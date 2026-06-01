@@ -5116,6 +5116,20 @@ function generatePlanFromUI() {
         out += '\n';
     }
     out += '\n';
+
+    // ========== 施工数量(工事概要の直後・入力済みのみ出力) ==========
+    if (planSec(cur, 'quantity')) {
+    let qty = (qtyRows && qtyRows.length) ? qtyRows : (cur.qtyRows || []);
+    const filledQty = qty.filter(r => r.value && String(r.value).trim());
+    if (filledQty.length > 0) {
+        out += '【施工数量】\n';
+        filledQty.forEach(r => {
+            const u = (r.unit === 'その他') ? (r.customUnit || '') : (r.unit || '');
+            out += `・${r.name}:${String(r.value).trim()}${u}\n`;
+        });
+        out += '\n';
+    }
+    }
     
     if (planSec(cur, 'steps')) {
     out += '【施工手順】\n';
@@ -5419,21 +5433,6 @@ function generatePlanFromUI() {
     out += '・再資源化:特定建設資材は再資源化施設へ搬出する\n';
     out += '・マニフェスト:産業廃棄物管理票で適正処理を確認・保管する\n';
     out += '・再生資材:可能な範囲で再生材を使用する\n\n';
-    }
-
-    // ========== 施工数量(入力済みのみ出力) ==========
-    if (planSec(cur, 'quantity')) {
-    // グローバルqtyRowsと保存値の両方を見て、確実に最新を取る
-    let qty = (qtyRows && qtyRows.length) ? qtyRows : (cur.qtyRows || []);
-    const filledQty = qty.filter(r => r.value && String(r.value).trim());
-    if (filledQty.length > 0) {
-        out += '【施工数量】\n';
-        filledQty.forEach(r => {
-            const u = (r.unit === 'その他') ? (r.customUnit || '') : (r.unit || '');
-            out += `・${r.name}:${String(r.value).trim()}${u}\n`;
-        });
-        out += '\n';
-    }
     }
 
     // ========== 添付図書 ==========
@@ -7824,6 +7823,10 @@ function fallbackCopy(text) {
 // ========== PDF出力(ブラウザ印刷機能を利用) ==========
 // PDF/Word出力用:未入力・未選択・未記載の行を除去(大手の書類は空欄を出さない)
 function stripBlankLines(text) {
+    // 重複する【施工数量】ブロックを除去(古いデータ対策。最後の1つだけ残す)
+    text = dedupeSection(text, '施工数量');
+    // 古い実測値注記を除去
+    text = text.replace(/^※現場代理人が実測値を記入してください\s*$/gm, '');
     const lines = text.split('\n');
     const out = [];
     lines.forEach((line, i) => {
@@ -7846,6 +7849,22 @@ function stripBlankLines(text) {
     });
     // 連続する空行を1つに圧縮
     return out.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+// 同じ見出しのブロックが複数あれば、最初の1つ(正しい位置=工事概要直後)を残す
+function dedupeSection(text, sectionName) {
+    const re = new RegExp('【' + sectionName + '】\\n[\\s\\S]*?(?=\\n【|$)', 'g');
+    const matches = text.match(re);
+    if (!matches || matches.length <= 1) return text;
+    // 内容が最も充実している方を採用(空ブロックを避ける)
+    let best = matches[0];
+    matches.forEach(m => { if (m.split('\n').filter(l=>l.trim()).length > best.split('\n').filter(l=>l.trim()).length) best = m; });
+    let replaced = false;
+    let result = text.replace(re, () => {
+        if (!replaced) { replaced = true; return best.trim(); }
+        return '\u0000';
+    });
+    return result.replace(/\u0000/g, '');
 }
 
 function downloadPDF(type) {
