@@ -10,14 +10,15 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body {
     font-family: "Yu Gothic", "Meiryo", "Noto Sans JP", sans-serif;
-    background: #EFEFEA; color: #111111; line-height: 1.6;
-    font-size: 18px; height: 100%; overflow: hidden;
+    background: #D8DCE0; color: #111111; line-height: 1.6;
+    font-size: 18px;
     -webkit-text-size-adjust: 100%;
+    margin: 0; padding: 0;
 }
-.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; max-width: 900px; margin: 0 auto; background: #EFEFEA; }
+.app { background: #EFEFEA; max-width: 1100px; margin: 0 auto; position: relative; }
 
-/* ========== ヘッダー ========== */
-.header { background: #0B2D4D; color: #FFFFFF; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+/* ========== ヘッダー(画面上端に固定) ========== */
+.header { background: #0B2D4D; color: #FFFFFF; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; right: 0; max-width: 1100px; margin: 0 auto; z-index: 200; height: 56px; box-sizing: border-box; }
 .header-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
 .header-logo { width: 24px; height: 24px; flex-shrink: 0; }
 .header-text { min-width: 0; }
@@ -36,9 +37,9 @@ html, body {
 .save-indicator svg { flex-shrink: 0; }
 
 /* ========== コンテンツ ========== */
-.content { flex: 1; overflow-y: auto; padding: 12px 14px 20px 14px; -webkit-overflow-scrolling: touch; }
+.content { padding: 80px 14px 200px 14px; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
 /* ========== グローバルアクションバー(.appのflex内 = iOS完全対応) ========== */
-.global-action-bar { padding: 8px 14px; background: #FFFFFF; border-top: 2px solid #0B2D4D; flex-shrink: 0; }
+.global-action-bar { padding: 8px 14px; background: #FFFFFF; border-top: 2px solid #0B2D4D; position: fixed; bottom: 60px; left: 0; right: 0; max-width: 1100px; margin: 0 auto; z-index: 150; box-sizing: border-box; }
 .global-action-btn { width: 100%; max-width: 720px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; border-radius: 8px; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; min-height: 52px; border: none; letter-spacing: 0.5px; }
 .global-action-btn.accent { background: #0B2D4D; color: #FFFFFF; }
 .global-action-btn.accent:hover { background: #173E63; }
@@ -47,6 +48,15 @@ html, body {
 /* ========== 外部連携設定ページ ========== */
 .integration-card { background: #FFFFFF; border: 1px solid #D0D7DE; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
 .integration-card.disabled { opacity: 0.6; }
+.cloud-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+.cloud-badge.off { background: #F2F4F7; color: #667085; }
+.cloud-badge.on { background: #E7F8EF; color: #067647; }
+.cloud-badge.syncing { background: #FEF0C7; color: #B54708; }
+.cloud-badge.error { background: #FEE4E2; color: #D92D20; }
+.cloud-field { margin-bottom: 8px; }
+.cloud-field label { display: block; font-size: 12px; font-weight: 700; color: #344054; margin-bottom: 3px; }
+.cloud-field input { width: 100%; padding: 9px 11px; border: 1.5px solid #D0D5DD; border-radius: 8px; font-size: 14px; font-family: inherit; box-sizing: border-box; min-height: 40px; }
+.cloud-field input:focus { outline: none; border-color: #1570B8; }
 .integration-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
 .integration-icon { width: 24px; height: 24px; color: #0B2D4D; flex-shrink: 0; }
 .integration-info { flex: 1; }
@@ -60,8 +70,93 @@ html, body {
 .integration-btn.accent { background: #0B2D4D; color: #FFFFFF; }
 .integration-btn.accent:hover { background: #173E63; }
 
+/* ========== KY選択UI(v2) ========== */
+.ky2-card { background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 16px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(16,24,40,0.06); }
+.ky2-card-title { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #1D2939; margin-bottom: 12px; }
+.ky2-card-title.danger { color: #B91C1C; }
+/* KY前回引き継ぎ */
+.ky-carryover { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #EFF4FF; border: 1px solid #B2CCFF; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; flex-wrap: wrap; }
+.kyc-text { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #2E5AAC; }
+.kyc-btn { background: #2E5AAC; color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 40px; }
+.kyc-btn:hover { background: #244a8f; }
+/* おすすめ提案ボックス */
+.ky2-suggest-box { background: #FFF7ED; border: 1px solid #FED7AA; border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; }
+.ky2-suggest-head { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #B45309; margin-bottom: 8px; }
+.ky2-suggest-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ky2-suggest-chip { display: inline-flex; align-items: center; gap: 5px; padding: 7px 12px; background: #FFFFFF; border: 1.5px solid #F59E0B; border-radius: 18px; font-size: 13px; font-weight: 600; color: #B45309; cursor: pointer; font-family: inherit; }
+.ky2-suggest-chip:hover { background: #FEF3E2; }
+.ky2-suggest-chip::before { content: '+'; font-weight: 800; font-size: 15px; }
+.ky2-suggest-chip.added { background: #E7F8EF; border-color: #067647; color: #067647; }
+.ky2-suggest-chip.added::before { content: '✓'; }
+.ky2-icon { width: 18px; height: 18px; color: #1570B8; flex-shrink: 0; }
+.ky2-card-title.danger .ky2-icon { color: #B91C1C; }
+.ky2-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ky2-chip { display: inline-flex; align-items: center; cursor: pointer; }
+.ky2-chip input { position: absolute; opacity: 0; width: 0; height: 0; }
+.ky2-chip span { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border: 1.5px solid #D0D5DD; border-radius: 22px; font-size: 14px; font-weight: 600; color: #1D2939; background: #FFFFFF; min-height: 44px; transition: all 0.12s; }
+.ky2-chip span::before { content: ''; width: 18px; height: 18px; border: 2px solid #98A2B3; border-radius: 5px; flex-shrink: 0; transition: all 0.12s; }
+.ky2-chip input:checked + span { background: #EAF4FB; border-color: #1570B8; color: #1570B8; }
+.ky2-chip input:checked + span::before { background: #1570B8; border-color: #1570B8; box-shadow: inset 0 0 0 3px #FFFFFF; }
+.ky2-chip.danger input:checked + span { background: #FEF3F2; border-color: #B91C1C; color: #B91C1C; }
+.ky2-chip.danger input:checked + span::before { background: #B91C1C; border-color: #B91C1C; box-shadow: inset 0 0 0 3px #FFFFFF; }
+.ky2-other-row { display: flex; gap: 6px; margin-top: 10px; }
+.ky2-other-input { flex: 1; padding: 9px 12px; border: 1.5px solid #D0D5DD; border-radius: 8px; font-size: 14px; font-family: inherit; min-height: 42px; box-sizing: border-box; }
+.ky2-other-input:focus { outline: none; border-color: #1570B8; }
+.ky2-other-btn { background: #1570B8; color: #FFF; border: none; padding: 9px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.ky2-note-suggest { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.ky2-suggest-btn { background: #F0F7FC; border: 1px solid #B8D9F0; color: #1570B8; padding: 7px 12px; border-radius: 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.ky2-suggest-btn:hover { background: #DBEEFB; }
+.ky2-note-input { width: 100%; padding: 11px 13px; border: 1.5px solid #D0D5DD; border-radius: 8px; font-size: 15px; font-family: inherit; min-height: 60px; resize: vertical; box-sizing: border-box; }
+.ky2-note-input:focus { outline: none; border-color: #1570B8; }
+.ky2-health { display: flex; gap: 10px; flex-wrap: wrap; }
+.ky2-radio { cursor: pointer; }
+.ky2-radio input { position: absolute; opacity: 0; }
+.ky2-radio span { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border: 1.5px solid #D0D5DD; border-radius: 22px; font-size: 14px; font-weight: 600; color: #1D2939; background: #FFFFFF; min-height: 44px; transition: all 0.12s; }
+.ky2-radio input:checked + span { background: #1570B8; border-color: #1570B8; color: #FFFFFF; }
+.ky2-radio:nth-child(3) input:checked + span { background: #B91C1C; border-color: #B91C1C; }
+.ky2-radio:nth-child(2) input:checked + span { background: #F59E0B; border-color: #F59E0B; }
+/* 作業員サイン */
+.ky2-sign-count { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.ky2-sign-count label { font-size: 14px; font-weight: 700; color: #1D2939; }
+.ky2-count-btn { width: 36px; height: 36px; border: 1.5px solid #1570B8; background: #FFFFFF; color: #1570B8; border-radius: 8px; font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.ky2-count-btn:hover { background: #EAF4FB; }
+#kySignCountVal { font-size: 18px; font-weight: 800; color: #1D2939; min-width: 24px; text-align: center; }
+.ky2-sign-list { display: flex; flex-direction: column; gap: 8px; }
+.ky2-sign-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: #F9FAFB; border: 1px solid #EAECF0; border-radius: 10px; }
+.ky2-sign-num { width: 28px; height: 28px; background: #EAF4FB; color: #1570B8; border-radius: 8px; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ky2-sign-preview { flex: 1; min-height: 48px; display: flex; align-items: center; gap: 10px; }
+.ky2-sign-img { height: 44px; max-width: 160px; border-radius: 4px; background: #FFFFFF; border: 1px solid #E4E7EC; }
+.ky2-sign-name { font-size: 15px; font-weight: 700; color: #1D2939; }
+.ky2-sign-placeholder { font-size: 13px; color: #98A2B3; }
+.ky2-sign-btn { background: #1570B8; color: #FFF; border: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; min-height: 40px; }
+.ky2-sign-btn.done { background: #FFFFFF; color: #067647; border: 1.5px solid #067647; }
+/* 職長承認 */
+.ky2-foreman-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.ky2-foreman-row label { font-size: 14px; font-weight: 700; color: #1D2939; flex-shrink: 0; }
+.ky2-approve-status { display: flex; align-items: center; gap: 8px; padding: 12px 14px; background: #E7F8EF; border: 1px solid #067647; border-radius: 10px; margin-bottom: 12px; font-size: 14px; font-weight: 700; color: #067647; }
+.ky2-approve-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 13px; background: #067647; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 50px; }
+.ky2-cancel-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; background: #FFFFFF; color: #D92D20; border: 1.5px solid #D92D20; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 42px; margin-top: 8px; }
+.ky2-cancel-btn:hover { background: #FEF3F2; }
+.ky2-approve-btn:hover { background: #055c38; }
+.ky2-approve-btn.approved { background: #FFFFFF; color: #067647; border: 1.5px solid #067647; }
+/* サイン削除 */
+.ky2-sign-del { background: none; border: 1px solid #E53E3E; color: #E53E3E; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; min-height: 36px; white-space: nowrap; }
+.ky2-sign-del:hover { background: #FEE2E2; }
+/* サインモーダル */
+.sign-modal { background: #FFFFFF; border-radius: 16px; padding: 20px; width: 90%; max-width: 480px; }
+.sign-modal h3 { font-size: 17px; font-weight: 700; color: #1D2939; margin-bottom: 14px; }
+.sign-name-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.sign-name-row label { font-size: 14px; font-weight: 700; color: #1D2939; flex-shrink: 0; }
+.sign-name-row input { flex: 1; padding: 10px 12px; border: 1.5px solid #D0D5DD; border-radius: 8px; font-size: 16px; font-family: inherit; min-height: 44px; box-sizing: border-box; }
+.sign-name-row input:focus { outline: none; border-color: #1570B8; }
+.sign-canvas-label { font-size: 13px; color: #667085; margin-bottom: 6px; }
+.sign-canvas { width: 100%; height: 200px; border: 2px dashed #98A2B3; border-radius: 10px; background: #FFFFFF; touch-action: none; cursor: crosshair; }
+.sign-modal-actions { display: flex; gap: 8px; margin-top: 14px; }
+.sign-clear-btn { background: #FFFFFF; border: 1.5px solid #D0D5DD; color: #667085; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.sign-cancel-btn { background: #FFFFFF; border: 1.5px solid #D0D5DD; color: #667085; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; flex: 1; }
+.sign-save-btn { background: #1570B8; color: #FFF; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; flex: 1; }
 /* ========== ボトムナビ ========== */
-.bottom-nav { background: #FFFFFF; display: flex; flex-shrink: 0; border-top: 1px solid #D0D7DE; padding-bottom: env(safe-area-inset-bottom); position: relative; z-index: 100; width: 100%; }
+.bottom-nav { background: #FFFFFF; display: flex; border-top: 1px solid #D0D7DE; padding-bottom: env(safe-area-inset-bottom); position: fixed; bottom: 0; left: 0; right: 0; max-width: 1100px; margin: 0 auto; z-index: 200; width: 100%; height: 60px; box-sizing: border-box; }
 .bottom-nav button { flex: 1; background: transparent; border: none; color: #111111; padding: 8px 4px 6px 4px; cursor: pointer; font-size: 11px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 3px; min-height: 60px; position: relative; transition: color 0.1s; }
 .bottom-nav button.active { color: #0B2D4D; }
 .bottom-nav button.active::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 36px; height: 2px; background: #0B2D4D; }
@@ -71,6 +166,45 @@ html, body {
 /* ========== ホーム ========== */
 /* 上部バー:日付+業種モード折りたたみ */
 .home-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; padding: 4px 0; }
+/* 全現場サマリー */
+.home-summary { display: flex; gap: 10px; margin-bottom: 12px; }
+.hsum-item { flex: 1; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 14px 8px; text-align: center; box-shadow: 0 1px 3px rgba(16,24,40,0.06); }
+.hsum-num { font-size: 28px; font-weight: 800; color: #0B2D4D; line-height: 1; }
+.hsum-label { font-size: 12px; color: #667085; margin-top: 6px; font-weight: 600; }
+.hsum-alert .hsum-num { color: #98A2B3; }
+.hsum-alert.has-alert { background: #FEF3F2; border-color: #FDA29B; }
+.hsum-alert.has-alert .hsum-num { color: #D92D20; }
+.hsum-alert.has-alert .hsum-label { color: #D92D20; }
+/* アラート一覧 */
+.home-alerts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.home-alert { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.home-alert svg { width: 18px; height: 18px; flex-shrink: 0; }
+.home-alert.urgent { background: #FEF3F2; border: 1px solid #FDA29B; color: #B42318; }
+.home-alert.warn { background: #FFFAEB; border: 1px solid #FEDF89; color: #B54708; }
+.home-alert:hover { filter: brightness(0.97); }
+.home-alert-name { font-weight: 700; }
+/* 日付横のミニ天気(軽量) */
+.home-date-row { display: flex; align-items: center; gap: 10px; }
+.home-weather-mini { display: inline-flex; align-items: center; gap: 4px; background: #EAF2FA; border: 1px solid #C9DEF0; border-radius: 14px; padding: 3px 10px; }
+.hwm-icon { width: 18px; height: 18px; color: #1570B8; }
+.hwm-temp { font-size: 14px; font-weight: 800; color: #0B2D4D; }
+.hwm-heat { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 8px; }
+.hwm-heat.warn { background: #FEF0C7; color: #B54708; }
+.hwm-heat.danger { background: #FEE4E2; color: #D92D20; }
+/* 現場の天気 */
+.home-weather { background: linear-gradient(135deg, #2E6FB0, #1B4B7A); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; color: #fff; box-shadow: 0 2px 8px rgba(27,75,122,0.25); }
+.hw-loading { font-size: 13px; opacity: 0.9; text-align: center; padding: 6px; }
+.hw-main { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.hw-icon { width: 40px; height: 40px; flex-shrink: 0; }
+.hw-temp { font-size: 32px; font-weight: 800; line-height: 1; }
+.hw-desc { display: flex; flex-direction: column; gap: 2px; margin-left: 4px; }
+.hw-desc #hwLoc { font-size: 13px; font-weight: 700; }
+.hw-desc #hwCond { font-size: 12px; opacity: 0.9; }
+.hw-sub { display: flex; gap: 8px; }
+.hw-sub-item { flex: 1; background: rgba(255,255,255,0.15); border-radius: 8px; padding: 7px 6px; text-align: center; font-size: 13px; font-weight: 700; display: flex; flex-direction: column; gap: 2px; }
+.hw-sub-label { font-size: 10px; opacity: 0.85; font-weight: 600; }
+.hw-sub-item.heat-danger { background: rgba(217,45,32,0.55); }
+.hw-sub-item.heat-warn { background: rgba(245,158,11,0.45); }
 .home-date-strong { font-size: 20px; font-weight: 800; color: #111111; letter-spacing: 0.3px; }
 .vmode-dropdown { position: relative; }
 .vmode-current-btn { background: #FFFFFF; border: 1.5px solid #0B2D4D; color: #0B2D4D; padding: 6px 14px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 8px; min-height: 36px; }
@@ -92,6 +226,8 @@ html, body {
 .home-hero .current-project { font-size: 14px; background: transparent; padding: 0; border-radius: 0; line-height: 1.4; border: none; }
 .home-hero .current-project strong { font-size: 16px; display: inline-block; margin-bottom: 0; color: #0B2D4D; margin-right: 12px; }
 .home-hero .meta-line { font-size: 12px; color: #333333; margin-top: 2px; display: inline-block; }
+.current-actions { display: flex; gap: 8px; margin-top: 10px; }
+.current-actions .recent-action-btn { flex: 1; justify-content: center; border-radius: 8px; min-height: 38px; }
 /* タブレット横画面(800px以上)対応:アクション+カードを横並び */
 @media (min-width: 800px) {
     .home-topbar { padding: 2px 0; margin-bottom: 8px; }
@@ -126,6 +262,8 @@ html, body {
 .todo-item { font-size: 13px; color: #111111; padding: 4px 0; cursor: pointer; }
 .todo-item:hover { color: #0B2D4D; text-decoration: underline; }
 .todo-item::before { content: '・'; color: #B45309; font-weight: 700; }
+.todo-item.warn { color: #D92D20; font-weight: 700; }
+.todo-item.warn::before { content: '⚠ '; color: #D92D20; }
 /* ========== 検索ボックス ========== */
 .recent-search-wrap { margin-bottom: 8px; }
 .recent-search-input-wrap { position: relative; }
@@ -224,6 +362,15 @@ html, body {
 .rc-name { font-size: 16px; font-weight: 700; color: #1D2939; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rc-meta { font-size: 13px; color: #667085; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rc-docs { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+/* 進捗バー */
+.rc-progress-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.rc-progress-track { flex: 1; height: 8px; background: #EAECF0; border-radius: 4px; overflow: hidden; }
+.rc-progress-fill { height: 100%; background: #34C759; border-radius: 4px; transition: width 0.4s ease; }
+.rc-progress-pct { font-size: 13px; font-weight: 800; color: #1D2939; min-width: 38px; text-align: right; }
+.rc-rem { font-weight: 700; color: #667085; }
+.rc-rem.soon { color: #B45309; }
+.rc-rem.over { color: #D92D20; }
+.rc-footer { padding: 0 16px 8px 16px; font-size: 11px; color: #98A2B3; }
 .rc-doc-dot { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #98A2B3; }
 .rc-doc-dot .rc-dot { width: 8px; height: 8px; border-radius: 50%; background: #D0D5DD; }
 .rc-doc-dot.created { color: #067647; }
@@ -318,6 +465,30 @@ html, body {
 .photo-thumb { position: relative; aspect-ratio: 1/1; border-radius: 8px; overflow: hidden; background: #F5F2E8; }
 .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .photo-thumb .del-thumb { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: #fff; border: none; width: 28px; height: 28px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+/* ========== 写真台帳カード方式 ========== */
+.photo-card-list { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+.photo-card-empty { text-align: center; padding: 24px; color: #98A2B3; font-size: 14px; background: #F9FAFB; border: 1px dashed #D0D5DD; border-radius: 10px; line-height: 1.6; }
+.photo-card { background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(16,24,40,0.06); }
+.photo-card-top { display: flex; gap: 12px; }
+.photo-card-img { width: 96px; height: 96px; border-radius: 8px; object-fit: cover; background: #F2F4F7; flex-shrink: 0; cursor: pointer; }
+.photo-card-body { flex: 1; min-width: 0; }
+.photo-card-no { display: inline-block; background: #1570B8; color: #FFFFFF; font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 6px; margin-bottom: 6px; }
+.photo-card-date { font-size: 12px; color: #667085; margin-left: 8px; }
+.photo-card-field { margin-bottom: 6px; }
+.photo-card-field label { display: block; font-size: 11px; font-weight: 700; color: #667085; margin-bottom: 2px; }
+.photo-card-field select, .photo-card-field input { width: 100%; padding: 7px 10px; border: 1.5px solid #D0D5DD; border-radius: 6px; font-size: 14px; font-family: inherit; box-sizing: border-box; min-height: 38px; }
+.photo-card-field select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231570B8' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; background-size: 16px; padding-right: 30px; }
+.photo-card-field select:focus, .photo-card-field input:focus { outline: none; border-color: #1570B8; }
+.photo-card-fields-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.photo-card-actions { display: flex; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #F2F4F7; }
+.photo-card-btn { flex: 1; background: #FFFFFF; border: 1.5px solid #D0D5DD; color: #667085; padding: 7px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 36px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.photo-card-btn:hover { background: #F9FAFB; }
+.photo-card-btn.up:hover, .photo-card-btn.down:hover { border-color: #1570B8; color: #1570B8; }
+.photo-card-btn.del:hover { border-color: #D92D20; color: #D92D20; background: #FEF3F2; }
+.photo-card-btn.kokuban { border-color: #067647; color: #067647; flex: 1.5; }
+.photo-card-btn.kokuban:hover { background: #E7F8EF; }
+.photo-card-btn.kokuban.done { background: #067647; color: #fff; border-color: #067647; }
+.photo-card-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .chapter-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #E0DDD3; }
 .chapter-jump-btn { background: #F5F2E8; border: 1.5px solid #D4A574; color: #111111; padding: 8px 14px; border-radius: 18px; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 40px; display: flex; align-items: center; gap: 4px; }
 .chapter-jump-btn:active { background: #D4A574; color: #fff; }
@@ -342,6 +513,9 @@ html, body {
 .chapter-head.open .chapter-toggle-icon { transform: rotate(180deg); }
 .chapter-body { display: none; padding: 18px 20px; }
 .chapter-head.open + .chapter-body { display: block; }
+.chapter-card-badge { display: inline-block; font-size: 10px; font-weight: 700; background: #EFF4FF; color: #2E5AAC; padding: 2px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle; }
+.chapter-dup { opacity: 0.85; }
+.chapter-dup .chapter-num { background: #98A2B3; }
 .chapter-body textarea { width: 100%; min-height: 180px; padding: 14px; border: 1.5px solid #DDD8C9; border-radius: 8px; font-size: 17px; line-height: 1.8; font-family: inherit; background: #FAFAF7; resize: vertical; color: #1A1A1A; }
 .chapter-body textarea:focus { outline: none; border-color: #D4A574; background: #fff; }
 
@@ -350,12 +524,13 @@ html, body {
 .preview-card h3 { font-size: 15px; color: #111111; border-left: 3px solid #0B2D4D; padding-left: 8px; margin-bottom: 10px; font-weight: 700; }
 .preview-text { width: 100%; min-height: 240px; border: 1px solid #C7CDD4; border-radius: 4px; padding: 12px; font-size: 15px; line-height: 1.7; background: #FFFFFF; font-family: "Yu Gothic", "Meiryo", monospace; resize: vertical; color: #111111; }
 .preview-text:focus { outline: none; border-color: #0B2D4D; background: #FFFFFF; }
-.output-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 6px; margin-top: 10px; }
+.output-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 6px; margin-top: 10px; margin-bottom: 90px; }
 .output-btn { padding: 10px 12px; border: 1px solid #D0D7DE; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 40px; display: flex; align-items: center; justify-content: center; gap: 6px; background: #FFFFFF; color: #111111; }
 .output-btn:hover { background: #F6F8FA; }
 .output-btn svg { width: 16px; height: 16px; }
 .output-btn.copy { background: #067647; color: #FFFFFF; border-color: #067647; }
 .output-btn.word { background: #0B2D4D; color: #FFFFFF; border-color: #0B2D4D; }
+.output-btn.pdf { background: #C0392B; color: #FFFFFF; border-color: #C0392B; }
 .output-btn.share { background: #FFFFFF; color: #0B2D4D; border-color: #0B2D4D; }
 .output-btn.email { background: #FFFFFF; color: #111111; border-color: #111111; }
 .output-btn.clear { background: #FFFFFF; color: #D92D20; border: 1px solid #D92D20; }
@@ -440,6 +615,19 @@ html, body {
 .pc-edit-btn { display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1.5px solid #1570B8; color: #1570B8; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 38px; }
 .pc-edit-btn:hover { background: #EAF4FB; }
 .pc-hint { font-size: 13px; color: #667085; background: #F0F7FC; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; line-height: 1.5; }
+.qc-card-list { display: flex; flex-direction: column; gap: 6px; }
+.qc-card-item { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #F9FAFB; border: 1px solid #E4E7EC; border-radius: 8px; font-size: 14px; font-weight: 600; color: #1D2939; }
+.qc-card-check { color: #067647; font-weight: 800; font-size: 16px; }
+.qc-del-btn { background: none; border: 1px solid #E53E3E; color: #E53E3E; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; }
+.qc-del-btn:hover { background: #FEE2E2; }
+/* 含める項目セレクター */
+.sec-preset { display: flex; gap: 8px; margin-bottom: 12px; }
+.sec-preset-btn { flex: 1; padding: 10px; background: #0B2D4D; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 42px; }
+.sec-preset-btn:hover { background: #163d63; }
+.sec-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.sec-item { display: flex; align-items: center; gap: 8px; padding: 9px 10px; background: #F9FAFB; border: 1px solid #E4E7EC; border-radius: 8px; font-size: 13px; cursor: pointer; }
+.sec-item input { width: 18px; height: 18px; flex-shrink: 0; }
+.sec-item.sec-locked { background: #EFF4FF; color: #2E5AAC; }
 .pc-field label { display: block; font-size: 13px; font-weight: 700; color: #1D2939; margin-bottom: 6px; }
 .pc-field textarea { width: 100%; padding: 11px 13px; border: 1.5px solid #D0D5DD; border-radius: 8px; font-size: 15px; font-family: inherit; min-height: 80px; resize: vertical; box-sizing: border-box; }
 .pc-field textarea:focus { outline: none; border-color: #1570B8; }
@@ -578,6 +766,26 @@ html, body {
 
 .page { display: none; }
 .page.active { display: block; }
+/* ========== PC・タブレット大画面対応 ========== */
+@media (min-width: 768px) {
+    .content { padding: 80px 32px 200px 32px; }
+    /* ページ内容を読みやすい幅で中央寄せ */
+    #page-home, #page-plan, #page-ky, #page-photo, #page-input, #page-integrations { max-width: 900px; margin: 0 auto; }
+    /* ヘッダー・バーの中身も中央寄せ */
+    .header, .global-action-bar > *, .bottom-nav { max-width: 1100px; margin-left: auto; margin-right: auto; }
+    /* ダッシュボード等を広く使う */
+    .dashboard-grid { grid-template-columns: repeat(4, 1fr); }
+    .quick-actions { max-width: 900px; }
+    /* チップを少し大きく */
+    .ky2-chip span, .check-chip { font-size: 15px; }
+    /* 入力欄が間延びしすぎないよう */
+    .input-group input, .input-group textarea, .input-group select { max-width: 600px; }
+}
+@media (min-width: 1024px) {
+    /* タブレット横・PC: 現場情報を2カラムに */
+    #page-input { max-width: 1000px; }
+    .content { padding: 80px 40px 200px 40px; }
+}
 
 .smart-tag { display: inline-flex; align-items: center; gap: 4px; background: #2D6B41; color: #fff; font-size: 12px; padding: 3px 9px; border-radius: 6px; font-weight: 600; }
 .smart-tag svg { width: 12px; height: 12px; }
@@ -595,6 +803,10 @@ html, body {
 <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
 <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
 <symbol id="i-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></symbol>
+<symbol id="i-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="19" x2="8" y2="21"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="16" y1="19" x2="16" y2="21"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></symbol>
+<symbol id="i-snow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"/><line x1="8" y1="20" x2="8.01" y2="20"/><line x1="12" y1="22" x2="12.01" y2="22"/><line x1="16" y1="20" x2="16.01" y2="20"/></symbol>
 <symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
 <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></symbol>
 <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
@@ -653,7 +865,14 @@ html, body {
 
 <!-- 上部バー:日付+業種モード(折りたたみ) -->
 <div class="home-topbar">
+<div class="home-date-row">
 <div class="home-date-strong" id="todayDateStrong"></div>
+<div class="home-weather-mini" id="homeWeatherMini" style="display:none;">
+<svg class="hwm-icon" id="hwmIcon"><use href="#i-sun"/></svg>
+<span class="hwm-temp" id="hwmTemp">--°</span>
+<span class="hwm-heat" id="hwmHeat" style="display:none;"></span>
+</div>
+</div>
 <div class="vmode-dropdown">
 <button class="vmode-current-btn" onclick="toggleVmodeMenu()" id="vmodeCurrentBtn">
 <span id="vmodeCurrentLabel">改修工事</span>
@@ -669,6 +888,25 @@ html, body {
 </div>
 </div>
 </div>
+
+<!-- 全現場サマリー(俯瞰) -->
+<div class="home-summary" id="homeSummary">
+<div class="hsum-item">
+<div class="hsum-num" id="hsumActive">0</div>
+<div class="hsum-label">進行中</div>
+</div>
+<div class="hsum-item hsum-alert" id="hsumAlertBox">
+<div class="hsum-num" id="hsumAlert">0</div>
+<div class="hsum-label">要対応</div>
+</div>
+<div class="hsum-item">
+<div class="hsum-num" id="hsumDone">0</div>
+<div class="hsum-label">完了</div>
+</div>
+</div>
+
+<!-- アラート(工期迫る・書類未作成) -->
+<div class="home-alerts" id="homeAlerts" style="display:none;"></div>
 
 <!-- 現場情報(コンパクト) -->
 <div class="home-hero compact">
@@ -842,8 +1080,8 @@ html, body {
 </div>
 </div>
 
-<!-- ⑥ 旧工種(折りたたみ・互換用) -->
-<details class="compat-fold">
+<!-- ⑥ 旧工種(非表示・内部互換用。workTypeChipsは自動判定が参照するため要素は保持) -->
+<details class="compat-fold" style="display:none;">
 <summary>▼ 旧形式の工種入力（互換用）</summary>
 <div class="input-group" style="margin-top:10px;">
 <label>工種<span id="lockIndicator"></span></label>
@@ -1211,27 +1449,60 @@ html, body {
 </div>
 </div>
 
-<!-- ⑩ プレビュー(既存のplanOutputをラップ) -->
-<div class="pc-card" id="pc-preview">
-<div class="pc-card-header" onclick="togglePcCard('preview')">
+<!-- ⑩ 品質管理(主工事から自動生成) -->
+<div class="pc-card" id="pc-quality">
+<div class="pc-card-header" onclick="togglePcCard('quality')">
 <div class="pc-card-left">
 <span class="pc-num">10</span>
-<span class="pc-title">施工計画書プレビュー</span>
+<span class="pc-title">品質管理項目</span>
 </div>
 <div class="pc-card-right">
-<span class="pc-badge auto" id="pc-badge-preview">生成後に表示</span>
-<svg class="pc-arrow" id="pc-arrow-preview"><use href="#i-arrow-right"/></svg>
+<span class="pc-badge auto" id="pc-badge-quality">自動</span>
+<svg class="pc-arrow" id="pc-arrow-quality"><use href="#i-arrow-right"/></svg>
 </div>
 </div>
-<div class="pc-card-body" id="pc-body-preview" style="display:none;">
-<div class="pc-hint">「施工計画書を生成」ボタンを押すと下部にプレビューが表示されます。</div>
+<div class="pc-card-body" id="pc-body-quality" style="display:none;">
+<div class="pc-hint">主工事に応じた品質管理の確認項目です。施工計画書に反映されます。</div>
+<div id="pc-quality-list" class="qc-card-list"></div>
+<div class="ky2-other-row" style="margin-top:10px;">
+<input type="text" id="pcQualityOther" class="ky2-other-input" placeholder="その他の確認項目を入力">
+<button class="ky2-other-btn" onclick="addPcQualityOther()">追加</button>
 </div>
-</div><!-- /pc-card preview -->
+</div>
+</div>
+
+<!-- ⑪ 含める項目(公共/民間で切替) -->
+<div class="pc-card" id="pc-sections">
+<div class="pc-card-header" onclick="togglePcCard('sections')">
+<div class="pc-card-left">
+<span class="pc-num">11</span>
+<span class="pc-title">施工計画書に含める項目</span>
+</div>
+<div class="pc-card-right">
+<span class="pc-badge auto" id="pc-badge-sections">選択</span>
+<svg class="pc-arrow" id="pc-arrow-sections"><use href="#i-arrow-right"/></svg>
+</div>
+</div>
+<div class="pc-card-body" id="pc-body-sections" style="display:none;">
+<div class="pc-hint">提出先に応じて項目を選べます。公共工事は全て、民間改修は必要な項目だけに。</div>
+<div class="sec-preset">
+<button class="sec-preset-btn" onclick="applySectionPreset('public')">公共工事(全項目)</button>
+<button class="sec-preset-btn" onclick="applySectionPreset('private')">民間改修(標準)</button>
+</div>
+<div id="pc-sections-list" class="sec-list"></div>
+<div class="ky2-other-row" style="margin-top:12px;">
+<input type="text" id="pcSectionOther" class="ky2-other-input" placeholder="独自の項目を追加(例:近隣協定事項)">
+<button class="ky2-other-btn" onclick="addPcSectionCustom()">追加</button>
+</div>
+<div id="pc-section-custom-list" class="qc-card-list" style="margin-top:8px;"></div>
+</div>
+</div>
 
 <!-- 施工計画書出力エリア(カード外・常時アクセス可能) -->
 <div id="planOutput" style="display:none;">
 <div class="preview-card">
-<h3>施工計画書（章ごとに編集できます）</h3>
+<h3>生成された施工計画書（最終確認・微調整）</h3>
+<div class="pc-hint" style="margin-bottom:12px;">上のカードで入力した内容から自動生成された施工計画書です。ここで章ごとに最終調整できます。</div>
 <div class="doc-status-bar">
 <label>ステータス:</label>
 <select id="statusPlanSelect" onchange="changeDocStatus('plan', this.value)">
@@ -1243,21 +1514,19 @@ html, body {
 </select>
 </div>
 <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
-<button class="view-toggle-btn active" id="viewToggleChapter" onclick="switchPlanView('chapter')">章別表示</button>
-<button class="view-toggle-btn" id="viewToggleFull" onclick="switchPlanView('full')">全文表示</button>
 <label class="easy-jp-toggle">
 <input type="checkbox" id="easyJpToggle" onchange="toggleEasyJP('plan')">
 <span>やさしい日本語</span>
 </label>
 </div>
-<div id="planChapters" class="plan-chapters"></div>
-<textarea class="preview-text" id="out-plan" rows="20" style="display:none;" oninput="markEditing('plan')" onclick="selectBlankAtCursor(this)" ontouchend="selectBlankAtCursor(this)"></textarea>
+<textarea class="preview-text" id="out-plan" rows="24" oninput="markEditing('plan')" onclick="selectBlankAtCursor(this)" ontouchend="selectBlankAtCursor(this)"></textarea>
 <div class="output-actions">
 <button class="output-btn copy" onclick="copyPlanText()"><svg><use href="#i-copy"/></svg>コピー</button>
 <button class="output-btn word" onclick="downloadWord('plan')"><svg><use href="#i-doc"/></svg>Word</button>
+<button class="output-btn pdf" onclick="downloadPDF('plan')"><svg><use href="#i-doc"/></svg>PDF</button>
 <button class="output-btn share" onclick="shareOutput('plan')"><svg><use href="#i-share"/></svg>共有</button>
 <button class="output-btn email" onclick="emailOutput('plan')"><svg><use href="#i-mail"/></svg>メール</button>
-<button class="output-btn clear" onclick="clearOutput('plan')"><svg><use href="#i-trash"/></svg>削除</button>
+<button class="output-btn clear" onclick="resetOutput('plan')"><svg><use href="#i-trash"/></svg>リセット</button>
 </div>
 </div>
 </div>
@@ -1271,6 +1540,124 @@ html, body {
 <!-- KY -->
 <div class="page" id="page-ky">
 <div class="page-title">KY活動表</div>
+
+<!-- 前回のKYを引き継ぐ -->
+<div class="ky-carryover" id="kyCarryover" style="display:none;">
+<div class="kyc-text"><svg style="width:16px;height:16px"><use href="#i-copy"/></svg>前回のKY(<span id="kycDate"></span>)があります</div>
+<button class="kyc-btn" onclick="carryOverKY()">前回の内容を引き継ぐ</button>
+</div>
+
+<!-- 本日の作業 -->
+<div class="ky2-card">
+<div class="ky2-card-title"><svg class="ky2-icon"><use href="#i-bolt"/></svg>本日の作業</div>
+<div class="ky2-chips" id="ky2Work">
+<label class="ky2-chip"><input type="checkbox" value="足場組立"><span>足場組立</span></label>
+<label class="ky2-chip"><input type="checkbox" value="足場解体"><span>足場解体</span></label>
+<label class="ky2-chip"><input type="checkbox" value="塗装作業"><span>塗装作業</span></label>
+<label class="ky2-chip"><input type="checkbox" value="シーリング作業"><span>シーリング作業</span></label>
+<label class="ky2-chip"><input type="checkbox" value="防水作業"><span>防水作業</span></label>
+<label class="ky2-chip"><input type="checkbox" value="高圧洗浄"><span>高圧洗浄</span></label>
+<label class="ky2-chip"><input type="checkbox" value="資材搬入"><span>資材搬入</span></label>
+<label class="ky2-chip"><input type="checkbox" value="重機作業"><span>重機作業</span></label>
+</div>
+<div class="ky2-other-row">
+<input type="text" id="ky2WorkOther" class="ky2-other-input" placeholder="その他の作業を入力">
+<button class="ky2-other-btn" onclick="addKy2Other('ky2Work','ky2WorkOther')">追加</button>
+</div>
+</div>
+
+<!-- 危険ポイント -->
+<div class="ky2-card">
+<div class="ky2-card-title danger"><svg class="ky2-icon"><use href="#i-warning"/></svg>危険ポイント</div>
+<div class="ky2-suggest-box" id="ky2DangerSuggest" style="display:none;">
+<div class="ky2-suggest-head"><svg style="width:14px;height:14px"><use href="#i-bolt"/></svg>この現場のおすすめ危険(作業+現場条件から判定・上位3件)</div>
+<div class="ky2-suggest-chips" id="ky2DangerSuggestChips"></div>
+</div>
+<div class="ky2-chips" id="ky2Danger">
+<label class="ky2-chip danger"><input type="checkbox" value="墜落"><span>墜落</span></label>
+<label class="ky2-chip danger"><input type="checkbox" value="転落"><span>転落</span></label>
+<label class="ky2-chip danger"><input type="checkbox" value="飛来落下"><span>飛来落下</span></label>
+<label class="ky2-chip danger"><input type="checkbox" value="重機接触"><span>重機接触</span></label>
+<label class="ky2-chip danger"><input type="checkbox" value="感電"><span>感電</span></label>
+<label class="ky2-chip danger"><input type="checkbox" value="転倒"><span>転倒</span></label>
+<label class="ky2-chip danger"><input type="checkbox" value="挟まれ"><span>挟まれ</span></label>
+<label class="ky2-chip danger"><input type="checkbox" value="第三者災害"><span>第三者災害</span></label>
+</div>
+<div class="ky2-other-row">
+<input type="text" id="ky2DangerOther" class="ky2-other-input" placeholder="その他の危険を入力">
+<button class="ky2-other-btn" onclick="addKy2Other('ky2Danger','ky2DangerOther','danger')">追加</button>
+</div>
+</div>
+
+<!-- 重点対策 -->
+<div class="ky2-card">
+<div class="ky2-card-title"><svg class="ky2-icon"><use href="#i-doc"/></svg>重点対策</div>
+<div class="ky2-suggest-box" id="ky2MeasureSuggest" style="display:none;">
+<div class="ky2-suggest-head"><svg style="width:14px;height:14px"><use href="#i-bolt"/></svg>この現場のおすすめ対策(作業+現場条件から判定・上位3件)</div>
+<div class="ky2-suggest-chips" id="ky2MeasureSuggestChips"></div>
+</div>
+<div class="ky2-chips" id="ky2Measure">
+<label class="ky2-chip"><input type="checkbox" value="フルハーネス使用"><span>フルハーネス使用</span></label>
+<label class="ky2-chip"><input type="checkbox" value="工具落下防止"><span>工具落下防止</span></label>
+<label class="ky2-chip"><input type="checkbox" value="保護具着用"><span>保護具着用</span></label>
+<label class="ky2-chip"><input type="checkbox" value="誘導員配置"><span>誘導員配置</span></label>
+<label class="ky2-chip"><input type="checkbox" value="作業範囲区画"><span>作業範囲区画</span></label>
+<label class="ky2-chip"><input type="checkbox" value="指差呼称実施"><span>指差呼称実施</span></label>
+</div>
+<div class="ky2-other-row">
+<input type="text" id="ky2MeasureOther" class="ky2-other-input" placeholder="その他の対策を入力">
+<button class="ky2-other-btn" onclick="addKy2Other('ky2Measure','ky2MeasureOther')">追加</button>
+</div>
+</div>
+
+<!-- 今日の特記事項 -->
+<div class="ky2-card">
+<div class="ky2-card-title"><svg class="ky2-icon"><use href="#i-edit"/></svg>今日の特記事項</div>
+<div class="ky2-note-suggest">
+<button class="ky2-suggest-btn" onclick="addKy2Note('強風予報あり')">強風予報あり</button>
+<button class="ky2-suggest-btn" onclick="addKy2Note('居住者通行多い')">居住者通行多い</button>
+<button class="ky2-suggest-btn" onclick="addKy2Note('搬入車両多い')">搬入車両多い</button>
+</div>
+<textarea id="ky2Note" class="ky2-note-input" rows="2" placeholder="特記事項を入力(任意)"></textarea>
+</div>
+
+<!-- 健康状態確認 -->
+<div class="ky2-card">
+<div class="ky2-card-title"><svg class="ky2-icon"><use href="#i-users"/></svg>健康状態確認</div>
+<div class="ky2-health">
+<label class="ky2-radio"><input type="radio" name="ky2Health" value="良好" checked><span>良好</span></label>
+<label class="ky2-radio"><input type="radio" name="ky2Health" value="やや疲労"><span>やや疲労</span></label>
+<label class="ky2-radio"><input type="radio" name="ky2Health" value="体調不良"><span>体調不良</span></label>
+</div>
+</div>
+
+<!-- 作業員サイン -->
+<div class="ky2-card">
+<div class="ky2-card-title"><svg class="ky2-icon"><use href="#i-badge"/></svg>作業員サイン</div>
+<div id="kySignList" class="ky2-sign-list"></div>
+<button class="member-add-btn" onclick="addKySign()" style="margin-top:10px;">
+<svg style="width:16px;height:16px"><use href="#i-edit"/></svg>作業員を追加
+</button>
+</div>
+
+<!-- 職長承認 -->
+<div class="ky2-card">
+<div class="ky2-card-title"><svg class="ky2-icon"><use href="#i-badge"/></svg>職長承認</div>
+<div class="ky2-foreman-row">
+<label>職長名</label>
+<input type="text" id="ky2ForemanName" class="ky2-other-input" placeholder="職長の氏名を入力" oninput="saveKy2State()">
+</div>
+<div id="ky2ApproveStatus" class="ky2-approve-status" style="display:none;">
+<svg style="width:18px;height:18px;color:#067647"><use href="#i-check"/></svg>
+<span id="ky2ApproveText"></span>
+</div>
+<button class="ky2-approve-btn" id="ky2ApproveBtn" onclick="approveKY()">
+<svg style="width:18px;height:18px"><use href="#i-check"/></svg>承認する(KY確認済)
+</button>
+<button class="ky2-cancel-btn" id="ky2CancelBtn" onclick="cancelApproveKY()" style="display:none;">
+<svg style="width:16px;height:16px"><use href="#i-trash"/></svg>承認を取り消す
+</button>
+</div>
 
 <div id="kyOutput" style="display:none;">
 <div class="preview-card">
@@ -1295,9 +1682,10 @@ html, body {
 <div class="output-actions">
 <button class="output-btn copy" onclick="copyOutput('out-ky')"><svg><use href="#i-copy"/></svg>コピー</button>
 <button class="output-btn word" onclick="downloadWord('ky')"><svg><use href="#i-doc"/></svg>Word</button>
+<button class="output-btn pdf" onclick="downloadPDF('ky')"><svg><use href="#i-doc"/></svg>PDF</button>
 <button class="output-btn share" onclick="shareOutput('ky')"><svg><use href="#i-share"/></svg>共有</button>
 <button class="output-btn email" onclick="emailOutput('ky')"><svg><use href="#i-mail"/></svg>メール</button>
-<button class="output-btn clear" onclick="clearOutput('ky')"><svg><use href="#i-trash"/></svg>削除</button>
+<button class="output-btn clear" onclick="resetOutput('ky')"><svg><use href="#i-trash"/></svg>リセット</button>
 </div>
 </div>
 </div>
@@ -1312,39 +1700,33 @@ html, body {
 <div class="page" id="page-photo">
 <div class="page-title">写真台帳</div>
 
+<!-- 撮影者(自動入力・編集可) -->
 <div class="input-group">
-<label>撮影種別</label>
-<div class="template-chips" id="photoTypeChips">
-<div class="chip active" data-type="before">着手前</div>
-<div class="chip" data-type="during">施工状況</div>
-<div class="chip" data-type="material">材料確認</div>
-<div class="chip" data-type="hidden">出来形</div>
-<div class="chip" data-type="completion">完成</div>
-<div class="chip" data-type="safety">安全管理</div>
-</div>
+<label>撮影者</label>
+<input id="photoTaker" placeholder="撮影者名" oninput="savePhotoTaker()">
+<div class="hint">新しい写真に自動で記録されます</div>
 </div>
 
+<!-- 写真追加 -->
 <div class="input-group">
-<label>写真の内容</label>
-<div class="input-row">
-<textarea id="photoContent" placeholder="例:掘削深さ測定、スタッフ立て" oninput="autoSave()"></textarea>
-
-</div>
-</div>
-
-<div class="input-group">
-<label>撮影箇所</label>
-<input id="photoLocation" placeholder="例:No.3+10付近" oninput="autoSave()">
-</div>
-
-<div class="input-group">
-<label>写真</label>
+<label>写真を追加</label>
 <button class="big-btn outline" onclick="document.getElementById('photoFileInput').click()" type="button" style="margin: 0;">
 <svg><use href="#i-camera"/></svg>写真を追加(撮影 or 選択)
 </button>
 <input type="file" id="photoFileInput" accept="image/*" capture="environment" multiple style="display:none;" onchange="handlePhotoSelect(this)">
-<div id="photoThumbs" class="photo-thumbs"></div>
+<div class="hint">撮影日・写真番号は自動で付きます。複数選択可。</div>
 </div>
+
+<!-- 写真一覧(カード) -->
+<div class="input-group">
+<label>写真一覧 <span id="photoCount" style="font-size:13px;color:#667085;"></span></label>
+<div id="photoCardList" class="photo-card-list"></div>
+</div>
+
+<!-- 旧hidden(互換用) -->
+<input type="hidden" id="photoContent">
+<input type="hidden" id="photoLocation">
+<div style="display:none;"><div id="photoTypeChips"><div class="chip active" data-type="before"></div></div><div id="photoThumbs"></div></div>
 
 <div id="photoOutput" style="display:none;">
 <div class="preview-card">
@@ -1363,9 +1745,10 @@ html, body {
 <div class="output-actions">
 <button class="output-btn copy" onclick="copyOutput('out-photo')"><svg><use href="#i-copy"/></svg>コピー</button>
 <button class="output-btn word" onclick="downloadWord('photo')"><svg><use href="#i-doc"/></svg>Word</button>
+<button class="output-btn pdf" onclick="downloadPDF('photo')"><svg><use href="#i-doc"/></svg>PDF</button>
 <button class="output-btn share" onclick="shareOutput('photo')"><svg><use href="#i-share"/></svg>共有</button>
 <button class="output-btn email" onclick="emailOutput('photo')"><svg><use href="#i-mail"/></svg>メール</button>
-<button class="output-btn clear" onclick="clearOutput('photo')"><svg><use href="#i-trash"/></svg>削除</button>
+<button class="output-btn clear" onclick="resetOutput('photo')"><svg><use href="#i-trash"/></svg>リセット</button>
 </div>
 </div>
 </div>
@@ -1381,6 +1764,37 @@ html, body {
 <!-- ========== 外部連携設定ページ ========== -->
 <div class="page" id="page-integrations">
 <div class="page-title">外部サービス連携</div>
+
+<!-- クラウド保存(Supabase) -->
+<div class="integration-card" id="cloudCard" style="border:2px solid #1570B8;">
+<div class="integration-header">
+<svg class="integration-icon" style="color:#1570B8;"><use href="#i-share"/></svg>
+<div class="integration-info">
+<div class="integration-name">クラウド保存・同期 <span id="cloudStatusBadge" class="cloud-badge off">未接続</span></div>
+<div class="integration-desc">データをクラウドに保存し、複数の端末で同期します</div>
+</div>
+</div>
+<div id="cloudSetupArea">
+<div class="cloud-field">
+<label>Supabase URL</label>
+<input type="text" id="supaUrl" placeholder="https://xxxxx.supabase.co" oninput="saveCloudConfig()">
+</div>
+<div class="cloud-field">
+<label>Supabase anon key</label>
+<input type="password" id="supaKey" placeholder="eyJ... (anon public key)" oninput="saveCloudConfig()">
+</div>
+<div class="cloud-field">
+<label>同期コード(全端末で同じ値にする)</label>
+<input type="text" id="supaSync" placeholder="例:abe-kenchiku-2026" oninput="saveCloudConfig()">
+</div>
+<div class="integration-actions" style="margin-top:10px;">
+<button class="integration-btn accent" onclick="cloudConnect()">接続して同期</button>
+<button class="integration-btn" onclick="cloudPushNow()">今すぐ保存</button>
+<button class="integration-btn" onclick="cloudPullNow()">クラウドから取得</button>
+</div>
+<div class="hint" id="cloudHint" style="margin-top:8px;">Supabaseの URL と anon key を入力し、同期コードを決めて「接続して同期」を押してください。別の端末でも同じ3つを入力すればデータが同期されます。</div>
+</div>
+</div>
 
 <!-- CSV/Excelエクスポート -->
 <div class="integration-card">
@@ -1510,6 +1924,7 @@ JSONインポート
 </label>
 </div>
 </div>
+<div style="height:40px;"></div>
 
 </div>
 
@@ -1532,6 +1947,24 @@ JSONインポート
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- 作業員サイン手書きモーダル -->
+<div class="modal-overlay" id="signModal" onclick="if(event.target===this)closeSignModal()" style="align-items:center;">
+<div class="sign-modal">
+<h3 id="signModalTitle">サインを記入</h3>
+<div class="sign-name-row">
+<label>氏名</label>
+<input type="text" id="signNameInput" placeholder="氏名を入力">
+</div>
+<div class="sign-canvas-label">下の枠内に指でサインしてください</div>
+<canvas id="signCanvas" class="sign-canvas" width="600" height="200"></canvas>
+<div class="sign-modal-actions">
+<button class="sign-clear-btn" onclick="clearSignCanvas()">書き直す</button>
+<button class="sign-cancel-btn" onclick="closeSignModal()">キャンセル</button>
+<button class="sign-save-btn" onclick="saveSignature()">確定</button>
+</div>
+</div>
+</div>
 
 <div class="modal-overlay" id="copyPrevModal" onclick="if(event.target===this)closeCopyPrevModal()">
 <div class="modal-sheet">
@@ -1562,11 +1995,11 @@ JSONインポート
 
 <div class="modal-overlay" id="confirmModal" onclick="if(event.target===this)closeConfirm()" style="align-items:center;">
 <div class="confirm-modal">
-<h3>削除の確認</h3>
+<h3 id="confirmTitle">削除の確認</h3>
 <p id="confirmText"></p>
 <div class="confirm-actions">
 <button class="btn-cancel" onclick="closeConfirm()">キャンセル</button>
-<button class="btn-delete" onclick="confirmDelete()">削除する</button>
+<button class="btn-delete" id="confirmOkBtn" onclick="confirmDelete()">削除する</button>
 </div>
 </div>
 </div>
@@ -1617,6 +2050,140 @@ function saveStorage() {
         updateSaveIndicator();
     }
     catch(e) { console.error('[v8] saveStorage失敗:', e); }
+    // クラウドへ非同期同期(設定済みなら)
+    if (typeof cloudPushDebounced === 'function') cloudPushDebounced();
+}
+
+// ========== クラウド保存(Supabase REST API) ==========
+let cloudConfig = { url:'', key:'', sync:'' };
+let cloudConnected = false;
+let cloudPushTimer = null;
+
+function loadCloudConfig() {
+    try {
+        cloudConfig.url = localStorage.getItem('genba_supa_url') || '';
+        cloudConfig.key = localStorage.getItem('genba_supa_key') || '';
+        cloudConfig.sync = localStorage.getItem('genba_supa_sync') || '';
+    } catch(e) {}
+    const u = document.getElementById('supaUrl'); if (u) u.value = cloudConfig.url;
+    const k = document.getElementById('supaKey'); if (k) k.value = cloudConfig.key;
+    const s = document.getElementById('supaSync'); if (s) s.value = cloudConfig.sync;
+    // 設定済みなら自動接続
+    if (cloudConfig.url && cloudConfig.key && cloudConfig.sync) {
+        cloudConnected = true;
+        setCloudBadge('on', '接続済み');
+    }
+}
+
+function saveCloudConfig() {
+    cloudConfig.url = (document.getElementById('supaUrl')?.value || '').trim().replace(/\/$/, '');
+    cloudConfig.key = (document.getElementById('supaKey')?.value || '').trim();
+    cloudConfig.sync = (document.getElementById('supaSync')?.value || '').trim();
+    try {
+        localStorage.setItem('genba_supa_url', cloudConfig.url);
+        localStorage.setItem('genba_supa_key', cloudConfig.key);
+        localStorage.setItem('genba_supa_sync', cloudConfig.sync);
+    } catch(e) {}
+}
+
+function setCloudBadge(cls, text) {
+    const b = document.getElementById('cloudStatusBadge');
+    if (b) { b.className = 'cloud-badge ' + cls; b.textContent = text; }
+}
+
+function cloudReady() {
+    return cloudConfig.url && cloudConfig.key && cloudConfig.sync;
+}
+
+// Supabaseテーブル genba_data (columns: sync_code text primary key, data jsonb, updated_at timestamptz)
+async function cloudPushNow() {
+    if (!cloudReady()) { showToast('先にクラウド設定を入力してください', true); return; }
+    setCloudBadge('syncing', '保存中...');
+    try {
+        const body = { sync_code: cloudConfig.sync, data: { projects: projects }, updated_at: new Date().toISOString() };
+        const res = await fetch(`${cloudConfig.url}/rest/v1/genba_data?on_conflict=sync_code`, {
+            method: 'POST',
+            headers: {
+                'apikey': cloudConfig.key,
+                'Authorization': 'Bearer ' + cloudConfig.key,
+                'Content-Type': 'application/json',
+                'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(body)
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        cloudConnected = true;
+        setCloudBadge('on', '保存済み');
+        showToast('クラウドに保存しました');
+    } catch(e) {
+        setCloudBadge('error', 'エラー');
+        showToast('クラウド保存に失敗:' + e.message, true);
+    }
+}
+
+async function cloudPullNow() {
+    if (!cloudReady()) { showToast('先にクラウド設定を入力してください', true); return; }
+    setCloudBadge('syncing', '取得中...');
+    try {
+        const res = await fetch(`${cloudConfig.url}/rest/v1/genba_data?sync_code=eq.${encodeURIComponent(cloudConfig.sync)}&select=data`, {
+            headers: { 'apikey': cloudConfig.key, 'Authorization': 'Bearer ' + cloudConfig.key }
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const rows = await res.json();
+        if (!rows.length) { setCloudBadge('on', '接続済み'); showToast('クラウドにデータがありません(初回は「今すぐ保存」)'); return; }
+        const cloudProjects = rows[0].data && rows[0].data.projects ? rows[0].data.projects : {};
+        // マージ(lastUsedが新しい方を採用)
+        Object.keys(cloudProjects).forEach(name => {
+            const local = projects[name];
+            const remote = cloudProjects[name];
+            if (!local) { projects[name] = remote; return; }
+            const lt = new Date(local.lastUsed || 0).getTime();
+            const rt = new Date(remote.lastUsed || 0).getTime();
+            if (rt >= lt) projects[name] = remote;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+        cloudConnected = true;
+        setCloudBadge('on', '同期済み');
+        if (typeof renderProjectMenu === 'function') renderProjectMenu();
+        if (typeof updateHome === 'function') updateHome();
+        showToast('クラウドから取得しました(' + Object.keys(cloudProjects).length + '件)');
+    } catch(e) {
+        setCloudBadge('error', 'エラー');
+        showToast('取得に失敗:' + e.message, true);
+    }
+}
+
+async function cloudConnect() {
+    saveCloudConfig();
+    if (!cloudReady()) { showToast('URL・キー・同期コードをすべて入力してください', true); return; }
+    // まずクラウドから取得→無ければ保存
+    await cloudPullNow();
+    await cloudPushNow();
+}
+
+// 保存のたびに呼ばれる(2秒デバウンスでクラウドへ)
+function cloudPushDebounced() {
+    if (!cloudReady() || !cloudConnected) return;
+    if (cloudPushTimer) clearTimeout(cloudPushTimer);
+    cloudPushTimer = setTimeout(() => { cloudPushSilent(); }, 2000);
+}
+
+async function cloudPushSilent() {
+    if (!cloudReady()) return;
+    try {
+        const body = { sync_code: cloudConfig.sync, data: { projects: projects }, updated_at: new Date().toISOString() };
+        await fetch(`${cloudConfig.url}/rest/v1/genba_data?on_conflict=sync_code`, {
+            method: 'POST',
+            headers: {
+                'apikey': cloudConfig.key,
+                'Authorization': 'Bearer ' + cloudConfig.key,
+                'Content-Type': 'application/json',
+                'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(body)
+        });
+        setCloudBadge('on', '保存済み');
+    } catch(e) { setCloudBadge('error', '同期エラー'); }
 }
 function updateSaveIndicator() {
     const ind = document.getElementById('saveIndicator');
@@ -1868,11 +2435,14 @@ function goPage(name) {
     const navBtn = document.querySelector(`.bottom-nav button[data-page="${name}"]`);
     if (navBtn) navBtn.classList.add('active');
     document.querySelector('.content').scrollTop = 0;
+    window.scrollTo(0, 0);
     // 戻るボタンはホーム以外で表示
     const backBtn = document.getElementById('backBtn');
     if (backBtn) backBtn.style.display = name === 'home' ? 'none' : 'flex';
     if (name === 'home') updateHome();
     if (name === 'ky') {
+        // 選択UI・サインの状態復元
+        if (typeof loadKy2State === 'function') loadKy2State();
         // 出力エリアを常時表示(生成前は空、生成ボタンで内容生成)
         const ko = document.getElementById('kyOutput');
         if (ko) ko.style.display = 'block';
@@ -1892,14 +2462,14 @@ function goPage(name) {
         // 生成済みなら出力エリア(コピー/Word/共有/メール/削除ボタン)を表示
         if (currentProject && projects[currentProject] && projects[currentProject].outPlan) {
             const ta = document.getElementById('out-plan');
-            if (ta) ta.value = projects[currentProject].outPlan;
+            if (ta) { ta.value = projects[currentProject].outPlan; ta.style.display = 'block'; }
             const po = document.getElementById('planOutput');
             if (po) po.style.display = 'block';
-            if (typeof renderPlanChapters === 'function') renderPlanChapters();
-            if (typeof setBadge === 'function') setBadge('preview', '作成済', 'filled');
         }
     }
     if (name === 'photo') {
+        // 写真カード一覧を復元
+        if (typeof loadPhotoItems === 'function') loadPhotoItems();
         // 生成済みなら出力エリアを表示
         if (currentProject && projects[currentProject] && projects[currentProject].outPhoto) {
             const ta = document.getElementById('out-photo');
@@ -2060,12 +2630,18 @@ function updateTodoSection(p) {
     const list = document.getElementById('todoList');
     if (!section || !list) return;
     const todos = [];
+    // 工期残日数(7日以内 or 超過で警告)
+    const rem = calcRemainingDays(p);
+    if (rem !== null) {
+        if (rem < 0) todos.push({ label:`⚠ 工期を${Math.abs(rem)}日超過しています`, page:'input', warn:true });
+        else if (rem === 0) todos.push({ label:'本日が工期最終日です', page:'input', warn:true });
+        else if (rem <= 7) todos.push({ label:`工期終了まで残り${rem}日`, page:'input', warn:true });
+    }
     if ((p.statusPlan || 'none') === 'none') todos.push({ label:'施工計画書を作成', page:'plan' });
     if ((p.statusKy || 'none') === 'none') todos.push({ label:'今日のKYを作成', page:'ky' });
     if ((p.statusPhoto || 'none') === 'none') todos.push({ label:'写真台帳を準備', page:'photo' });
     if ((p.statusPlan || 'none') === 'editing') todos.push({ label:'施工計画書の編集を完了', page:'plan' });
     if ((p.statusPlan || 'none') === 'pending') todos.push({ label:'施工計画書の確認待ち', page:'plan' });
-    // 全書類が承認済かつ案件がactiveなら、完了化を案内
     const sp = p.statusPlan || 'none', sk = p.statusKy || 'none', sphoto = p.statusPhoto || 'none';
     if (sp === 'approved' && sk === 'approved' && sphoto === 'approved' && (p.status || 'active') === 'active') {
         todos.push({ label:'全書類が承認済 → 案件を「完了」にできます(進行中ボタンをクリック)', page:'home' });
@@ -2075,7 +2651,7 @@ function updateTodoSection(p) {
         return;
     }
     section.style.display = 'block';
-    list.innerHTML = todos.map(t => `<div class="todo-item" onclick="goPage('${t.page}')">${escapeHtml(t.label)}</div>`).join('');
+    list.innerHTML = todos.map(t => `<div class="todo-item ${t.warn ? 'warn' : ''}" onclick="goPage('${t.page}')">${escapeHtml(t.label)}</div>`).join('');
 }
 
 // ========== 検索・フィルタ ==========
@@ -2421,6 +2997,144 @@ function updateGenButtonLabels() {
     if (photoLabel) photoLabel.textContent = photoVal ? '写真台帳を再生成' : '写真台帳を生成';
 }
 
+// 全現場サマリー+アラート集計(大手の俯瞰・気づかせる機能)
+function updateHomeSummary() {
+    const names = Object.keys(projects);
+    let active = 0, done = 0;
+    const alerts = [];
+    names.forEach(name => {
+        const p = projects[name];
+        const status = p.status || 'active';
+        if (status === 'done') { done++; return; }
+        if (status === 'archived') return;
+        active++;
+        // 工期チェック
+        const rem = (typeof calcRemainingDays === 'function') ? calcRemainingDays(p) : null;
+        if (rem !== null && rem < 0) {
+            alerts.push({ name, type:'urgent', msg:`工期を${Math.abs(rem)}日超過`, page:name });
+        } else if (rem !== null && rem >= 0 && rem <= 7) {
+            alerts.push({ name, type:'warn', msg:`工期まで残り${rem}日`, page:name });
+        }
+        // 書類未作成チェック(工期が近い現場のみ)
+        if (rem !== null && rem <= 14) {
+            const missing = [];
+            if ((p.statusPlan||'none') === 'none') missing.push('施工計画書');
+            if ((p.statusKy||'none') === 'none') missing.push('KY');
+            if ((p.statusPhoto||'none') === 'none') missing.push('写真台帳');
+            if (missing.length) {
+                alerts.push({ name, type:'warn', msg:`${missing.join('・')}が未作成`, page:name });
+            }
+        }
+    });
+    // 数値サマリー
+    const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    setText('hsumActive', active);
+    setText('hsumDone', done);
+    setText('hsumAlert', alerts.length);
+    const alertBox = document.getElementById('hsumAlertBox');
+    if (alertBox) alertBox.classList.toggle('has-alert', alerts.length > 0);
+    // アラート一覧(最大5件)
+    const alertWrap = document.getElementById('homeAlerts');
+    if (alertWrap) {
+        if (alerts.length === 0) {
+            alertWrap.style.display = 'none';
+        } else {
+            alertWrap.style.display = 'flex';
+            const icon = (t) => t === 'urgent' ? '#i-warning' : '#i-calendar';
+            alertWrap.innerHTML = alerts.slice(0, 5).map(a =>
+                `<div class="home-alert ${a.type}" onclick="selectProject('${escapeJs(a.page)}');goPage('home');">
+                    <svg><use href="${icon(a.type)}"/></svg>
+                    <span class="home-alert-name">${escapeHtml(a.name)}</span>
+                    <span>${escapeHtml(a.msg)}</span>
+                </div>`
+            ).join('');
+        }
+    }
+}
+
+// ========== 現場の天気(軽量版・日付横ミニ表示) ==========
+let weatherCache = {};
+
+async function updateHomeWeather() {
+    const mini = document.getElementById('homeWeatherMini');
+    if (!mini) return;
+    const cur = (currentProject && projects[currentProject]) ? projects[currentProject] : null;
+    const loc = cur && cur.location ? cur.location.trim() : '';
+    if (!loc) { mini.style.display = 'none'; return; }
+
+    // キャッシュ(1時間)→即表示
+    const cached = weatherCache[loc];
+    if (cached && (Date.now() - cached.ts < 3600000)) {
+        renderWeatherMini(cached.data);
+        return;
+    }
+    // 座標キャッシュ(住所→座標は変わらないので永続化)
+    let coords = null;
+    try {
+        const cc = localStorage.getItem('geo_' + loc);
+        if (cc) coords = JSON.parse(cc);
+    } catch(e) {}
+
+    try {
+        if (!coords) {
+            const q = extractCityName(loc);
+            const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=ja&country=JP`);
+            const geo = await geoRes.json();
+            if (!geo.results || !geo.results.length) { mini.style.display = 'none'; return; }
+            coords = { lat: geo.results[0].latitude, lon: geo.results[0].longitude };
+            try { localStorage.setItem('geo_' + loc, JSON.stringify(coords)); } catch(e) {}
+        }
+        // 軽量: 現在の気温・天気コード+当日の体感最高のみ
+        const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=temperature_2m,weather_code&daily=apparent_temperature_max&timezone=Asia%2FTokyo&forecast_days=1`);
+        const w = await wRes.json();
+        const data = {
+            temp: Math.round(w.current.temperature_2m),
+            code: w.current.weather_code,
+            feelMax: Math.round(w.daily.apparent_temperature_max[0])
+        };
+        weatherCache[loc] = { data, ts: Date.now() };
+        renderWeatherMini(data);
+    } catch (e) {
+        mini.style.display = 'none';
+    }
+}
+
+function extractCityName(loc) {
+    let m = loc.match(/(.+?[都道府県])?(.+?[市区町村])/);
+    if (m) return (m[1]||'') + m[2];
+    return loc.replace(/[0-9０-９\-－].*$/, '');
+}
+
+function weatherCodeInfo(code) {
+    if (code === 0) return { icon:'#i-sun', label:'快晴' };
+    if (code <= 2) return { icon:'#i-sun', label:'晴れ' };
+    if (code === 3) return { icon:'#i-cloud', label:'くもり' };
+    if (code <= 48) return { icon:'#i-cloud', label:'霧' };
+    if (code <= 67) return { icon:'#i-rain', label:'雨' };
+    if (code <= 77) return { icon:'#i-snow', label:'雪' };
+    if (code <= 82) return { icon:'#i-rain', label:'にわか雨' };
+    if (code <= 86) return { icon:'#i-snow', label:'にわか雪' };
+    return { icon:'#i-rain', label:'雷雨' };
+}
+
+function renderWeatherMini(d) {
+    const mini = document.getElementById('homeWeatherMini');
+    if (!mini) return;
+    mini.style.display = 'inline-flex';
+    const info = weatherCodeInfo(d.code);
+    const iconEl = document.getElementById('hwmIcon');
+    if (iconEl) iconEl.querySelector('use').setAttribute('href', info.icon);
+    const tempEl = document.getElementById('hwmTemp');
+    if (tempEl) tempEl.textContent = d.temp + '°';
+    // 熱中症バッジ(危険時のみ)
+    const heatEl = document.getElementById('hwmHeat');
+    if (heatEl) {
+        if (d.feelMax >= 31) { heatEl.style.display='inline'; heatEl.textContent='熱中症危険'; heatEl.className='hwm-heat danger'; }
+        else if (d.feelMax >= 28) { heatEl.style.display='inline'; heatEl.textContent='熱中症警戒'; heatEl.className='hwm-heat warn'; }
+        else { heatEl.style.display='none'; }
+    }
+}
+
 // ========== ホーム ==========
 function updateHome() {
     const d = new Date();
@@ -2430,6 +3144,10 @@ function updateHome() {
     if (dateEl) dateEl.textContent = dateStr;
     const dateStrongEl = document.getElementById('todayDateStrong');
     if (dateStrongEl) dateStrongEl.textContent = dateStr;
+    // 全現場サマリー+アラート更新
+    if (typeof updateHomeSummary === 'function') updateHomeSummary();
+    // 現場の天気更新
+    if (typeof updateHomeWeather === 'function') updateHomeWeather();
     const h = d.getHours();
     let greet = 'お疲れさまです';
     if (h < 10) greet = 'おはようございます';
@@ -2440,7 +3158,12 @@ function updateHome() {
     const info = document.getElementById('currentProjectInfo');
     if (currentProject && projects[currentProject]) {
         const p = projects[currentProject];
-        info.innerHTML = `<strong>${escapeHtml(currentProject)}</strong><span class="meta-line">${escapeHtml(p.location || '場所未設定')} / 工種:${workTypeToKoushu(p.workType||'earthwork')}</span>`;
+        info.innerHTML = `<strong>${escapeHtml(currentProject)}</strong><span class="meta-line">${escapeHtml(p.location || '場所未設定')} / 工種:${workTypeToKoushu(p.workType||'earthwork')}</span>
+        <div class="current-actions">
+            <button class="recent-action-btn edit" onclick="editFromRecent('${escapeJs(currentProject)}')"><svg class="icon-sm"><use href="#i-edit"/></svg><span>編集</span></button>
+            <button class="recent-action-btn copy" onclick="copyFromRecent('${escapeJs(currentProject)}')"><svg class="icon-sm"><use href="#i-copy"/></svg><span>コピー</span></button>
+            <button class="recent-action-btn del" onclick="deleteFromRecent('${escapeJs(currentProject)}')"><svg class="icon-sm"><use href="#i-trash"/></svg><span>削除</span></button>
+        </div>`;
     } else {
         info.textContent = '現場が未選択です。右上のメニューから選択してください。';
     }
@@ -2465,29 +3188,41 @@ function updateHome() {
             const status = p.status || 'active';
             const stLabel = status === 'done' ? '完了' : status === 'archived' ? 'アーカイブ' : '進行中';
             const stClass = status === 'done' ? 'done' : status === 'archived' ? 'archived' : '';
-            const lastDate = p.lastUsed ? new Date(p.lastUsed).toLocaleDateString('ja-JP', {month:'numeric',day:'numeric'}) : '';
-            // 書類の状態ドット(作成済み判定)
+            // 進捗率(施工計画書の入力完成度)
+            const pct = calcPlanProgress(p, name);
+            // 工期残日数
+            const rem = calcRemainingDays(p);
+            let remLabel = '工期未設定';
+            let remClass = '';
+            if (rem !== null) {
+                if (rem < 0) { remLabel = `工期超過 ${Math.abs(rem)}日`; remClass = 'over'; }
+                else if (rem === 0) { remLabel = '本日が工期末'; remClass = 'soon'; }
+                else if (rem <= 7) { remLabel = `残り ${rem}日`; remClass = 'soon'; }
+                else { remLabel = `残り ${rem}日`; }
+            }
+            // 最終更新
+            const lastDate = p.lastUsed ? new Date(p.lastUsed).toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'}) : '';
+            // 書類の状態ドット
             const docDot = (st, label) => {
                 const done = st && st !== 'none';
                 const cls = done ? (st === 'approved' ? 'approved' : 'created') : 'none';
                 return `<span class="rc-doc-dot ${cls}" title="${label}"><span class="rc-dot"></span>${label}</span>`;
             };
             const docDots = docDot(p.statusPlan, '計画書') + docDot(p.statusKy, 'KY') + docDot(p.statusPhoto, '写真');
-            // イニシャル(サムネイル代わり)
             const initial = (name || '?').charAt(0);
             return `<div class="recent-card ${isCurrent ? 'recent-current' : ''}">
                 <div class="rc-main" onclick="selectProject('${escapeJs(name)}')">
                     <div class="rc-thumb ${stClass}">${escapeHtml(initial)}</div>
                     <div class="rc-info">
                         <div class="rc-name">${escapeHtml(name)}</div>
-                        <div class="rc-meta">${escapeHtml(p.location || '場所未設定')}</div>
+                        <div class="rc-meta">${escapeHtml(p.location || '場所未設定')}・<span class="rc-rem ${remClass}">${remLabel}</span></div>
                         <div class="rc-docs">${docDots}</div>
                     </div>
                     <div class="rc-right">
                         <button class="recent-status-btn ${stClass}" onclick="event.stopPropagation();toggleProjectStatus('${escapeJs(name)}')">${stLabel}</button>
-                        <div class="rc-date">${lastDate}</div>
                     </div>
                 </div>
+                <div class="rc-footer">最終更新 ${lastDate || '—'}</div>
                 <div class="rc-actions" onclick="event.stopPropagation();">
                     <button class="recent-action-btn edit" onclick="editFromRecent('${escapeJs(name)}')"><svg class="icon-sm"><use href="#i-edit"/></svg><span>編集</span></button>
                     <button class="recent-action-btn copy" onclick="copyFromRecent('${escapeJs(name)}')"><svg class="icon-sm"><use href="#i-copy"/></svg><span>コピー</span></button>
@@ -2568,8 +3303,7 @@ function loadCurrentProject() {
     if (document.getElementById('orgGuide')) document.getElementById('orgGuide').value = d.orgGuide || '';
     if (document.getElementById('orgOperator')) document.getElementById('orgOperator').value = d.orgOperator || '';
     if (document.getElementById('kyContent')) document.getElementById('kyContent').value = d.kyContent || '';
-    document.getElementById('photoContent').value = d.photoContent || '';
-    document.getElementById('photoLocation').value = d.photoLocation || '';
+    { const e1=document.getElementById('photoContent'); if(e1) e1.value=d.photoContent||''; const e2=document.getElementById('photoLocation'); if(e2) e2.value=d.photoLocation||''; }
     
     setActiveChip('workTypeChips', d.workType || 'earthwork');
     setActiveChip('kyTypeChips', workTypeToKY(d.workType || 'earthwork'));
@@ -2682,8 +3416,8 @@ function gatherInputs() {
         orgGuide: (document.getElementById('orgGuide')?.value || '').trim(),
         orgOperator: (document.getElementById('orgOperator')?.value || '').trim(),
         kyContent: (document.getElementById('kyContent')?.value || '').trim(),
-        photoContent: document.getElementById('photoContent').value.trim(),
-        photoLocation: document.getElementById('photoLocation').value.trim(),
+        photoContent: (document.getElementById('photoContent')?.value||'').trim(),
+        photoLocation: (document.getElementById('photoLocation')?.value||'').trim(),
         workType: getActiveChip('workTypeChips') || 'earthwork',
         subWorkTypes: (projects[currentProject] && projects[currentProject].subWorkTypes) || [],
         mainConstruction: (document.getElementById('mainConstruction')?.value || ''),
@@ -2891,16 +3625,16 @@ function saveProject() {
 }
 
 function newProject() {
-    ['projectName','location','workContent','prime','manager','kyContent','photoContent','photoLocation'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('workers').value = 3;
+    ['projectName','location','workContent','prime','manager','kyContent','photoContent','photoLocation'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    const wk = document.getElementById('workers'); if (wk) wk.value = 3;
     setActiveChip('workTypeChips', 'earthwork');
     setActiveChip('kyTypeChips', 'excavation');
     setActiveChip('photoTypeChips', 'before');
     document.querySelectorAll('#conditionChecks .check-chip').forEach(c => c.classList.remove('active'));
     manualWorkTypeLock = false;
-    updateLockIndicator();
-    document.getElementById('detectedHint').innerHTML = '↑ 工事内容を入力すると、最適な工種が自動選択されます';
-    document.getElementById('detectedHint').className = 'hint';
+    if (typeof updateLockIndicator === 'function') updateLockIndicator();
+    const hint = document.getElementById('detectedHint');
+    if (hint) { hint.innerHTML = '入力内容から主工事・関連工事・KY・必要資格を自動判定します'; hint.className = 'hint-hero'; }
     setCurrent(null);
     closeProjectMenu();
     goPage('input');
@@ -2916,10 +3650,25 @@ function editProject(name) {
 
 function deleteProject(name) {
     pendingDelete = name;
+    pendingReset = null;
+    const cm = document.getElementById('confirmModal');
+    if (cm) cm.dataset.mode = 'delete';
+    const tt = document.getElementById('confirmTitle'); if (tt) tt.textContent = '削除の確認';
+    const ok = document.getElementById('confirmOkBtn'); if (ok) ok.textContent = '削除する';
     document.getElementById('confirmText').innerHTML = `<strong>「${escapeHtml(name)}」</strong>を完全に削除します。<br>この操作は取り消せません。`;
     document.getElementById('confirmModal').classList.add('show');
 }
 function confirmDelete() {
+    const cm = document.getElementById('confirmModal');
+    // リセットモードの場合
+    if (cm && cm.dataset.mode === 'reset' && pendingReset) {
+        const t = pendingReset;
+        pendingReset = null;
+        cm.dataset.mode = '';
+        doResetOutput(t);
+        closeConfirm();
+        return;
+    }
     if (pendingDelete) {
         delete projects[pendingDelete];
         if (currentProject === pendingDelete) setCurrent(null);
@@ -2931,7 +3680,12 @@ function confirmDelete() {
     }
     closeConfirm();
 }
-function closeConfirm() { document.getElementById('confirmModal').classList.remove('show'); pendingDelete = null; }
+function closeConfirm() {
+    const cm = document.getElementById('confirmModal');
+    if (cm) { cm.classList.remove('show'); cm.dataset.mode = ''; }
+    pendingDelete = null;
+    pendingReset = null;
+}
 
 function copyProjectAction(name) {
     const newName = prompt('新しい現場名を入力:', name + '_コピー');
@@ -2994,6 +3748,14 @@ function copyAsNewProject(srcName) {
     copy.outPlan = src.outPlan || '';
     copy.outKy = src.outKy || '';
     copy.outPhoto = src.outPhoto || '';
+    // 3書類のステータスも引き継ぐ
+    copy.statusPlan = src.statusPlan || 'none';
+    copy.statusKy = src.statusKy || 'none';
+    copy.statusPhoto = src.statusPhoto || 'none';
+    // 写真台帳の写真データ(photoItems)も引き継ぐ(深コピー済だが明示)
+    copy.photoItems = src.photoItems ? JSON.parse(JSON.stringify(src.photoItems)) : [];
+    // KY承認はコピー先では未承認に(別現場のため)
+    copy.ky2Approval = { approved: false };
     // 生成テキスト内の日付を今日に置換
     copy.outPlan = replaceDatesInText(copy.outPlan);
     copy.outKy = replaceDatesInText(copy.outKy);
@@ -3003,11 +3765,11 @@ function copyAsNewProject(srcName) {
     setCurrent(newName);
     loadCurrentProject();
     // テキストエリアにもコピーされた生成テキストを反映
-    if (copy.outPlan) document.getElementById('out-plan').value = copy.outPlan;
-    if (copy.outKy) document.getElementById('out-ky').value = copy.outKy;
-    if (copy.outPhoto) document.getElementById('out-photo').value = copy.outPhoto;
+    const op = document.getElementById('out-plan'); if (op && copy.outPlan) op.value = copy.outPlan;
+    const ok = document.getElementById('out-ky'); if (ok && copy.outKy) ok.value = copy.outKy;
+    const oph = document.getElementById('out-photo'); if (oph && copy.outPhoto) oph.value = copy.outPhoto;
     closeCopyPrevModal();
-    showToast(`「${srcName}」から複製しました(日付は本日に更新済)`);
+    showToast(`「${srcName}」を複製しました(施工計画書・KY・写真台帳も含む / 日付は本日に更新)`);
     goPage('home');
 }
 
@@ -3953,6 +4715,253 @@ function generateCompositeSafety(relatedWorks) {
     return result;
 }
 
+// ========== 施工計画書 強化セクション用ヘルパー ==========
+// 工程表: 主工事・関連工事から標準工程を組み立て(重みは日数比率)
+function buildSchedule(cur) {
+    const phases = [{ name:'準備工', w:1 }];
+    const rw = cur.relatedWorks || [];
+    const has = (k) => rw.includes(k);
+    const main = cur.mainConstruction || '';
+    // 足場
+    if (has('scaffold') || /大規模修繕|外壁|屋上|塗装|防水/.test(main)) phases.push({ name:'足場工事(組立)', w:2 });
+    // 下地補修
+    if (has('concrete_repair') || has('tile') || /大規模修繕|外壁/.test(main)) phases.push({ name:'下地補修', w:2 });
+    // 高圧洗浄
+    if (has('washing')) phases.push({ name:'高圧洗浄', w:1 });
+    // シーリング
+    if (has('sealing')) phases.push({ name:'シーリング工事', w:1 });
+    // 塗装
+    if (has('painting') || /塗装/.test(main)) phases.push({ name:'塗装工事', w:3 });
+    // 防水
+    if (has('waterproof') || /防水/.test(main)) phases.push({ name:'防水工事', w:2 });
+    // 解体・土工等
+    if (has('demolition')) phases.push({ name:'解体工事', w:2 });
+    if (has('earthwork')) phases.push({ name:'土工事', w:2 });
+    if (has('concrete')) phases.push({ name:'コンクリート工事', w:2 });
+    if (has('piping')) phases.push({ name:'管布設工事', w:2 });
+    if (has('interior')) phases.push({ name:'内装工事', w:2 });
+    if (has('electric')) phases.push({ name:'電気・設備工事', w:2 });
+    // 足場解体(足場があれば)
+    if (has('scaffold') || /大規模修繕|外壁|屋上|塗装|防水/.test(main)) phases.push({ name:'足場工事(解体)', w:1 });
+    phases.push({ name:'完了検査', w:1 });
+    phases.push({ name:'清掃・片付け', w:1 });
+    return phases;
+}
+
+// リスクアセスメント: 現場条件・作業から自動生成
+function buildRiskAssessment(cur) {
+    const conds = cur.conditions || [];
+    const rw = cur.relatedWorks || [];
+    const foreman = cur.orgForeman || cur.orgChiefEng || '職長';
+    const list = [];
+    const hasC = (k) => conds.includes(k);
+    const hasW = (k) => rw.includes(k);
+    if (hasC('high') || hasC('scaffold') || hasC('rooftop') || hasW('scaffold')) {
+        list.push({ work:'高所・足場作業', hazard:'墜落・転落', level:'Ⅲ', measure:'フルハーネス着用・手すり設置・開口部養生', person:foreman });
+    }
+    if (hasW('scaffold')) {
+        list.push({ work:'足場組立解体', hazard:'飛来落下・工具落下', level:'Ⅱ', measure:'メッシュシート・立入禁止区画・工具落下防止紐', person:foreman });
+    }
+    if (hasW('painting') || hasW('waterproof')) {
+        list.push({ work:'塗装・防水作業', hazard:'有機溶剤中毒・換気不良', level:'Ⅱ', measure:'保護マスク着用・換気励行・SDS確認', person:foreman });
+    }
+    if (hasC('residential') || hasC('school') || hasC('commercial') || hasC('occupied')) {
+        list.push({ work:'第三者近接作業', hazard:'通行人・居住者への災害', level:'Ⅲ', measure:'作業範囲区画・誘導員配置・養生徹底', person:foreman });
+    }
+    if (hasC('heavy') || hasW('demolition')) {
+        list.push({ work:'重機作業', hazard:'重機接触・挟まれ', level:'Ⅲ', measure:'誘導員配置・立入禁止・合図統一', person:foreman });
+    }
+    if (hasC('hot')) {
+        list.push({ work:'夏季屋外作業', hazard:'熱中症', level:'Ⅱ', measure:'こまめな休憩・水分塩分補給・WBGT確認', person:foreman });
+    }
+    if (hasC('livewire') || hasW('electric')) {
+        list.push({ work:'電気作業', hazard:'感電', level:'Ⅲ', measure:'停電確認・絶縁保護具・検電実施', person:foreman });
+    }
+    if (list.length === 0) {
+        list.push({ work:'一般作業', hazard:'転倒・つまずき', level:'Ⅰ', measure:'整理整頓・通路確保・足元注意', person:foreman });
+    }
+    return list;
+}
+
+// 数量から該当項目の値を取得(部分一致)
+function getQtyVal(qtyRows, keyword) {
+    if (!qtyRows) return '';
+    const row = qtyRows.find(r => r.name && r.name.includes(keyword) && r.value && r.value.trim());
+    return row ? (row.value + (row.customUnit||row.unit||'')) : '';
+}
+
+// 品質管理項目(主工事別・機械的に決定)
+const QC_MAP = {
+    'マンション大規模修繕工事': ['下地補修確認','シーリング確認','塗装膜厚確認','防水施工確認','仕上がり確認'],
+    'マンション外壁改修工事':   ['クラック補修確認','タイル浮き確認','シーリング確認','塗装膜厚確認','仕上がり確認'],
+    'マンション屋上防水改修工事': ['下地処理確認','防水材使用量確認','膜厚確認','脱気筒確認','仕上がり確認'],
+    'マンション共用部改修工事': ['下地確認','仕上材確認','寸法確認','清掃確認','仕上がり確認'],
+    '戸建住宅新築工事':         ['基礎配筋確認','コンクリート品質確認','構造材確認','防水確認','完成検査'],
+    '戸建住宅改修工事':         ['下地確認','寸法確認','防水確認','仕上材確認','完成確認'],
+    '戸建住宅外壁塗装工事':     ['高圧洗浄確認','ケレン確認','下塗り確認','膜厚確認','仕上がり確認'],
+    'マンション新築工事':       ['配筋確認','コンクリート品質確認','躯体寸法確認','防水確認','完成検査'],
+    '外壁改修工事':             ['クラック補修確認','下地補修確認','シーリング確認','塗装確認','仕上がり確認'],
+    '屋上防水改修工事':         ['下地確認','防水材確認','膜厚確認','防水端部確認','仕上がり確認'],
+    '内装改修工事':             ['下地確認','寸法確認','建具確認','仕上材確認','完成確認'],
+    '設備改修工事':             ['配管確認','配線確認','圧力試験確認','試運転確認','完成確認'],
+    '解体工事':                 ['養生確認','散水確認','分別確認','搬出確認','完了確認'],
+    '土木工事':                 ['掘削深さ確認','床付確認','埋戻し確認','転圧確認','出来形確認'],
+    '塗装工事':                 ['ケレン確認','下塗り確認','中塗り確認','上塗り確認','膜厚確認'],
+    '防水工事':                 ['下地確認','防水材確認','膜厚確認','防水端部確認','水張り試験確認']
+};
+
+// ========== 施工計画書 含める項目(公共/民間 切替) ==========
+// key: 内部キー, label: 表示名, always: 常に含む(OFF不可)
+const PLAN_SECTIONS = [
+    { key:'overview',   label:'工事概要',        always:true },
+    { key:'schedule',   label:'工程表',          always:false },
+    { key:'org',        label:'現場組織表',      always:false },
+    { key:'steps',      label:'施工手順',        always:false },
+    { key:'machine',    label:'使用機械',        always:false },
+    { key:'material',   label:'使用資材',        always:false },
+    { key:'safety',     label:'安全対策',        always:false },
+    { key:'risk',       label:'主要リスクと対策', always:false },
+    { key:'quality',    label:'品質管理項目',    always:false },
+    { key:'dekigata',   label:'出来形管理計画',  always:false },
+    { key:'photo',      label:'写真管理計画',    always:false },
+    { key:'traffic',    label:'交通管理計画',    always:false },
+    { key:'env',        label:'環境対策',        always:false },
+    { key:'recycle',    label:'再生資源利用計画', always:false },
+    { key:'quantity',   label:'施工数量',        always:false },
+    { key:'workers',    label:'作業員名簿',      always:false },
+    { key:'safetyorg',  label:'安全管理体制表',  always:false },
+    { key:'emergency',  label:'緊急連絡先',      always:false },
+    { key:'attach',     label:'添付図書',        always:false }
+];
+// プリセット
+const PLAN_SECTION_PRESETS = {
+    public: PLAN_SECTIONS.map(s => s.key), // 公共=全部
+    private: ['overview','schedule','org','steps','machine','material','safety','quality','quantity','emergency','attach'] // 民間=標準
+};
+
+// 現場の項目設定を取得(未設定なら民間プリセット)
+function getPlanSections(cur) {
+    if (cur && cur.planSections && cur.planSections.length) return cur.planSections;
+    return PLAN_SECTION_PRESETS.private.slice();
+}
+// 指定キーが有効か
+function planSec(cur, key) {
+    const sec = getPlanSections(cur);
+    const def = PLAN_SECTIONS.find(s => s.key === key);
+    if (def && def.always) return true;
+    return sec.includes(key);
+}
+
+// 項目選択UIを描画
+function refreshPcSections(p) {
+    const wrap = document.getElementById('pc-sections-list');
+    if (!wrap) return;
+    const active = getPlanSections(p);
+    wrap.innerHTML = PLAN_SECTIONS.map(s => {
+        const checked = s.always || active.includes(s.key);
+        const disabled = s.always ? 'disabled' : '';
+        return `<label class="sec-item ${s.always?'sec-locked':''}">
+<input type="checkbox" ${checked?'checked':''} ${disabled} onchange="togglePlanSection('${s.key}',this.checked)">
+<span>${escapeHtml(s.label)}${s.always?' (必須)':''}</span>
+</label>`;
+    }).join('');
+    // カスタム項目を描画
+    const cwrap = document.getElementById('pc-section-custom-list');
+    if (cwrap) {
+        const custom = p.planSectionsCustom || [];
+        cwrap.innerHTML = custom.map((c, idx) =>
+            `<div class="qc-card-item"><span class="qc-card-check">＋</span><span style="flex:1;">${escapeHtml(c.title)}</span><button class="qc-del-btn" onclick="deletePcSectionCustom(${idx})">削除</button></div>`
+        ).join('');
+    }
+}
+
+// 含める項目に独自項目を追加
+function addPcSectionCustom() {
+    const input = document.getElementById('pcSectionOther');
+    if (!input) return;
+    const val = input.value.trim();
+    if (!val) { showToast('項目名を入力してください', true); return; }
+    if (!currentProject || !projects[currentProject]) { showToast('先に現場を選んでください', true); return; }
+    if (!projects[currentProject].planSectionsCustom) projects[currentProject].planSectionsCustom = [];
+    projects[currentProject].planSectionsCustom.push({ title: val });
+    saveStorage();
+    input.value = '';
+    refreshPcSections(projects[currentProject]);
+    showToast('独自項目を追加しました');
+}
+
+function deletePcSectionCustom(idx) {
+    if (!currentProject || !projects[currentProject] || !projects[currentProject].planSectionsCustom) return;
+    projects[currentProject].planSectionsCustom.splice(idx, 1);
+    saveStorage();
+    refreshPcSections(projects[currentProject]);
+}
+
+function togglePlanSection(key, on) {
+    if (!currentProject || !projects[currentProject]) return;
+    let sec = getPlanSections(projects[currentProject]).slice();
+    if (on) { if (!sec.includes(key)) sec.push(key); }
+    else { sec = sec.filter(k => k !== key); }
+    projects[currentProject].planSections = sec;
+    saveStorage();
+}
+
+function applySectionPreset(preset) {
+    if (!currentProject || !projects[currentProject]) { showToast('先に現場を選んでください', true); return; }
+    projects[currentProject].planSections = (PLAN_SECTION_PRESETS[preset] || PLAN_SECTION_PRESETS.private).slice();
+    saveStorage();
+    refreshPcSections(projects[currentProject]);
+    showToast(preset === 'public' ? '公共工事(全項目)に設定' : '民間改修(標準)に設定');
+}
+
+function buildQualityControl(cur) {
+    const main = cur.mainConstruction || '';
+    let base = null;
+    // 完全一致を優先
+    if (QC_MAP[main]) base = QC_MAP[main].slice();
+    // 部分一致(その他/自由入力対応)
+    if (!base) {
+        for (const key of Object.keys(QC_MAP)) {
+            if (main.includes(key) || key.includes(main)) { base = QC_MAP[key].slice(); break; }
+        }
+    }
+    // 関連工事から推定
+    if (!base) {
+        const rw = cur.relatedWorks || [];
+        if (rw.includes('painting')) base = QC_MAP['塗装工事'].slice();
+        else if (rw.includes('waterproof')) base = QC_MAP['防水工事'].slice();
+        else if (rw.includes('demolition')) base = QC_MAP['解体工事'].slice();
+    }
+    // デフォルト(一般)
+    if (!base) base = ['下地確認','寸法確認','使用材料確認','出来形確認','仕上がり確認'];
+    // ユーザー追加のカスタム項目を末尾に追加
+    const custom = cur.qcCustom || [];
+    return base.concat(custom);
+}
+
+// 品質管理にカスタム項目を追加
+function addPcQualityOther() {
+    const input = document.getElementById('pcQualityOther');
+    if (!input) return;
+    const val = input.value.trim();
+    if (!val) { showToast('項目を入力してください', true); return; }
+    if (!currentProject || !projects[currentProject]) { showToast('先に現場を選んでください', true); return; }
+    if (!projects[currentProject].qcCustom) projects[currentProject].qcCustom = [];
+    projects[currentProject].qcCustom.push(val);
+    saveStorage();
+    input.value = '';
+    refreshPcQuality(projects[currentProject]);
+    showToast('品質管理項目を追加しました');
+}
+
+// カスタム品質項目を削除
+function deletePcQualityCustom(idx) {
+    if (!currentProject || !projects[currentProject] || !projects[currentProject].qcCustom) return;
+    projects[currentProject].qcCustom.splice(idx, 1);
+    saveStorage();
+    refreshPcQuality(projects[currentProject]);
+}
+
 function generatePlanFromUI() {
     const cur = getCurrent();
     if (!cur) { showToast('先に現場を選んでください', true); openProjectMenu(); return; }
@@ -4000,15 +5009,19 @@ function generatePlanFromUI() {
     }
     out += '\n';
     
-    out += '【施工手順】\n\n';
+    if (planSec(cur, 'steps')) {
+    out += '【施工手順】\n';
     if (hasComposite) {
         // 関連工種から工程順に手順を生成
         const steps = generateCompositeSteps(cur.relatedWorks);
-        steps.forEach((s, i) => out += `${i+1}. ${s}\n\n`);
+        steps.forEach((s, i) => out += `${i+1}. ${s}\n`);
     } else {
-        tpl.steps.forEach(s => out += s + '\n\n');
+        tpl.steps.forEach((s, i) => out += `${s}\n`);
+    }
+    out += '\n';
     }
     
+    if (planSec(cur, 'machine')) {
     out += '【使用機械】\n';
     if (hasComposite) {
         const machines = generateCompositeMachines(cur.relatedWorks);
@@ -4024,17 +5037,30 @@ function generatePlanFromUI() {
             if (t) out += '・' + t + '\n';
         });
     }
-    out += '\n【使用資材】\n';
+    out += '\n';
+    }
+    if (planSec(cur, 'material')) {
+    out += '【使用資材】\n';
     if (hasComposite) {
         const mats = generateCompositeMaterials(cur.relatedWorks);
         mats.forEach(m => out += m + '\n');
     } else {
         tpl.materials.forEach(m => out += '・' + m + '\n');
     }
+    out += '\n';
+    }
     
-    out += '\n【安全対策】\n\n';
-    out += '〔第三者災害防止〕\n工事区域外周にH=1.8m鋼板パネルで仮囲いを設置し、施錠管理する。歩行者通路は幅員1.5m以上確保し、カラーコーン+バリケード+反射板で動線を明示する。出入口に交通誘導警備員(2級以上)を1名配置し、車両出入時は一時停止+左右確認後に誘導する。工事看板は出入口・コーナーに掲示する。\n\n';
-    out += '〔重機・機械災害防止〕\n重機作業半径内をカラーコーンで明示し、立入禁止表示板を設置する。作業員の立入禁止区域は誘導員が監視する。誘導員1名を専任配置し、特小無線でオペレーターと常時連絡をとる。始業前点検をチェックシートに記入し、職長が確認のうえ作業開始する。\n';
+    if (planSec(cur, 'safety')) {
+    out += '【安全対策】\n';
+    out += '〔第三者災害防止〕\n';
+    out += '・工事区域外周にH=1.8m鋼板パネルで仮囲い、施錠管理\n';
+    out += '・歩行者通路は幅員1.5m以上確保、カラーコーン+バリケードで動線明示\n';
+    out += '・出入口に交通誘導警備員を配置、車両出入時は一時停止+誘導\n';
+    out += '・工事看板を出入口・コーナーに掲示\n';
+    out += '〔重機・機械災害防止〕\n';
+    out += '・重機作業半径内を立入禁止区画、表示板設置\n';
+    out += '・誘導員を専任配置、無線でオペレーターと常時連絡\n';
+    out += '・始業前点検をチェックシートに記入、職長が確認\n';
     // 重機災害対策の追加
     if (cur.useHeavy) {
         out += '〔本工事重機災害対策〕\n';
@@ -4145,8 +5171,10 @@ function generatePlanFromUI() {
     out += '・発注者:' + (cur.client || '未入力') + ' 連絡先:未入力\n';
     out += '・最寄り病院:未入力\n\n';
     out += '〔その他〕\n朝礼時にKY活動を実施し、当日の危険要因と対策を全員で確認する。新規入場者には入場時教育(30分以上)を実施し、教育記録を保管する。\n\n';
+    }
     
     // 現場組織表(立場別に内容変更)
+    if (planSec(cur, 'org')) {
     out += '【現場組織表】\n';
     if (cur.role === 'sub') {
         // 専門工事業者:職長中心の簡素な構成
@@ -4174,29 +5202,176 @@ function generatePlanFromUI() {
     }
     out += '\n';
     
-    // 専門工事業者の場合は追加項目
+    // 専門工事業者の場合は下請編成表(組織表に含める)
     if (cur.role === 'sub') {
         out += '【下請負業者編成表】\n';
         out += '・自社作業員数:' + (cur.workers || '＿') + '名\n';
         out += '・職長(兼安全衛生責任者):' + (cur.orgForeman || '未入力') + '\n';
         out += '・元請担当:' + (cur.prime || '未入力') + '殿への報告は職長が一元化する\n\n';
-        out += '【作業員名簿】\n';
-        out += '※別紙「作業員名簿」(全国建設業協会様式)を添付する\n';
-        out += '※新規入場者教育を実施し、教育記録を保管する\n\n';
         out += '【専門工事固有の安全管理】\n';
         out += '・職長は自社作業員の朝礼を毎日実施し、TBM・KYを記録する\n';
         out += '・元請の安全パトロールに同行し、指摘事項は即日是正する\n';
         out += '・自社使用機械・工具の始業前点検を職長が確認する\n\n';
     }
+    }
     
-    // 承認欄(横並び風の見やすい書式)
+    // 作業員名簿
+    if (planSec(cur, 'workers')) {
+        out += '【作業員名簿】\n';
+        out += '※別紙「作業員名簿」(全国建設業協会様式)を添付する\n';
+        out += '※新規入場者教育を実施し、教育記録を保管する\n\n';
+    }
+    
+    // ========== 工程表(主工事・関連工事から自動生成) ==========
+    if (planSec(cur, 'schedule')) {
+    out += '【工程表】\n';
+    const phases = buildSchedule(cur);
+    const startD = cur.startDate ? new Date(cur.startDate.replace(/\//g,'-')) : null;
+    const endD = cur.endDate ? new Date(cur.endDate.replace(/\//g,'-')) : null;
+    let totalDays = (startD && endD) ? Math.max(1, Math.round((endD-startD)/(1000*60*60*24))) : null;
+    out += '区分／作業内容／日数の目安\n';
+    phases.forEach((ph, idx) => {
+        const ratio = ph.w / phases.reduce((s,p)=>s+p.w,0);
+        const days = totalDays ? Math.max(1, Math.round(totalDays * ratio)) : null;
+        out += `${idx+1}. ${ph.name}` + (days ? `(約${days}日)` : '') + '\n';
+    });
+    if (startD && endD) {
+        out += `工期:${cur.startDate} 〜 ${cur.endDate}(全${totalDays}日)\n`;
+    }
+    out += '※天候・現場状況により調整する\n\n';
+    }
+
+    // ========== リスクアセスメント(概要・詳細はKYで) ==========
+    if (planSec(cur, 'risk')) {
+    out += '【主要リスクと対策(概要)】\n';
+    out += '作業内容／危険要因／リスク/対策\n';
+    const raList = buildRiskAssessment(cur).slice(0, 3); // 主要3件のみ
+    raList.forEach(r => {
+        out += `・${r.work}|${r.hazard}|${r.level}|${r.measure}\n`;
+    });
+    out += '※リスクレベル:Ⅲ=重大 Ⅱ=中 Ⅰ=小\n';
+    out += '※日々の詳細な危険予知はKY活動表で実施・記録する\n\n';
+    }
+
+    // ========== 品質管理項目(主工事別・機械的に生成) ==========
+    if (planSec(cur, 'quality')) {
+    out += '【品質管理項目】\n';
+    const qcItems = buildQualityControl(cur);
+    qcItems.forEach(q => out += `☑ ${q}\n`);
+    out += '※各確認項目は施工写真・検査記録で確認する\n\n';
+    }
+
+    // ========== 出来形管理計画 ==========
+    if (planSec(cur, 'dekigata')) {
+    out += '【出来形管理計画】\n';
+    out += '・測定項目:設計図書および出来形管理基準に基づき実測する\n';
+    out += '・測定方法:各工程の節目で設計値と実測値を対比し記録する\n';
+    out += '・記録方法:出来形管理図表を作成し、監督員の確認を受ける\n';
+    out += '・写真:出来形寸法が確認できるよう黒板を併せて撮影する\n\n';
+    }
+
+    // ========== 写真管理計画 ==========
+    if (planSec(cur, 'photo')) {
+    out += '【写真管理計画】\n';
+    out += '・撮影区分:着手前・施工状況・出来形・完成の各段階で撮影する\n';
+    out += '・撮影方法:黒板に工事名・工種・撮影箇所・年月日を記載し撮影する\n';
+    out += '・整理方法:本アプリの写真台帳機能で番号順に整理し提出する\n';
+    out += '・撮影頻度:写真管理基準に基づき必要枚数を確保する\n\n';
+    }
+
+    // ========== 交通管理計画 ==========
+    if (planSec(cur, 'traffic')) {
+    out += '【交通管理計画】\n';
+    out += '・交通誘導警備員:車両出入口・道路占用箇所に配置する\n';
+    out += '・搬入出経路:' + (cur.location || '現場') + 'への最短かつ安全な経路を選定する\n';
+    out += '・安全施設:カラーコーン・バリケード・保安灯・注意看板を設置する\n';
+    out += '・道路使用許可:必要に応じ所轄警察署へ申請する\n';
+    out += '・歩行者動線:幅員1.5m以上確保し、誘導員が安全を確保する\n\n';
+    }
+
+    // ========== 環境対策 ==========
+    if (planSec(cur, 'env')) {
+    out += '【環境対策】\n';
+    out += '・騒音:低騒音型建設機械を使用し、規制基準値以下に抑える\n';
+    out += '・振動:低振動工法を採用し、近隣への影響を最小化する\n';
+    out += '・粉じん:散水・湿式工法・集じん機を使用し飛散を防止する\n';
+    out += '・廃棄物:分別を徹底し、産業廃棄物は許可業者へ委託処理する\n';
+    out += '・近隣:作業時間を遵守し、事前周知と苦情対応窓口を設置する\n\n';
+    }
+
+    // ========== 再生資源利用計画 ==========
+    if (planSec(cur, 'recycle')) {
+    out += '【再生資源利用計画】\n';
+    out += '・建設廃棄物:コンクリート塊・アスファルト塊・木くず等を分別する\n';
+    out += '・再資源化:特定建設資材は再資源化施設へ搬出する\n';
+    out += '・マニフェスト:産業廃棄物管理票で適正処理を確認・保管する\n';
+    out += '・再生資材:可能な範囲で再生材を使用する\n\n';
+    }
+
+    // ========== 施工数量 ==========
+    if (planSec(cur, 'quantity')) {
+    out += '【施工数量】\n';
+    const qty = cur.qtyRows || [];
+    if (qty.length && qty.some(r => r.value && r.value.trim())) {
+        qty.forEach(r => { if (r.value && r.value.trim()) out += `・${r.name}:${r.value}${r.customUnit||r.unit||''}\n`; });
+    }
+    // 標準数量項目(未入力でも欄を用意)
+    out += '〔主要数量〕\n';
+    out += `・施工面積:${getQtyVal(qty,'施工面積')||'＿＿＿'} ㎡\n`;
+    out += `・施工延長:${getQtyVal(qty,'施工延長')||'＿＿＿'} m\n`;
+    out += `・掘削量:${getQtyVal(qty,'掘削')||'＿＿＿'} ㎥\n`;
+    out += `・埋戻量:${getQtyVal(qty,'埋戻')||'＿＿＿'} ㎥\n`;
+    out += `・残土量:${getQtyVal(qty,'残土')||'＿＿＿'} ㎥\n`;
+    out += `・使用材料数量:${getQtyVal(qty,'材料')||'別紙のとおり'}\n\n`;
+    }
+
+    // ========== 添付図書 ==========
+    if (planSec(cur, 'attach')) {
+    out += '【添付図書】\n';
+    out += '□ 位置図\n□ 平面図\n□ 断面図\n□ 現場写真(着手前)\n';
+    out += '※該当する図書を添付しチェックする\n\n';
+    }
+
+    // ========== 緊急連絡先 ==========
+    if (planSec(cur, 'emergency')) {
+    out += '【緊急連絡先】\n';
+    out += `・元請担当:${cur.prime||'＿＿＿'} / TEL＿＿＿\n`;
+    out += `・発注者:${cur.client||'＿＿＿'} / TEL＿＿＿\n`;
+    out += '・最寄り病院:＿＿＿ / TEL＿＿＿\n';
+    out += '・消防署:119(救急・火災)\n';
+    out += '・警察署:110(事故・事件)\n';
+    out += '・労働基準監督署:＿＿＿\n\n';
+    }
+
+    // 安全管理体制表
+    if (planSec(cur, 'safetyorg')) {
+    out += '【安全管理体制表】\n';
+    out += '役職／氏名／資格／連絡先\n';
+    const safetyRoles = [
+        ['統括安全衛生責任者', cur.orgChief||''],
+        ['安全衛生責任者', cur.orgSafety||''],
+        ['職長', cur.orgForeman||''],
+        ['主任技術者', cur.orgChiefEng||'']
+    ];
+    safetyRoles.forEach(([role, name]) => {
+        out += `・${role}:${name||'＿＿＿'} / 資格＿＿＿ / TEL＿＿＿\n`;
+    });
+    out += '\n';
+    }
+
+    // 独自追加項目(含める項目で追加したもの)
+    const customSecs = cur.planSectionsCustom || [];
+    customSecs.forEach(c => {
+        out += `【${c.title}】\n`;
+        out += `${c.body || '（記入してください）'}\n\n`;
+    });
+
+    // 承認欄(名前のみ・印不要)
     out += '【承認欄】\n';
-    out += '┌──────────┬──────────┬──────────┐\n';
-    out += '│  作成者  │  確認者  │  承認者  │\n';
-    out += '├──────────┼──────────┼──────────┤\n';
-    out += '│          │          │          │\n';
-    out += '│   印     │   印     │   印     │\n';
-    out += '└──────────┴──────────┴──────────┘\n';
+    out += '作成者:＿＿＿\n';
+    out += '確認者:＿＿＿\n';
+    out += '承認者:＿＿＿\n';
+    out += `承認日:${new Date().toLocaleDateString('ja-JP')}\n`;
     
     document.getElementById('out-plan').value = injectBlankFields(out, cur);
     document.getElementById('planOutput').style.display = 'block';
@@ -4207,8 +5382,6 @@ function generatePlanFromUI() {
     // ⑩プレビューカードのバッジ更新
     if (typeof setBadge === 'function') setBadge('preview', '作成済', 'filled');
     if (typeof updatePlanSummary === 'function') updatePlanSummary();
-    renderPlanChapters();
-    switchPlanView('chapter');
     showToast('施工計画書を生成しました');
     if (currentProject && projects[currentProject] && (projects[currentProject].statusPlan || 'none') === 'none') {
         projects[currentProject].statusPlan = 'created';
@@ -4256,23 +5429,9 @@ function injectBlankFields(text, cur) {
 
 // 表示切替(章別 / 全文)
 function switchPlanView(mode) {
-    const ch = document.getElementById('planChapters');
+    // 章別表示は廃止。全文(out-plan)を常時表示
     const ta = document.getElementById('out-plan');
-    const bChap = document.getElementById('viewToggleChapter');
-    const bFull = document.getElementById('viewToggleFull');
-    if (mode === 'chapter') {
-        if (ch) ch.style.display = 'flex';
-        if (ta) ta.style.display = 'none';
-        if (bChap) bChap.classList.add('active');
-        if (bFull) bFull.classList.remove('active');
-    } else {
-        // 章別の編集内容を全文に反映してから切替
-        syncChaptersToText();
-        if (ch) ch.style.display = 'none';
-        if (ta) ta.style.display = 'block';
-        if (bChap) bChap.classList.remove('active');
-        if (bFull) bFull.classList.add('active');
-    }
+    if (ta) ta.style.display = 'block';
 }
 
 // 章別アコーディオン描画
@@ -4303,20 +5462,30 @@ function renderPlanChapters() {
         container.innerHTML = '<p style="color:#333333;text-align:center;padding:24px;">章を抽出できませんでした</p>';
         return;
     }
-    container.innerHTML = parts.map((p, i) => `
-        <div class="chapter-card">
-            <div class="chapter-head ${i===0?'open':''}" onclick="toggleChapter(this)">
+    // 入力カードと重複する章(カードで編集する内容)
+    const cardChapters = ['工事概要','施工数量','品質管理項目','現場組織表','使用機械','作業員名簿'];
+    // 被っていない章を上、重複章を下に並べ替え(元のindexは保持)
+    const unique = [], dup = [];
+    parts.forEach((p, i) => { (cardChapters.includes(p.title) ? dup : unique).push({ p, i }); });
+    const ordered = [...unique, ...dup];
+    container.innerHTML = ordered.map((o, displayIdx) => {
+        const p = o.p, i = o.i;
+        const isDup = cardChapters.includes(p.title);
+        const badge = isDup ? '<span class="chapter-card-badge">カードで編集</span>' : '';
+        return `
+        <div class="chapter-card ${isDup ? 'chapter-dup' : ''}">
+            <div class="chapter-head ${displayIdx===0?'open':''}" onclick="toggleChapter(this)">
                 <div class="chapter-head-left">
-                    <div class="chapter-num">${String(p.num).padStart(2,'0')}</div>
-                    <div class="chapter-title">${escapeHtml(p.title)}</div>
+                    <div class="chapter-num">${String(displayIdx+1).padStart(2,'0')}</div>
+                    <div class="chapter-title">${escapeHtml(p.title)}${badge}</div>
                 </div>
                 <div class="chapter-toggle-icon">▼</div>
             </div>
             <div class="chapter-body">
                 <textarea data-ch-idx="${i}" oninput="onChapterEdit()">${escapeHtml(p.body)}</textarea>
             </div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
 function toggleChapter(headEl) {
@@ -4557,12 +5726,16 @@ function copyFromRecent(name) {
 
 function deleteFromRecent(name) {
     if (!projects[name]) return;
-    if (!confirm(`「${name}」を削除します。\n本当に削除しますか?\n(この操作は元に戻せません)`)) return;
-    delete projects[name];
-    if (currentProject === name) setCurrent(null);
-    saveStorage();
-    showToast('削除しました');
-    updateHome();
+    // アプリ内確認モーダルを使用(confirm()はスマホでブロックされるため)
+    pendingDelete = name;
+    pendingReset = null;
+    const cm = document.getElementById('confirmModal');
+    if (cm) cm.dataset.mode = 'delete';
+    const tt = document.getElementById('confirmTitle'); if (tt) tt.textContent = '削除の確認';
+    const ok = document.getElementById('confirmOkBtn'); if (ok) ok.textContent = '削除する';
+    const ct = document.getElementById('confirmText');
+    if (ct) ct.innerHTML = `<strong>「${escapeHtml(name)}」</strong>を完全に削除します。<br>この操作は取り消せません。`;
+    if (cm) cm.classList.add('show');
 }
 
 function toggleHeavyMachine() {
@@ -4616,24 +5789,42 @@ function applyEasyJP(text) {
 
 // 出力をクリア(部分削除)
 function clearOutput(type) {
+    // 旧関数は維持(後方互換)。実処理はdoResetOutputへ
+    doResetOutput(type);
+}
+
+// リセット(確認モーダル経由)
+let pendingReset = null;
+function resetOutput(type) {
+    const labelMap = { plan:'施工計画書', ky:'KY活動表', photo:'写真台帳' };
+    pendingReset = type;
+    const ct = document.getElementById('confirmText');
+    if (ct) ct.innerHTML = `<strong>${labelMap[type]}</strong>の生成内容をリセットします。<br>入力した内容(現場情報・写真など)は残り、生成した文書だけが消えます。<br>この操作は元に戻せません。`;
+    const cm = document.getElementById('confirmModal');
+    if (cm) {
+        // 確認ボタンをリセット用に切り替え
+        cm.dataset.mode = 'reset';
+        const tt = document.getElementById('confirmTitle'); if (tt) tt.textContent = 'リセットの確認';
+        const ok = document.getElementById('confirmOkBtn'); if (ok) ok.textContent = 'リセットする';
+        cm.classList.add('show');
+    }
+}
+
+function doResetOutput(type) {
     const labelMap = { plan:'施工計画書', ky:'KY活動表', photo:'写真台帳' };
     const outMap = { plan:'out-plan', ky:'out-ky', photo:'out-photo' };
     const containerMap = { plan:'planOutput', ky:'kyOutput', photo:'photoOutput' };
-    if (!confirm(`${labelMap[type]}を削除します。\n本当に削除しますか？\n(この操作は元に戻せません)`)) return;
-    document.getElementById(outMap[type]).value = '';
-    document.getElementById(containerMap[type]).style.display = 'none';
-    if (type === 'plan') {
-        const ch = document.getElementById('planChapters');
-        if (ch) ch.innerHTML = '';
-    }
-    // localStorageからも削除
+    const oEl = document.getElementById(outMap[type]); if (oEl) oEl.value = '';
+    const cEl = document.getElementById(containerMap[type]); if (cEl) cEl.style.display = 'none';
     if (currentProject && projects[currentProject]) {
-        if (type === 'plan') projects[currentProject].outPlan = '';
-        if (type === 'ky') projects[currentProject].outKy = '';
-        if (type === 'photo') projects[currentProject].outPhoto = '';
+        if (type === 'plan') { projects[currentProject].outPlan = ''; projects[currentProject].statusPlan = 'none'; }
+        if (type === 'ky') { projects[currentProject].outKy = ''; projects[currentProject].statusKy = 'none'; }
+        if (type === 'photo') { projects[currentProject].outPhoto = ''; projects[currentProject].statusPhoto = 'none'; }
         saveStorage();
     }
-    showToast(`${labelMap[type]}を削除しました`);
+    if (typeof syncStatusSelectors === 'function') syncStatusSelectors();
+    if (typeof updateGenButtonLabels === 'function') updateGenButtonLabels();
+    showToast(`${labelMap[type]}をリセットしました`);
 }
 
 function jumpToChapter(pos) {
@@ -4735,9 +5926,60 @@ function refreshPlanCards() {
     // 特記事項復元
     const noteEl = document.getElementById('pc-note-text');
     if (noteEl) noteEl.value = (p.planExtra && p.planExtra.pcNote) || '';
+    // 品質管理項目を描画
+    refreshPcQuality(p);
+    // 含める項目を描画
+    if (typeof refreshPcSections === 'function') refreshPcSections(p);
+}
+
+// 品質管理カードの中身を描画(主工事から自動)
+function refreshPcQuality(p) {
+    const wrap = document.getElementById('pc-quality-list');
+    if (!wrap) return;
+    const items = (typeof buildQualityControl === 'function') ? buildQualityControl(p) : [];
+    if (items.length === 0) {
+        wrap.innerHTML = '<div style="color:#98A2B3;font-size:13px;padding:8px;">主工事を選択すると品質管理項目が表示されます</div>';
+        return;
+    }
+    const customCount = (p.qcCustom || []).length;
+    const baseCount = items.length - customCount;
+    wrap.innerHTML = items.map((q, idx) => {
+        const isCustom = idx >= baseCount;
+        const delBtn = isCustom ? `<button class="qc-del-btn" onclick="deletePcQualityCustom(${idx - baseCount})">削除</button>` : '';
+        return `<div class="qc-card-item"><span class="qc-card-check">☑</span><span style="flex:1;">${escapeHtml(q)}</span>${delBtn}</div>`;
+    }).join('');
 }
 
 // ANDPAD風 進捗サマリー更新
+// 施工計画書の入力完成度を計算(0-100)。現場カード・サマリー共通
+function calcPlanProgress(p, name) {
+    if (!p) return 0;
+    const checks = [
+        !!(p.projectName || name),
+        !!p.location,
+        !!(p.mainConstruction || (p.relatedWorks && p.relatedWorks.length)),
+        !!(p.qtyRows && p.qtyRows.some(r => r.value && r.value.trim())),
+        !!(p.conditions && p.conditions.length),
+        !!(p.startDate || p.endDate),
+        !!(p.peopleRows && p.peopleRows.some(r => r.name)),
+        !!(p.orgChief || p.orgForeman || p.orgChiefEng),
+        !!p.outPlan
+    ];
+    return Math.round((checks.filter(Boolean).length / checks.length) * 100);
+}
+
+// 工期残日数を計算(終了日が無ければnull)
+function calcRemainingDays(p) {
+    if (!p || !p.endDate) return null;
+    const end = new Date(p.endDate.replace(/\//g, '-'));
+    if (isNaN(end.getTime())) return null;
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    end.setHours(0,0,0,0);
+    const diff = Math.round((end - today) / (1000*60*60*24));
+    return diff;
+}
+
 function updatePlanSummary() {
     const nameEl = document.getElementById('planSummaryName');
     const statusEl = document.getElementById('planSummaryStatus');
@@ -4753,21 +5995,7 @@ function updatePlanSummary() {
     }
     const p = projects[currentProject];
     nameEl.textContent = p.projectName || currentProject;
-    // 入力完成度を計算(主要9項目)
-    let filled = 0;
-    const checks = [
-        !!(p.projectName || currentProject),
-        !!p.location,
-        !!(p.mainConstruction || (p.relatedWorks && p.relatedWorks.length)),
-        !!(p.qtyRows && p.qtyRows.some(r => r.value && r.value.trim())),
-        !!(p.conditions && p.conditions.length),
-        !!(p.startDate || p.endDate),
-        !!(p.peopleRows && p.peopleRows.some(r => r.name)),
-        !!(p.orgChief || p.orgForeman || p.orgChiefEng),
-        !!p.outPlan
-    ];
-    filled = checks.filter(Boolean).length;
-    const pct = Math.round((filled / checks.length) * 100);
+    const pct = calcPlanProgress(p, currentProject);
     if (fillEl) fillEl.style.width = pct + '%';
     if (textEl) textEl.textContent = '入力 ' + pct + '%';
     if (statusEl) {
@@ -5730,7 +6958,485 @@ function generateKYFromNewUI(cur, s) {
     setTimeout(() => outArea?.scrollIntoView({behavior:'smooth',block:'start'}), 100);
 }
 
+// ========== KY選択UI(v2)+作業員サイン ==========
+let kySignData = []; // [{name, dataUrl}]
+let kySignCount = 3;
+let currentSignIndex = -1;
+let signCtx = null, signing = false;
+
+function addKy2Other(groupId, inputId, danger) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const val = input.value.trim();
+    if (!val) { showToast('入力してください', true); return; }
+    const group = document.getElementById(groupId);
+    const label = document.createElement('label');
+    label.className = 'ky2-chip' + (danger ? ' danger' : '');
+    label.innerHTML = `<input type="checkbox" value="${escapeHtml(val)}" checked><span>${escapeHtml(val)}</span>`;
+    group.appendChild(label);
+    input.value = '';
+    saveKy2State();
+}
+
+function addKy2Note(text) {
+    const ta = document.getElementById('ky2Note');
+    if (!ta) return;
+    if (ta.value.trim()) ta.value += '\n' + text;
+    else ta.value = text;
+    saveKy2State();
+}
+
+// 職長承認
+function approveKY() {
+    const name = (document.getElementById('ky2ForemanName')?.value || '').trim();
+    if (!name) { showToast('職長名を入力してください', true); return; }
+    const now = new Date();
+    const dateStr = now.getFullYear() + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    if (!currentProject || !projects[currentProject]) { showToast('先に現場を選んでください', true); return; }
+    projects[currentProject].ky2Approval = { foreman: name, datetime: dateStr, approved: true };
+    saveKy2State();
+    renderKy2Approval();
+    showToast('KYを承認しました');
+    if (document.getElementById('out-ky')?.value) {
+        generateKYFromUI();
+    }
+}
+
+// 承認をキャンセル(取り消し)
+function cancelApproveKY() {
+    if (!currentProject || !projects[currentProject]) return;
+    projects[currentProject].ky2Approval = { approved: false };
+    saveKy2State();
+    renderKy2Approval();
+    showToast('承認を取り消しました');
+    if (document.getElementById('out-ky')?.value) {
+        generateKYFromUI();
+    }
+}
+
+function renderKy2Approval() {
+    const statusEl = document.getElementById('ky2ApproveStatus');
+    const textEl = document.getElementById('ky2ApproveText');
+    const btnEl = document.getElementById('ky2ApproveBtn');
+    const cancelEl = document.getElementById('ky2CancelBtn');
+    if (!statusEl) return;
+    const ap = (currentProject && projects[currentProject] && projects[currentProject].ky2Approval) || null;
+    if (ap && ap.approved) {
+        statusEl.style.display = 'flex';
+        textEl.textContent = `${ap.datetime} ${ap.foreman} 確認済`;
+        if (btnEl) { btnEl.innerHTML = '<svg style="width:18px;height:18px"><use href="#i-check"/></svg>再承認(日時を更新)'; btnEl.classList.add('approved'); }
+        if (cancelEl) cancelEl.style.display = 'flex';
+    } else {
+        statusEl.style.display = 'none';
+        if (btnEl) { btnEl.innerHTML = '<svg style="width:18px;height:18px"><use href="#i-check"/></svg>承認する(KY確認済)'; btnEl.classList.remove('approved'); }
+        if (cancelEl) cancelEl.style.display = 'none';
+    }
+}
+
+function getKy2Checked(groupId) {
+    return Array.from(document.querySelectorAll(`#${groupId} input:checked`)).map(c => c.value);
+}
+
+// ========== おすすめ(現場の入力情報から機械的に判定) ==========
+// 作業ごとの危険・対策の重み
+const KY_SUGGEST_MAP = {
+    '足場組立':   { danger: {'墜落':10,'転落':9,'飛来落下':7,'挟まれ':5}, measure: {'フルハーネス使用':10,'工具落下防止':8,'作業範囲区画':6} },
+    '足場解体':   { danger: {'墜落':10,'飛来落下':9,'転落':8,'第三者災害':6}, measure: {'フルハーネス使用':10,'工具落下防止':9,'作業範囲区画':7} },
+    '塗装作業':   { danger: {'墜落':8,'転落':6,'第三者災害':5}, measure: {'フルハーネス使用':8,'保護具着用':9,'作業範囲区画':5} },
+    'シーリング作業': { danger: {'墜落':8,'転落':6}, measure: {'フルハーネス使用':8,'保護具着用':7} },
+    '防水作業':   { danger: {'墜落':7,'転倒':5}, measure: {'保護具着用':8,'フルハーネス使用':6} },
+    '高圧洗浄':   { danger: {'転倒':7,'第三者災害':6,'感電':5}, measure: {'保護具着用':9,'作業範囲区画':7} },
+    '資材搬入':   { danger: {'挟まれ':8,'転倒':7,'飛来落下':6}, measure: {'作業範囲区画':8,'誘導員配置':7} },
+    '重機作業':   { danger: {'重機接触':10,'挟まれ':9,'第三者災害':8}, measure: {'誘導員配置':10,'作業範囲区画':9,'指差呼称実施':6} }
+};
+
+// 現場条件(現場ページで入力した data-cond)ごとの危険・対策の重み
+const KY_CONDITION_MAP = {
+    'high':         { danger: {'墜落':10,'転落':8,'飛来落下':6}, measure: {'フルハーネス使用':10,'工具落下防止':7} },
+    'scaffold':     { danger: {'墜落':9,'飛来落下':7,'転落':6}, measure: {'フルハーネス使用':9,'工具落下防止':7} },
+    'rooftop':      { danger: {'墜落':10,'転落':7}, measure: {'フルハーネス使用':10} },
+    'balcony_entry':{ danger: {'墜落':8,'転落':6}, measure: {'フルハーネス使用':7} },
+    'residential':  { danger: {'第三者災害':9,'飛来落下':7}, measure: {'作業範囲区画':9,'誘導員配置':6} },
+    'school':       { danger: {'第三者災害':10}, measure: {'誘導員配置':9,'作業範囲区画':8} },
+    'commercial':   { danger: {'第三者災害':9}, measure: {'作業範囲区画':8,'誘導員配置':7} },
+    'occupied':     { danger: {'第三者災害':8}, measure: {'作業範囲区画':7} },
+    'traffic':      { danger: {'重機接触':8,'第三者災害':8}, measure: {'誘導員配置':10,'作業範囲区画':7} },
+    'fire':         { danger: {'感電':5}, measure: {'保護具着用':8} },
+    'noise':        { danger: {}, measure: {'保護具着用':6} },
+    'hot':          { danger: {'転倒':5}, measure: {'保護具着用':7} },
+    'heavy':        { danger: {'挟まれ':8,'重機接触':7,'転倒':5}, measure: {'誘導員配置':7,'作業範囲区画':6} },
+    'confined':     { danger: {'感電':6}, measure: {'保護具着用':9} },
+    'livewire':     { danger: {'感電':10}, measure: {'保護具着用':9,'作業範囲区画':6} },
+    'adjacent':     { danger: {'第三者災害':8,'飛来落下':6}, measure: {'作業範囲区画':8} },
+    'asbestos':     { danger: {}, measure: {'保護具着用':10} },
+    'lead':         { danger: {}, measure: {'保護具着用':10} },
+    'night':        { danger: {'転倒':6,'重機接触':5}, measure: {'作業範囲区画':6} }
+};
+
+function calcKySuggestions() {
+    const works = getKy2Checked('ky2Work');
+    const conds = (currentProject && projects[currentProject] && projects[currentProject].conditions) || [];
+    const dangerScore = {}, measureScore = {};
+    const add = (map) => {
+        if (!map) return;
+        Object.entries(map.danger||{}).forEach(([k,v]) => dangerScore[k] = (dangerScore[k]||0) + v);
+        Object.entries(map.measure||{}).forEach(([k,v]) => measureScore[k] = (measureScore[k]||0) + v);
+    };
+    // 作業から加点
+    works.forEach(w => add(KY_SUGGEST_MAP[w]));
+    // 現場条件から加点(現場ごとに異なる判定の核心)
+    conds.forEach(c => add(KY_CONDITION_MAP[c]));
+    const top3 = (obj) => Object.entries(obj).sort((a,b) => b[1]-a[1]).slice(0,3).map(e => e[0]);
+    return { danger: top3(dangerScore), measure: top3(measureScore) };
+}
+
+function renderKySuggestions() {
+    const sug = calcKySuggestions();
+    // 危険
+    const dBox = document.getElementById('ky2DangerSuggest');
+    const dChips = document.getElementById('ky2DangerSuggestChips');
+    if (dBox && dChips) {
+        if (sug.danger.length === 0) { dBox.style.display = 'none'; }
+        else {
+            dBox.style.display = 'block';
+            dChips.innerHTML = sug.danger.map(v => {
+                const added = getKy2Checked('ky2Danger').includes(v);
+                return `<button class="ky2-suggest-chip ${added?'added':''}" onclick="applyKySuggest('ky2Danger','${escapeJs(v)}',this)">${escapeHtml(v)}</button>`;
+            }).join('');
+        }
+    }
+    // 対策
+    const mBox = document.getElementById('ky2MeasureSuggest');
+    const mChips = document.getElementById('ky2MeasureSuggestChips');
+    if (mBox && mChips) {
+        if (sug.measure.length === 0) { mBox.style.display = 'none'; }
+        else {
+            mBox.style.display = 'block';
+            mChips.innerHTML = sug.measure.map(v => {
+                const added = getKy2Checked('ky2Measure').includes(v);
+                return `<button class="ky2-suggest-chip ${added?'added':''}" onclick="applyKySuggest('ky2Measure','${escapeJs(v)}',this)">${escapeHtml(v)}</button>`;
+            }).join('');
+        }
+    }
+}
+
+function applyKySuggest(groupId, value, btn) {
+    // 該当チェックボックスをON
+    const inputs = document.querySelectorAll(`#${groupId} input`);
+    let found = false;
+    inputs.forEach(c => { if (c.value === value) { c.checked = true; found = true; } });
+    if (found && btn) { btn.classList.add('added'); }
+    saveKy2State();
+    showToast(`「${value}」を追加しました`);
+}
+
+function addKySign() {
+    kySignData.push({ name: '', dataUrl: '' });
+    kySignCount = kySignData.length;
+    renderKySignList();
+    saveKy2State();
+}
+
+function deleteKySign(index) {
+    kySignData.splice(index, 1);
+    kySignCount = kySignData.length;
+    renderKySignList();
+    saveKy2State();
+}
+
+function renderKySignList() {
+    const list = document.getElementById('kySignList');
+    if (!list) return;
+    if (kySignData.length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:14px;color:#98A2B3;font-size:13px;">「作業員を追加」でサイン欄を追加してください</div>';
+        return;
+    }
+    let html = '';
+    for (let i = 0; i < kySignData.length; i++) {
+        const d = kySignData[i] || { name: '', dataUrl: '' };
+        const hasSign = d.dataUrl && d.name;
+        html += `<div class="ky2-sign-item">
+<div class="ky2-sign-num">${i+1}</div>
+<div class="ky2-sign-preview">
+${hasSign ? `<span class="ky2-sign-name">${escapeHtml(d.name)}</span><img class="ky2-sign-img" src="${d.dataUrl}">` : '<span class="ky2-sign-placeholder">未サイン</span>'}
+</div>
+<button class="ky2-sign-btn ${hasSign ? 'done' : ''}" onclick="openSignModal(${i})">${hasSign ? '記入済' : 'サイン'}</button>
+<button class="ky2-sign-del" onclick="deleteKySign(${i})">削除</button>
+</div>`;
+    }
+    list.innerHTML = html;
+}
+
+function openSignModal(index) {
+    currentSignIndex = index;
+    const d = kySignData[index] || { name: '', dataUrl: '' };
+    document.getElementById('signModalTitle').textContent = `作業員${index+1} のサイン`;
+    document.getElementById('signNameInput').value = d.name || '';
+    document.getElementById('signModal').classList.add('show');
+    setTimeout(() => initSignCanvas(), 50);
+}
+
+function closeSignModal() {
+    document.getElementById('signModal').classList.remove('show');
+    currentSignIndex = -1;
+}
+
+function initSignCanvas() {
+    const canvas = document.getElementById('signCanvas');
+    if (!canvas) return;
+    // 実寸に合わせる
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    signCtx = canvas.getContext('2d');
+    signCtx.fillStyle = '#FFFFFF';
+    signCtx.fillRect(0, 0, canvas.width, canvas.height);
+    signCtx.strokeStyle = '#0B2D4D';
+    signCtx.lineWidth = 2.5;
+    signCtx.lineCap = 'round';
+    signCtx.lineJoin = 'round';
+    // 既存サインがあれば描画
+    const d = kySignData[currentSignIndex];
+    if (d && d.dataUrl) {
+        const img = new Image();
+        img.onload = () => signCtx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        img.src = d.dataUrl;
+    }
+    // イベント設定(重複防止のため一旦クローン)
+    const getPos = (e) => {
+        const r = canvas.getBoundingClientRect();
+        const touch = e.touches ? e.touches[0] : e;
+        return { x: touch.clientX - r.left, y: touch.clientY - r.top };
+    };
+    const start = (e) => { e.preventDefault(); signing = true; const p = getPos(e); signCtx.beginPath(); signCtx.moveTo(p.x, p.y); };
+    const move = (e) => { if (!signing) return; e.preventDefault(); const p = getPos(e); signCtx.lineTo(p.x, p.y); signCtx.stroke(); };
+    const end = (e) => { e.preventDefault(); signing = false; };
+    canvas.ontouchstart = start;
+    canvas.ontouchmove = move;
+    canvas.ontouchend = end;
+    canvas.onmousedown = start;
+    canvas.onmousemove = move;
+    canvas.onmouseup = end;
+    canvas.onmouseleave = end;
+}
+
+function clearSignCanvas() {
+    const canvas = document.getElementById('signCanvas');
+    if (!canvas || !signCtx) return;
+    signCtx.fillStyle = '#FFFFFF';
+    signCtx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function saveSignature() {
+    if (currentSignIndex < 0) return;
+    const name = document.getElementById('signNameInput').value.trim();
+    if (!name) { showToast('氏名を入力してください', true); return; }
+    const canvas = document.getElementById('signCanvas');
+    // 空チェック(全部白か)
+    const dataUrl = canvas.toDataURL('image/png');
+    kySignData[currentSignIndex] = { name, dataUrl };
+    renderKySignList();
+    saveKy2State();
+    closeSignModal();
+    showToast(`作業員${currentSignIndex+1}のサインを保存しました`);
+}
+
+function saveKy2State() {
+    if (!currentProject || !projects[currentProject]) return;
+    projects[currentProject].ky2 = {
+        work: getKy2Checked('ky2Work'),
+        danger: getKy2Checked('ky2Danger'),
+        measure: getKy2Checked('ky2Measure'),
+        note: (document.getElementById('ky2Note')?.value || ''),
+        health: (document.querySelector('input[name="ky2Health"]:checked')?.value || '良好'),
+        foremanName: (document.getElementById('ky2ForemanName')?.value || ''),
+        signCount: kySignData.length,
+        signs: kySignData
+    };
+    saveStorage();
+}
+
+function loadKy2State() {
+    // チェックを一旦クリア
+    document.querySelectorAll('#ky2Work input, #ky2Danger input, #ky2Measure input').forEach(c => c.checked = false);
+    kySignData = [];
+    kySignCount = 3;
+    if (currentProject && projects[currentProject] && projects[currentProject].ky2) {
+        const k = projects[currentProject].ky2;
+        const check = (gid, vals) => (vals||[]).forEach(v => {
+            let found = false;
+            document.querySelectorAll(`#${gid} input`).forEach(c => { if (c.value === v) { c.checked = true; found = true; } });
+            if (!found && v) {
+                const danger = gid === 'ky2Danger';
+                const group = document.getElementById(gid);
+                const label = document.createElement('label');
+                label.className = 'ky2-chip' + (danger ? ' danger' : '');
+                label.innerHTML = `<input type="checkbox" value="${escapeHtml(v)}" checked><span>${escapeHtml(v)}</span>`;
+                group.appendChild(label);
+            }
+        });
+        check('ky2Work', k.work);
+        check('ky2Danger', k.danger);
+        check('ky2Measure', k.measure);
+        if (document.getElementById('ky2Note')) document.getElementById('ky2Note').value = k.note || '';
+        const hr = document.querySelector(`input[name="ky2Health"][value="${k.health||'良好'}"]`);
+        if (hr) hr.checked = true;
+        if (document.getElementById('ky2ForemanName')) document.getElementById('ky2ForemanName').value = k.foremanName || '';
+        kySignData = k.signs || [];
+        kySignCount = kySignData.length;
+    }
+    // デフォルトで3名分(初回のみ)
+    if (kySignData.length === 0 && !(currentProject && projects[currentProject] && projects[currentProject].ky2)) {
+        kySignData = [{name:'',dataUrl:''},{name:'',dataUrl:''},{name:'',dataUrl:''}];
+    }
+    renderKySignList();
+    renderKy2Approval();
+    // 作業・危険・対策のチェック変更でおすすめ更新+保存
+    ['ky2Work','ky2Danger','ky2Measure'].forEach(gid => {
+        const grp = document.getElementById(gid);
+        if (grp && !grp.dataset.bound) {
+            grp.dataset.bound = '1';
+            grp.addEventListener('change', () => { renderKySuggestions(); saveKy2State(); });
+        }
+    });
+    renderKySuggestions();
+    // 前回KYの引き継ぎボタン表示判定
+    if (typeof updateKyCarryover === 'function') updateKyCarryover();
+}
+
+// 前回KYの引き継ぎ
+function updateKyCarryover() {
+    const box = document.getElementById('kyCarryover');
+    if (!box) return;
+    const p = (currentProject && projects[currentProject]) ? projects[currentProject] : null;
+    const prev = p && p.ky2Prev;
+    // 今日まだ作業を選んでいない、かつ前回スナップがある場合のみ表示
+    const hasCurrentInput = getKy2Checked('ky2Work').length > 0 || getKy2Checked('ky2Danger').length > 0;
+    if (prev && prev.date && !hasCurrentInput) {
+        box.style.display = 'flex';
+        const dateEl = document.getElementById('kycDate');
+        if (dateEl) dateEl.textContent = prev.date;
+    } else {
+        box.style.display = 'none';
+    }
+}
+
+function carryOverKY() {
+    const p = (currentProject && projects[currentProject]) ? projects[currentProject] : null;
+    if (!p || !p.ky2Prev) return;
+    const prev = p.ky2Prev;
+    // チェックを復元
+    const check = (gid, vals) => {
+        (vals||[]).forEach(v => {
+            let found = false;
+            document.querySelectorAll(`#${gid} input`).forEach(c => { if (c.value === v) { c.checked = true; found = true; } });
+            if (!found && v) {
+                const danger = gid === 'ky2Danger';
+                const group = document.getElementById(gid);
+                if (group) {
+                    const label = document.createElement('label');
+                    label.className = 'ky2-chip' + (danger ? ' danger' : '');
+                    label.innerHTML = `<input type="checkbox" value="${escapeHtml(v)}" checked><span>${escapeHtml(v)}</span>`;
+                    group.appendChild(label);
+                }
+            }
+        });
+    };
+    check('ky2Work', prev.work);
+    check('ky2Danger', prev.danger);
+    check('ky2Measure', prev.measure);
+    const noteEl = document.getElementById('ky2Note');
+    if (noteEl && prev.note) noteEl.value = prev.note;
+    renderKySuggestions();
+    saveKy2State();
+    const box = document.getElementById('kyCarryover');
+    if (box) box.style.display = 'none';
+    showToast('前回のKYを引き継ぎました(日付は本日)');
+}
+
 function generateKYFromUI() {
+    const cur = getCurrent();
+    if (!cur) { showToast('先に現場を選んでください', true); openProjectMenu(); return; }
+
+    const work = getKy2Checked('ky2Work');
+    const danger = getKy2Checked('ky2Danger');
+    const measure = getKy2Checked('ky2Measure');
+    const note = (document.getElementById('ky2Note')?.value || '').trim();
+    const health = (document.querySelector('input[name="ky2Health"]:checked')?.value || '良好');
+    const today = new Date().toLocaleDateString('ja-JP');
+
+    if (work.length === 0 && danger.length === 0) {
+        showToast('本日の作業・危険ポイントを選択してください', true);
+        return;
+    }
+
+    let out = '';
+    out += 'KY活動表(危険予知活動)\n';
+    out += '━━━━━━━━━━━━━━━━━━━━\n';
+    out += `実施日:${today}\n`;
+    out += `工事名:${cur.projectName || currentProject}\n`;
+    out += `工事場所:${cur.location || '未入力'}\n`;
+    out += `元請会社:${cur.prime || '施主直請け'}\n`;
+    out += `現場代理人:${cur.manager || '未入力'}\n\n`;
+
+    out += '【本日の作業】\n';
+    if (work.length) work.forEach(w => out += '・' + w + '\n'); else out += '・未選択\n';
+    out += '\n【危険ポイント】\n';
+    if (danger.length) danger.forEach(d => out += '・' + d + '\n'); else out += '・未選択\n';
+    out += '\n【重点対策】\n';
+    if (measure.length) measure.forEach(m => out += '・' + m + '\n'); else out += '・未選択\n';
+
+    if (note) out += '\n【本日の特記事項】\n' + note + '\n';
+
+    out += '\n【健康状態確認】\n全員の健康状態:' + health + '\n';
+    out += '※体調不良者は必ず申告し、無理な作業は行わない\n';
+
+    out += '\n【本日のスローガン】\n・指差呼称「ヨシ！」を全員で徹底する\n';
+
+    out += '\n【作業員サイン】\n';
+    if (kySignData.length > 0) {
+        kySignData.forEach((s, i) => {
+            if (s.name) out += `作業員${i+1}:${s.name}(サイン済)\n`;
+            else out += `作業員${i+1}:未サイン\n`;
+        });
+    }
+    out += '\n【確認欄】\n';
+    const ap = (currentProject && projects[currentProject] && projects[currentProject].ky2Approval) || null;
+    const foreman = (document.getElementById('ky2ForemanName')?.value || '').trim();
+    if (ap && ap.approved) {
+        out += '職長:' + ap.foreman + '\n';
+        out += '確認日時:' + ap.datetime + '\n';
+        out += '\u2611 KY確認済\n';
+    } else {
+        out += '職長:' + (foreman || '未入力') + '\n';
+        out += '確認日時:未承認\n';
+        out += '\u2610 KY確認済\n';
+    }
+
+    document.getElementById('out-ky').value = out;
+    document.getElementById('kyOutput').style.display = 'block';
+    if (currentProject && projects[currentProject]) {
+        projects[currentProject].outKy = out;
+        // 前回引き継ぎ用スナップショットを保存
+        projects[currentProject].ky2Prev = {
+            date: today,
+            work: work,
+            danger: danger,
+            measure: measure,
+            note: note
+        };
+    }
+    saveKy2State();
+    showToast('KY活動表を生成しました');
+    if (currentProject && projects[currentProject] && (projects[currentProject].statusKy || 'none') === 'none') {
+        projects[currentProject].statusKy = 'created';
+        saveStorage();
+    }
+    syncStatusSelectors();
+    setTimeout(() => document.getElementById('kyOutput').scrollIntoView({behavior:'smooth',block:'start'}), 100);
+}
+
+function generateKYFromUI_OLD() {
     const cur = getCurrent();
     if (!cur) { showToast('先に現場を選んでください', true); openProjectMenu(); return; }
     
@@ -5795,47 +7501,51 @@ function generateKYFromUI() {
 function generatePhotoFromUI() {
     const cur = getCurrent();
     if (!cur) { showToast('先に現場を選んでください', true); openProjectMenu(); return; }
-    
-    const photoType = getActiveChip('photoTypeChips') || 'before';
-    const tpl = photoTemplates[photoType];
-    const wt = cur.workType || 'earthwork';
-    const koushu = workTypeToKoushu(wt);
-    const photoContent = document.getElementById('photoContent').value || tpl.title + 'の状況';
-    const photoLoc = document.getElementById('photoLocation').value || '（撮影箇所未記載）';
-    const today = new Date().toISOString().split('T')[0];
-    
-    const desc = `本写真は${tpl.title}段階における${koushu}の${photoContent}を記録したものである。撮影箇所${photoLoc}において、品質確認を目的として撮影し、黒板により工事名・工種・撮影日・施工業者を明示している。`;
-    
-    // 工種別の追加ポイント
-    const points = [...tpl.baseP];
-    if (tpl.koushuP[wt]) {
-        tpl.koushuP[wt].forEach(p => points.push(p));
-    }
-    
+    if (photoItems.length === 0) { showToast('先に写真を追加してください', true); return; }
+
+    const koushu = workTypeToKoushu(cur.workType || 'earthwork');
+    // 現場条件(現場情報)を日本語ラベルに変換
+    const condLabels = (cur.conditions || []).map(c => {
+        const el = document.querySelector(`.check-chip[data-cond="${c}"]`);
+        return el ? el.textContent.trim() : c;
+    });
+
     let out = '';
     out += '写真台帳\n━━━━━━━━━━━━━━━━━━━━\n';
+    // 現場・施工計画書からの連携情報
     out += `工事名:${cur.projectName || currentProject}\n`;
     out += `工事場所:${cur.location || '（未記載）'}\n`;
-    out += `元請会社:${cur.prime || '施主直請け'}\n\n`;
-    out += '【写真貼付欄】\n┌─────────────────┐\n│                       │\n│      （写真貼付）      │\n│                       │\n└─────────────────┘\n\n';
-    out += `【写真タイトル】\n${tpl.title}:${photoContent}\n\n`;
-    out += `【工種】\n${koushu}\n\n`;
-    out += '【撮影情報】\n';
-    out += `撮影箇所:${photoLoc}\n撮影年月日:${today}\n撮影者:${cur.manager || '（未記載）'}\n\n`;
-    out += `【撮影内容説明】\n${desc}\n\n`;
-    out += '【品質確認ポイント】\n';
-    points.forEach(p => out += '・' + p + '\n');
-    out += '\n【黒板記載事項】\n';
-    out += `工事名:${cur.projectName || currentProject}\n工種:${koushu}\n撮影箇所:${photoLoc}\n撮影年月日:${today}\n施工業者:${cur.prime || '施主直請け'}\n`;
-    out += '\n【確認欄】\n確認者:未入力 印\n';
-    
+    out += `工種:${koushu}\n`;
+    if (cur.mainConstruction) out += `主工事:${cur.mainConstruction}\n`;
+    if (cur.relatedWorks && cur.relatedWorks.length) out += `関連工事:${cur.relatedWorks.join('、')}\n`;
+    out += `元請会社:${cur.prime || '施主直請け'}\n`;
+    if (cur.manager) out += `現場代理人:${cur.manager}\n`;
+    out += `作業員数:${cur.workers || 3}名\n`;
+    if (condLabels.length) out += `現場条件:${condLabels.join('、')}\n`;
+    out += `写真総数:${photoItems.length}枚\n\n`;
+
+    photoItems.forEach((p, i) => {
+        const no = 'P-' + String(i+1).padStart(3,'0');
+        const typeLabel = p.type === 'その他' ? (p.typeOther || 'その他') : p.type;
+        out += '────────────────────\n';
+        const locLabel = (p.location === 'その他' ? (p.locationOther || 'その他') : p.location) + (p.floor ? ' ' + p.floor : '');
+        out += `【${no}】${typeLabel}\n`;
+        out += '┌─────────────────┐\n│                       │\n│      （写真貼付）      │\n│                       │\n└─────────────────┘\n';
+        out += `撮影箇所:${locLabel || '（未記載）'}\n`;
+        out += `撮影年月日:${p.date}\n`;
+        out += `撮影者:${p.taker || '（未記載）'}\n`;
+        out += `写真内容:${p.comment || typeLabel}\n`;
+        out += `黒板記載:${cur.projectName || currentProject} / ${koushu} / ${locLabel} / ${p.date}\n\n`;
+    });
+
+    out += '────────────────────\n【確認欄】\n確認者:未入力 印\n';
+
     document.getElementById('out-photo').value = out;
     document.getElementById('photoOutput').style.display = 'block';
-    // 生成内容を保存(ページ再訪時に出力ボタンを表示するため)
     if (currentProject && projects[currentProject]) {
         projects[currentProject].outPhoto = out;
     }
-    showToast('写真台帳を生成');
+    showToast(`写真台帳を生成(${photoItems.length}枚)`);
     if (currentProject && projects[currentProject] && (projects[currentProject].statusPhoto || 'none') === 'none') {
         projects[currentProject].statusPhoto = 'created';
         saveStorage();
@@ -5963,7 +7673,346 @@ function fallbackCopy(text) {
     }
 }
 
+// ========== PDF出力(ブラウザ印刷機能を利用) ==========
+function downloadPDF(type) {
+    const cur = getCurrent();
+    const titleMap = { plan:'施工計画書', ky:'KY活動表', photo:'写真台帳' };
+    const map = { plan:'out-plan', ky:'out-ky', photo:'out-photo' };
+    const esc = (s) => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    let bodyHtml = '';
+
+    // 施工計画書・KYは表紙+目次を先頭に追加
+    if (type === 'plan' || type === 'ky') {
+        const koushuC = workTypeToKoushu((cur && cur.workType) || 'earthwork');
+        const docTitle = titleMap[type] + (type === 'plan' ? '（' + koushuC + '）' : '');
+        const taker = (type === 'plan')
+            ? ((cur && cur.manager) || '')
+            : ((document.getElementById('photoTaker')?.value) || (cur && cur.manager) || '');
+        // ===== 表紙 =====
+        bodyHtml += `<div class="cover">`;
+        bodyHtml += `<div class="cover-title">${esc(docTitle)}</div>`;
+        bodyHtml += `<table class="cover-info">`;
+        bodyHtml += `<tr><th>工事名</th><td>${esc((cur&&cur.projectName)||currentProject||'')}</td></tr>`;
+        bodyHtml += `<tr><th>工事場所</th><td>${esc((cur&&cur.location)||'')}</td></tr>`;
+        bodyHtml += `<tr><th>工種</th><td>${esc(koushuC)}</td></tr>`;
+        bodyHtml += `</table>`;
+        bodyHtml += `<table class="cover-info cover-info2">`;
+        bodyHtml += `<tr><th>作成日</th><td>${esc(new Date().toLocaleDateString('ja-JP'))}</td></tr>`;
+        bodyHtml += `<tr><th>作成者</th><td>${esc((cur&&cur.manager)||'')}</td></tr>`;
+        bodyHtml += `<tr><th>会社名</th><td>${esc((cur&&cur.prime)||'')}</td></tr>`;
+        bodyHtml += `</table>`;
+        bodyHtml += `</div>`;
+
+        // ===== 目次(施工計画書のみ。本文の【見出し】から自動生成) =====
+        if (type === 'plan') {
+            if (typeof syncChaptersToText === 'function') syncChaptersToText();
+            const planText = document.getElementById('out-plan')?.value || '';
+            const headings = [];
+            const re = /【([^】]+)】/g;
+            let mm;
+            const skip = ['承認欄'];
+            while ((mm = re.exec(planText)) !== null) {
+                if (!skip.includes(mm[1]) && !headings.includes(mm[1])) headings.push(mm[1]);
+            }
+            if (headings.length) {
+                bodyHtml += `<div class="toc"><div class="toc-title">目 次</div>`;
+                headings.forEach((h, idx) => {
+                    bodyHtml += `<div class="toc-row"><span class="toc-no">${idx+1}.</span><span class="toc-name">${esc(h)}</span></div>`;
+                });
+                bodyHtml += `</div>`;
+            }
+        }
+        bodyHtml += `<div class="pagebreak"></div>`;
+    }
+
+    if (type === 'photo') {
+        if (!photoItems || photoItems.length === 0) { showToast('先に写真を追加してください', true); return; }
+        const koushu = workTypeToKoushu((cur && cur.workType) || 'earthwork');
+        const condLabels = ((cur && cur.conditions) || []).map(c => {
+            const el = document.querySelector(`.check-chip[data-cond="${c}"]`);
+            return el ? el.textContent.trim() : c;
+        });
+        bodyHtml += `<h1>写真台帳</h1>`;
+        bodyHtml += `<table class="info">`;
+        bodyHtml += `<tr><th>工事名</th><td>${esc((cur&&cur.projectName)||currentProject||'')}</td></tr>`;
+        bodyHtml += `<tr><th>工事場所</th><td>${esc((cur&&cur.location)||'')}</td></tr>`;
+        bodyHtml += `<tr><th>工種</th><td>${esc(koushu)}</td></tr>`;
+        if (cur && cur.mainConstruction) bodyHtml += `<tr><th>主工事</th><td>${esc(cur.mainConstruction)}</td></tr>`;
+        bodyHtml += `<tr><th>元請会社</th><td>${esc((cur&&cur.prime)||'施主直請け')}</td></tr>`;
+        bodyHtml += `<tr><th>作業員数</th><td>${esc((cur&&cur.workers)||3)}名</td></tr>`;
+        if (condLabels.length) bodyHtml += `<tr><th>現場条件</th><td>${esc(condLabels.join('、'))}</td></tr>`;
+        bodyHtml += `<tr><th>写真総数</th><td>${photoItems.length}枚</td></tr>`;
+        bodyHtml += `</table>`;
+        photoItems.forEach((p, i) => {
+            const no = 'P-' + String(i+1).padStart(3,'0');
+            const typeLabel = p.type === 'その他' ? (p.typeOther || 'その他') : p.type;
+            const locLabel = (p.location === 'その他' ? (p.locationOther || 'その他') : p.location) + (p.floor ? ' ' + p.floor : '');
+            bodyHtml += `<div class="photo-block">`;
+            bodyHtml += `<div class="photo-head">【${no}】${esc(typeLabel)}</div>`;
+            bodyHtml += `<img src="${p.src}" class="photo-img">`;
+            bodyHtml += `<table class="info"><tr><th>撮影箇所</th><td>${esc(locLabel)}</td></tr>`;
+            bodyHtml += `<tr><th>撮影年月日</th><td>${esc(p.date)}</td></tr>`;
+            bodyHtml += `<tr><th>撮影者</th><td>${esc(p.taker||'')}</td></tr>`;
+            bodyHtml += `<tr><th>写真内容</th><td>${esc(p.comment||typeLabel)}</td></tr></table>`;
+            bodyHtml += `</div>`;
+        });
+    } else {
+        if (type === 'plan' && typeof syncChaptersToText === 'function') syncChaptersToText();
+        const text = document.getElementById(map[type])?.value;
+        if (!text || !text.trim()) { showToast('先に生成してください', true); return; }
+        const lines = text.split('\n');
+        let i = 0;
+        const cur2 = cur || {};
+        while (i < lines.length) {
+            const line = lines[i];
+            if (line.trim() === '') { bodyHtml += '<div style="height:6px;"></div>'; i++; continue; }
+            if (line.includes('┌')||line.includes('│')||line.includes('└')||line.includes('├')||line.includes('─')||line.includes('┴')||line.includes('━')) { i++; continue; }
+
+            // 工程表 → 図(横バー)
+            if (line === '【工程表】') {
+                bodyHtml += `<h2>工程表</h2>`;
+                i++;
+                if (lines[i] && lines[i].includes('区分')) i++;
+                const items = [];
+                while (i < lines.length && /^\d+\./.test(lines[i].trim())) { items.push(lines[i].trim()); i++; }
+                // 各工程の日数を抽出(「(約N日)」)
+                const parsed = items.map(it => {
+                    const dm = it.match(/約(\d+)日/);
+                    const days = dm ? parseInt(dm[1]) : 1;
+                    const name = it.replace(/^\d+\.\s*/,'').replace(/\s*[(（]約\d+日[)）]/,'');
+                    return { name, days };
+                });
+                const totalDays = parsed.reduce((s,p)=>s+p.days, 0) || 1;
+                bodyHtml += '<div class="gantt">';
+                let cum = 0;
+                parsed.forEach((p, idx) => {
+                    const leftPct = (cum / totalDays) * 100;
+                    const widthPct = Math.max(4, (p.days / totalDays) * 100);
+                    bodyHtml += `<div class="gantt-row">
+<div class="gantt-no">${idx+1}</div>
+<div class="gantt-label">${esc(p.name)}</div>
+<div class="gantt-track"><div class="gantt-fill" style="margin-left:${leftPct.toFixed(1)}%;width:${widthPct.toFixed(1)}%;">${p.days}日</div></div>
+</div>`;
+                    cum += p.days;
+                });
+                bodyHtml += '</div>';
+                while (i < lines.length && (lines[i].startsWith('工期') || lines[i].startsWith('※'))) {
+                    bodyHtml += `<p class="note">${esc(lines[i])}</p>`; i++;
+                }
+                continue;
+            }
+
+            // リスクアセスメント表 → 表
+            if (line === '【主要リスクと対策(概要)】' || line === '【リスクアセスメント表】') {
+                bodyHtml += `<h2>主要リスクと対策(概要)</h2>`;
+                i++;
+                if (lines[i] && lines[i].includes('作業内容')) i++;
+                bodyHtml += `<table class="grid"><tr><th>作業内容</th><th>危険要因</th><th>リスク</th><th>対策</th></tr>`;
+                while (i < lines.length && lines[i].startsWith('・') && lines[i].includes('|')) {
+                    const c = lines[i].replace(/^・/,'').split('|');
+                    bodyHtml += `<tr><td>${esc(c[0]||'')}</td><td>${esc(c[1]||'')}</td><td style="text-align:center;">${esc(c[2]||'')}</td><td>${esc(c[3]||'')}</td></tr>`;
+                    i++;
+                }
+                bodyHtml += `</table>`;
+                while (i < lines.length && lines[i].startsWith('※')) { bodyHtml += `<p class="note">${esc(lines[i])}</p>`; i++; }
+                continue;
+            }
+
+            // 品質管理項目 → チェックリスト
+            if (line === '【品質管理項目】') {
+                bodyHtml += `<h2>品質管理項目</h2>`;
+                i++;
+                bodyHtml += '<div class="qc-list">';
+                while (i < lines.length && lines[i].startsWith('☑')) {
+                    bodyHtml += `<div class="qc-item"><span class="qc-box">☑</span>${esc(lines[i].replace(/^☑\s*/,''))}</div>`;
+                    i++;
+                }
+                bodyHtml += '</div>';
+                while (i < lines.length && lines[i].startsWith('※')) { bodyHtml += `<p class="note">${esc(lines[i])}</p>`; i++; }
+                continue;
+            }
+
+            // 安全管理体制表 → 表
+            if (line === '【安全管理体制表】') {
+                bodyHtml += `<h2>安全管理体制表</h2>`;
+                i++;
+                if (lines[i] && lines[i].includes('役職')) i++;
+                bodyHtml += `<table class="grid"><tr><th>役職</th><th>氏名</th><th>資格</th><th>連絡先</th></tr>`;
+                while (i < lines.length && lines[i].startsWith('・')) {
+                    const body = lines[i].replace(/^・/,'');
+                    const ci = body.indexOf(':');
+                    const role = ci>-1 ? body.slice(0,ci) : body;
+                    const rest = ci>-1 ? body.slice(ci+1) : '';
+                    const parts = rest.split('/').map(s=>s.trim());
+                    const name = (parts[0]||'').replace(/＿+/g,'');
+                    const qual = (parts[1]||'').replace(/資格/,'').replace(/＿+/g,'');
+                    const tel = (parts[2]||'').replace(/TEL/,'').replace(/＿+/g,'');
+                    bodyHtml += `<tr><td>${esc(role)}</td><td>${esc(name)||'&nbsp;'}</td><td>${esc(qual)||'&nbsp;'}</td><td>${esc(tel)||'&nbsp;'}</td></tr>`;
+                    i++;
+                }
+                bodyHtml += `</table>`;
+                continue;
+            }
+
+            // 現場組織表 → 組織図(縦ツリー)
+            if (line === '【現場組織表】' || line === '【現場組織図】') {
+                bodyHtml += `<h2>現場組織図</h2>`;
+                i++;
+                const org = [];
+                while (i < lines.length && lines[i].startsWith('・')) {
+                    const body = lines[i].replace(/^・/,'');
+                    const ci = body.indexOf(':');
+                    if (ci>-1) {
+                        const role = body.slice(0,ci);
+                        const name = body.slice(ci+1).replace(/＿+/g,'').trim();
+                        if (name) org.push({ role, name });
+                    }
+                    i++;
+                }
+                bodyHtml += '<div class="orgchart">';
+                org.forEach((o, idx) => {
+                    bodyHtml += `<div class="org-node"><div class="org-role">${esc(o.role)}</div><div class="org-name">${esc(o.name)}</div></div>`;
+                    if (idx < org.length-1) bodyHtml += '<div class="org-line"></div>';
+                });
+                bodyHtml += '</div>';
+                continue;
+            }
+
+            // 添付図書・緊急連絡先 → そのまま箇条書き(チェック欄含む)
+            if (line.startsWith('【') && line.endsWith('】')) {
+                bodyHtml += `<h2>${esc(line.replace(/[【】]/g,''))}</h2>`;
+                i++; continue;
+            }
+            if (line.startsWith('・') || line.startsWith('□') || line.startsWith('〔')) {
+                bodyHtml += `<p class="bullet">${esc(line)}</p>`;
+                i++; continue;
+            }
+            bodyHtml += `<p>${esc(line)}</p>`;
+            i++;
+        }
+    }
+
+    const css = `
+        @page { size: A4; margin: 15mm; }
+        body { font-family: "Yu Gothic","Meiryo",sans-serif; color:#000; line-height:1.6; font-size:10.5pt; }
+        h1 { font-size:18pt; text-align:center; border-bottom:3px double #000; padding-bottom:8px; margin-bottom:14px; }
+        h2 { font-size:12.5pt; font-weight:bold; background:#0B2D4D; color:#fff; padding:4px 10px; margin:12px 0 6px; }
+        .pagebreak { page-break-after: always; }
+        .cover { text-align:center; padding-top:40mm; }
+        .cover-title { font-size:26pt; font-weight:bold; letter-spacing:4pt; border:3px double #000; display:inline-block; padding:14pt 40pt; margin-bottom:30mm; }
+        .cover-info { border-collapse:collapse; width:75%; margin:0 auto 12mm; }
+        .cover-info.cover-info2 { margin-top:24mm; }
+        .cover-info th { border:1px solid #555; padding:8pt 12pt; background:#f0f0f0; font-weight:bold; width:32%; text-align:left; font-size:12pt; }
+        .cover-info td { border:1px solid #555; padding:8pt 12pt; font-size:12pt; text-align:left; }
+        .toc { margin:0 auto; width:70%; padding-top:10mm; }
+        .toc-title { font-size:16pt; font-weight:bold; text-align:center; letter-spacing:6pt; border-bottom:2px solid #000; padding-bottom:6pt; margin-bottom:14pt; }
+        .toc-row { display:flex; align-items:baseline; padding:7pt 0; border-bottom:1px dotted #aaa; font-size:12pt; }
+        .toc-no { font-weight:bold; width:32pt; }
+        .toc-name { flex:1; }
+        p { margin:2px 0; }
+        p.bullet { padding-left:1.2em; text-indent:-1em; }
+        p.note { font-size:9.5pt; color:#555; margin:2px 0; }
+        table.info { border-collapse:collapse; width:100%; margin:6px 0 12px; }
+        table.info th { border:1px solid #555; padding:4px 8px; background:#f0f0f0; font-weight:bold; width:28%; text-align:left; font-size:10pt; }
+        table.info td { border:1px solid #555; padding:4px 8px; font-size:10pt; }
+        table.grid { border-collapse:collapse; width:100%; margin:6px 0 12px; font-size:9.5pt; }
+        table.grid th { border:1px solid #555; padding:4px 6px; background:#0B2D4D; color:#fff; }
+        table.grid td { border:1px solid #555; padding:4px 6px; vertical-align:top; }
+        .gantt { margin:6px 0 10px; }
+        .gantt-row { display:flex; align-items:center; margin-bottom:5px; }
+        .gantt-no { width:20px; height:20px; background:#1570B8; color:#fff; border-radius:4px; text-align:center; line-height:20px; font-weight:bold; font-size:8.5pt; flex-shrink:0; }
+        .gantt-label { width:120px; font-size:9.5pt; padding:0 8px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .gantt-track { flex:1; background:#F0F2F5; border-radius:4px; height:20px; position:relative; }
+        .gantt-fill { background:#1570B8; height:20px; border-radius:4px; color:#fff; font-size:8pt; line-height:20px; text-align:center; min-width:24px; box-sizing:border-box; overflow:hidden; }
+        .orgchart { margin:8px 0; }
+        .org-node { border:2px solid #0B2D4D; border-radius:6px; padding:5px 12px; text-align:center; width:200px; margin:0 auto; background:#F0F7FC; }
+        .org-role { font-size:8.5pt; color:#1570B8; font-weight:bold; }
+        .org-name { font-size:11pt; font-weight:bold; }
+        .org-line { width:2px; height:14px; background:#0B2D4D; margin:0 auto; }
+        .qc-list { margin:6px 0 10px; }
+        .qc-item { padding:5px 10px; border:1px solid #ccc; border-radius:4px; margin-bottom:4px; font-size:10.5pt; background:#F9FAFB; }
+        .qc-box { color:#067647; font-weight:bold; margin-right:8px; }
+        .photo-block { page-break-inside:avoid; margin-bottom:16px; border:1px solid #999; padding:8px; }
+        .photo-head { background:#0B2D4D; color:#fff; font-weight:bold; padding:5px 8px; margin-bottom:6px; }
+        .photo-img { display:block; max-width:100%; max-height:120mm; margin:0 auto 8px; }
+    `;
+
+    const win = window.open('', '_blank');
+    if (!win) { showToast('ポップアップがブロックされました。許可してください', true); return; }
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${titleMap[type]}_${esc(currentProject||'工事')}</title><style>${css}</style></head><body>${bodyHtml}<scr`+`ipt>window.onload=function(){setTimeout(function(){window.print();},400);};</scr`+`ipt></body></html>`);
+    win.document.close();
+    showToast('PDF印刷画面を開きました(送信先で「PDFに保存」を選択)');
+}
+
+// 写真台帳専用Word出力(画像を埋め込む)
+function downloadPhotoWord() {
+    const cur = getCurrent();
+    if (!cur) { showToast('先に現場を選んでください', true); return; }
+    if (!photoItems || photoItems.length === 0) { showToast('先に写真を追加してください', true); return; }
+
+    const koushu = workTypeToKoushu(cur.workType || 'earthwork');
+    const confirmer = '';
+    const condLabels = (cur.conditions || []).map(c => {
+        const el = document.querySelector(`.check-chip[data-cond="${c}"]`);
+        return el ? el.textContent.trim() : c;
+    });
+    const esc = (s) => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const CS = 'border:1px solid #555;padding:5pt 8pt;font-family:Yu Gothic,Meiryo,sans-serif;font-size:10.5pt;';
+    const HS = CS + 'font-weight:bold;background:#f0f0f0;width:28%;';
+
+    let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>写真台帳</title></head><body style="font-family:Yu Gothic,Meiryo,sans-serif;">`;
+    html += `<h1 style="font-size:18pt;text-align:center;border-bottom:3pt double #000;padding-bottom:6pt;">写真台帳</h1>`;
+    // ヘッダー情報
+    html += `<table style="border-collapse:collapse;width:100%;margin:10pt 0 16pt;">`;
+    html += `<tr><td style="${HS}">工事名</td><td style="${CS}">${esc(cur.projectName||currentProject)}</td></tr>`;
+    html += `<tr><td style="${HS}">工事場所</td><td style="${CS}">${esc(cur.location||'')}</td></tr>`;
+    html += `<tr><td style="${HS}">工種</td><td style="${CS}">${esc(koushu)}</td></tr>`;
+    if (cur.mainConstruction) html += `<tr><td style="${HS}">主工事</td><td style="${CS}">${esc(cur.mainConstruction)}</td></tr>`;
+    if (cur.relatedWorks && cur.relatedWorks.length) html += `<tr><td style="${HS}">関連工事</td><td style="${CS}">${esc(cur.relatedWorks.join('、'))}</td></tr>`;
+    html += `<tr><td style="${HS}">元請会社</td><td style="${CS}">${esc(cur.prime||'施主直請け')}</td></tr>`;
+    if (cur.manager) html += `<tr><td style="${HS}">現場代理人</td><td style="${CS}">${esc(cur.manager)}</td></tr>`;
+    html += `<tr><td style="${HS}">作業員数</td><td style="${CS}">${esc(cur.workers||3)}名</td></tr>`;
+    if (condLabels.length) html += `<tr><td style="${HS}">現場条件</td><td style="${CS}">${esc(condLabels.join('、'))}</td></tr>`;
+    html += `<tr><td style="${HS}">写真総数</td><td style="${CS}">${photoItems.length}枚</td></tr>`;
+    html += `</table>`;
+
+    // 写真(2枚ずつ並べる)
+    photoItems.forEach((p, i) => {
+        const no = 'P-' + String(i+1).padStart(3,'0');
+        const typeLabel = p.type === 'その他' ? (p.typeOther || 'その他') : p.type;
+        html += `<table style="border-collapse:collapse;width:100%;margin:0 0 14pt;page-break-inside:avoid;">`;
+        html += `<tr><td style="${CS}font-weight:bold;background:#0B2D4D;color:#fff;" colspan="2">【${no}】${esc(typeLabel)}</td></tr>`;
+        html += `<tr><td style="${CS}text-align:center;" colspan="2"><img src="${p.src}" style="max-width:420pt;max-height:300pt;"></td></tr>`;
+        const locLabel = (p.location === 'その他' ? (p.locationOther || 'その他') : p.location) + (p.floor ? ' ' + p.floor : '');
+        html += `<tr><td style="${HS}">撮影箇所</td><td style="${CS}">${esc(locLabel)}</td></tr>`;
+        html += `<tr><td style="${HS}">撮影年月日</td><td style="${CS}">${esc(p.date)}</td></tr>`;
+        html += `<tr><td style="${HS}">撮影者</td><td style="${CS}">${esc(p.taker||'')}</td></tr>`;
+        html += `<tr><td style="${HS}">写真内容</td><td style="${CS}">${esc(p.comment||typeLabel)}</td></tr>`;
+        html += `</table>`;
+    });
+
+    // 確認欄
+    html += `<table style="border-collapse:collapse;width:50%;margin:16pt 0;"><tr><td style="${HS}">確認者</td><td style="${CS}height:36pt;">${esc(confirmer)} 印</td></tr></table>`;
+    html += `</body></html>`;
+
+    try {
+        const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '写真台帳_' + (currentProject || '工事') + '.doc';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showToast('写真台帳をWord出力しました(写真入り)');
+    } catch(e) {
+        showToast('Word出力に失敗しました', true);
+    }
+}
+
 function downloadWord(type) {
+    // 写真台帳は写真を埋め込む専用処理
+    if (type === 'photo') { downloadPhotoWord(); return; }
     if (type === 'plan' && typeof syncChaptersToText === 'function') syncChaptersToText();
     const map = { plan:'out-plan', ky:'out-ky', photo:'out-photo' };
     const titleMap = { plan:'施工計画書', ky:'KY活動表', photo:'写真台帳' };
@@ -5985,14 +8034,17 @@ function downloadWord(type) {
                 // 【承認欄】→ 3列テーブル
                 if (line === '【承認欄】') {
                     html += `<h2 style="font-family:Yu Gothic,Meiryo,sans-serif;font-size:13pt;font-weight:bold;margin:12pt 0 6pt;border-bottom:2pt solid #000;padding-bottom:3pt;">【承認欄】</h2>`;
-                    html += `<table style="border-collapse:collapse;width:100%;margin:6pt 0 12pt;">
-<tr><td style="${HS}width:33%;">作成者</td><td style="${HS}width:33%;">確認者</td><td style="${HS}width:34%;">承認者</td></tr>
-<tr><td style="${CS}height:40pt;"> </td><td style="${CS}height:40pt;"> </td><td style="${CS}height:40pt;"> </td></tr>
-<tr><td style="${CS}text-align:center;height:22pt;">印</td><td style="${CS}text-align:center;">印</td><td style="${CS}text-align:center;">印</td></tr>
-</table>`;
-                    // 後続の罫線・印行を読み飛ばす
+                    // 後続の作成者/確認者/承認者/承認日の行を読み取る
                     i++;
-                    while (i < lines.length && (lines[i].includes('┌') || lines[i].includes('│') || lines[i].includes('└') || lines[i].includes('├') || lines[i].includes('─') || lines[i].includes('┴') || (lines[i].includes('印') && !lines[i].includes('：')))) { i++; }
+                    let appRows = '';
+                    while (i < lines.length && /^(作成者|確認者|承認者|承認日)[:：]/.test(lines[i])) {
+                        const ci = lines[i].search(/[:：]/);
+                        const label = lines[i].slice(0, ci);
+                        let val = lines[i].slice(ci+1).trim().replace(/＿+/g,'');
+                        appRows += `<tr><td style="${HS}width:30%;">${label}</td><td style="${CS}">${escHtml(val)||'&nbsp;'}</td></tr>`;
+                        i++;
+                    }
+                    html += `<table style="border-collapse:collapse;width:60%;margin:6pt 0 12pt;">${appRows}</table>`;
                     continue;
                 }
 
@@ -6071,6 +8123,12 @@ function downloadWord(type) {
                     i++; continue;
                 }
 
+                // 品質管理チェック項目(☑)
+                if (line.startsWith('☑')) {
+                    html += `<p style="font-family:Yu Gothic,Meiryo,sans-serif;font-size:11pt;margin:2pt 0;padding:4pt 8pt;border:1px solid #ccc;background:#f6faf7;"><span style="color:#067647;font-weight:bold;">☑</span> ${escHtml(line.replace(/^☑\s*/,''))}</p>`;
+                    i++; continue;
+                }
+
                 // 箇条書き
                 if (line.startsWith('・')) {
                     html += `<p style="font-family:Yu Gothic,Meiryo,sans-serif;font-size:11pt;margin:1pt 0;padding-left:1.5em;text-indent:-1em;line-height:1.7;">${escHtml(line)}</p>`;
@@ -6093,38 +8151,39 @@ function downloadWord(type) {
         // 表紙(施工計画書のみ)
         let coverPage = '';
         if (type === 'plan') {
-            const periodStr = (projectInfo.startDate || projectInfo.endDate) 
-                ? `${projectInfo.startDate || '未入力'} 〜 ${projectInfo.endDate || '未入力'}` 
-                : '未入力';
+            const koushuW = workTypeToKoushu(projectInfo.workType || 'earthwork');
             coverPage = `
-<div style="page-break-after:always;text-align:center;padding-top:80pt;">
-<div style="font-size:14pt;letter-spacing:8pt;margin-bottom:60pt;">施 工 計 画 書</div>
-<div style="font-size:22pt;font-weight:bold;margin:40pt 0;padding:18pt 0;border-top:2pt solid #000;border-bottom:2pt solid #000;">${escHtml(projectName)}</div>
-<table style="border-collapse:collapse;width:70%;margin:50pt auto;">
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;width:35%;background:#fff;">工事場所</td><td style="border:1px solid #555;padding:10pt;">${escHtml(projectInfo.location || '')}</td></tr>
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;">工&nbsp;&nbsp;&nbsp;&nbsp;期</td><td style="border:1px solid #555;padding:10pt;">${escHtml(periodStr)}</td></tr>
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;">発 注 者</td><td style="border:1px solid #555;padding:10pt;">${escHtml(projectInfo.client || '')}</td></tr>
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;">元請会社</td><td style="border:1px solid #555;padding:10pt;">${escHtml(projectInfo.prime || '')}</td></tr>
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;">作 成 日</td><td style="border:1px solid #555;padding:10pt;">${escHtml(todayStr)}</td></tr>
+<div style="page-break-after:always;text-align:center;padding-top:70pt;">
+<div style="font-size:24pt;font-weight:bold;letter-spacing:6pt;border:3pt double #000;display:inline-block;padding:14pt 40pt;margin-bottom:50pt;">施工計画書（${escHtml(koushuW)}）</div>
+<table style="border-collapse:collapse;width:72%;margin:30pt auto;">
+<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;width:32%;background:#f0f0f0;text-align:left;">工事名</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(projectName)}</td></tr>
+<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;background:#f0f0f0;text-align:left;">工事場所</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(projectInfo.location || '')}</td></tr>
+<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;background:#f0f0f0;text-align:left;">工種</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(koushuW)}</td></tr>
 </table>
-<table style="border-collapse:collapse;width:70%;margin:40pt auto 0;">
-<tr>
-<td style="border:1px solid #555;padding:8pt;font-weight:bold;text-align:center;width:33%;">作成者</td>
-<td style="border:1px solid #555;padding:8pt;font-weight:bold;text-align:center;width:33%;">確認者</td>
-<td style="border:1px solid #555;padding:8pt;font-weight:bold;text-align:center;width:34%;">承認者</td>
-</tr>
-<tr>
-<td style="border:1px solid #555;padding:8pt;height:50pt;"> </td>
-<td style="border:1px solid #555;padding:8pt;height:50pt;"> </td>
-<td style="border:1px solid #555;padding:8pt;height:50pt;"> </td>
-</tr>
-<tr>
-<td style="border:1px solid #555;padding:6pt;text-align:center;">印</td>
-<td style="border:1px solid #555;padding:6pt;text-align:center;">印</td>
-<td style="border:1px solid #555;padding:6pt;text-align:center;">印</td>
-</tr>
+<table style="border-collapse:collapse;width:72%;margin:40pt auto 0;">
+<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;width:32%;background:#f0f0f0;text-align:left;">作成日</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(todayStr)}</td></tr>
+<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;background:#f0f0f0;text-align:left;">作成者</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(projectInfo.manager || '')}</td></tr>
+<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;background:#f0f0f0;text-align:left;">会社名</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(projectInfo.prime || '')}</td></tr>
 </table>
 </div>`;
+
+            // 目次(本文の見出しから自動生成)
+            const headings = [];
+            const re = /【([^】]+)】/g;
+            let mm; const skip = ['承認欄'];
+            while ((mm = re.exec(text)) !== null) {
+                if (!skip.includes(mm[1]) && !headings.includes(mm[1])) headings.push(mm[1]);
+            }
+            if (headings.length) {
+                let toc = `<div style="page-break-after:always;padding-top:20pt;">
+<div style="font-size:16pt;font-weight:bold;text-align:center;letter-spacing:6pt;border-bottom:2pt solid #000;padding-bottom:6pt;margin-bottom:16pt;">目 次</div>
+<table style="border-collapse:collapse;width:70%;margin:0 auto;">`;
+                headings.forEach((h, idx) => {
+                    toc += `<tr><td style="padding:7pt 4pt;border-bottom:1px dotted #aaa;font-weight:bold;width:36pt;">${idx+1}.</td><td style="padding:7pt 4pt;border-bottom:1px dotted #aaa;">${escHtml(h)}</td></tr>`;
+                });
+                toc += `</table></div>`;
+                coverPage += toc;
+            }
         }
 
         // ヘッダー・フッター(Word独自要素)
@@ -6150,7 +8209,7 @@ table{border-collapse:collapse;}
 <body>
 <div class="Section1">
 ${coverPage}
-<h1 style="font-family:Yu Gothic,Meiryo,sans-serif;font-size:16pt;font-weight:bold;text-align:center;margin-bottom:14pt;padding-bottom:6pt;border-bottom:2pt solid #000;">${escHtml(titleMap[type])}</h1>
+${type === 'plan' ? '' : `<h1 style="font-family:Yu Gothic,Meiryo,sans-serif;font-size:16pt;font-weight:bold;text-align:center;margin-bottom:14pt;padding-bottom:6pt;border-bottom:2pt solid #000;">${escHtml(titleMap[type])}</h1>`}
 ${bodyHtml}
 ${headerFooter}
 </div>
@@ -6208,36 +8267,278 @@ function emailOutput(type) {
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
 }
 
-// ========== 写真追加処理 ==========
-let photoThumbs = [];
+// ========== 写真台帳カード方式 ==========
+// photoItems: [{ id, src, date, taker, type, location, comment }]
+let photoItems = [];
+let photoSeq = 0;
+
+// 撮影種別の選択肢
+const PHOTO_TYPES = ['着手前','施工状況','材料確認','出来形','完成','安全管理','品質管理','その他'];
+// 撮影箇所の選択肢(改修工事向け)
+const PHOTO_LOCATIONS = ['外壁北面','外壁南面','外壁東面','外壁西面','屋上','バルコニー','共用廊下','共用階段','エントランス','駐車場','その他'];
+
+// 主工事ごとに優先表示する撮影箇所(機械的に並び替え)
+const PHOTO_LOC_PRIORITY = {
+    'マンション大規模修繕工事': ['外壁北面','外壁南面','外壁東面','外壁西面','屋上','バルコニー','共用廊下','共用階段','エントランス','駐車場'],
+    'マンション外壁改修工事':   ['外壁北面','外壁南面','外壁東面','外壁西面','バルコニー','共用廊下','屋上','エントランス'],
+    'マンション屋上防水改修工事': ['屋上','共用階段','外壁北面','外壁南面','バルコニー','共用廊下'],
+    'マンション共用部改修工事': ['共用廊下','共用階段','エントランス','駐車場','外壁北面','屋上','バルコニー'],
+    '外壁改修工事':   ['外壁北面','外壁南面','外壁東面','外壁西面','バルコニー','屋上'],
+    '屋上防水改修工事': ['屋上','外壁北面','外壁南面','共用階段'],
+    '内装改修工事':   ['共用廊下','共用階段','エントランス','バルコニー'],
+    '設備改修工事':   ['共用廊下','屋上','駐車場','エントランス','共用階段']
+};
+
+// 現在の現場の主工事に応じた撮影箇所リストを返す
+function getPhotoLocations() {
+    const cur = (currentProject && projects[currentProject]) || {};
+    const main = cur.mainConstruction || '';
+    const priority = PHOTO_LOC_PRIORITY[main];
+    if (!priority) return PHOTO_LOCATIONS;
+    // 優先リストにある箇所を先頭に、残りを後ろに、最後に「その他」
+    const rest = PHOTO_LOCATIONS.filter(l => l !== 'その他' && !priority.includes(l));
+    return [...priority, ...rest, 'その他'];
+}
+// 種別→コメント雛形(機械生成)
+const PHOTO_COMMENT_TPL = {
+    '着手前':'着手前の状況を記録',
+    '施工状況':'施工状況を確認',
+    '材料確認':'使用材料を確認',
+    '出来形':'出来形を測定・記録',
+    '完成':'完成状況を確認',
+    '安全管理':'安全管理状況を記録',
+    '品質管理':'品質管理状況を記録',
+    'その他':''
+};
+
+function savePhotoTaker() {
+    const v = document.getElementById('photoTaker')?.value || '';
+    try { localStorage.setItem('genba_photo_taker', v); } catch(e) {}
+}
+
+function savePhotoConfirmer() {}
+
+// 電子小黒板を写真に焼き込む(大手の小黒板機能に相当)
+function applyKokuban(id) {
+    const item = photoItems.find(p => p.id === id);
+    if (!item) return;
+    const cur = getCurrent() || {};
+    const koushu = workTypeToKoushu(cur.workType || 'earthwork');
+    const typeLabel = item.type === 'その他' ? (item.typeOther || 'その他') : item.type;
+    const locLabel = (item.location === 'その他' ? (item.locationOther || 'その他') : item.location) + (item.floor ? ' ' + item.floor : '');
+
+    const img = new Image();
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        // 黒板サイズ(画像幅基準)
+        const bw = Math.min(img.width * 0.55, img.width - 20);
+        const lineH = Math.max(16, img.width * 0.028);
+        const pad = lineH * 0.5;
+        const rows = [
+            '工事名:' + (cur.projectName || currentProject || ''),
+            '工種:' + koushu,
+            '種別:' + typeLabel,
+            '箇所:' + locLabel,
+            '日付:' + item.date
+        ];
+        const bh = lineH * rows.length + pad * 2;
+        const bx = 10, by = img.height - bh - 10;
+        // 黒板背景(濃緑)
+        ctx.fillStyle = 'rgba(20,60,40,0.88)';
+        ctx.fillRect(bx, by, bw, bh);
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+        ctx.strokeRect(bx, by, bw, bh);
+        // 文字(白・チョーク風)
+        ctx.fillStyle = '#fff';
+        ctx.font = `${Math.floor(lineH*0.72)}px "Yu Gothic","Meiryo",sans-serif`;
+        ctx.textBaseline = 'top';
+        rows.forEach((r, i) => {
+            ctx.fillText(r, bx + pad, by + pad + i * lineH);
+        });
+        // 焼き込んだ画像で置き換え
+        item.src = canvas.toDataURL('image/jpeg', 0.85);
+        item.hasKokuban = true;
+        renderPhotoCards();
+        savePhotoItems();
+        showToast('黒板を焼き込みました');
+    };
+    img.src = item.src;
+}
+
 function handlePhotoSelect(input) {
     const files = Array.from(input.files);
+    const taker = document.getElementById('photoTaker')?.value || '';
+    const today = new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'});
     files.forEach(file => {
         const reader = new FileReader();
         reader.onload = e => {
-            photoThumbs.push(e.target.result);
-            renderPhotoThumbs();
+            photoSeq++;
+            const defaultLoc = getPhotoLocations()[0] || '外壁北面';
+            photoItems.push({
+                id: photoSeq,
+                src: e.target.result,
+                date: today,        // ② 撮影日自動
+                taker: taker,       // ③ 撮影者自動
+                type: '着手前',     // ④ 種別(選択)
+                typeOther: '',      // その他入力
+                location: defaultLoc, // ⑤ 撮影箇所(主工事ベース最優先)
+                locationOther: '',  // その他入力
+                floor: '',          // 階数(入力)
+                comment: PHOTO_COMMENT_TPL['着手前'] // ⑥ 写真内容(雛形)
+            });
+            renderPhotoCards();
+            savePhotoItems();
         };
         reader.readAsDataURL(file);
     });
     input.value = '';
 }
-function renderPhotoThumbs() {
-    const wrap = document.getElementById('photoThumbs');
+
+function renderPhotoCards() {
+    const wrap = document.getElementById('photoCardList');
+    const cnt = document.getElementById('photoCount');
     if (!wrap) return;
-    wrap.innerHTML = photoThumbs.map((src, i) => `
-        <div class="photo-thumb">
-            <img src="${src}" alt="">
-            <button class="del-thumb" onclick="removePhoto(${i})">×</button>
-        </div>
-    `).join('');
-}
-function removePhoto(i) {
-    photoThumbs.splice(i, 1);
-    renderPhotoThumbs();
+    if (cnt) cnt.textContent = photoItems.length ? `(${photoItems.length}枚)` : '';
+    if (photoItems.length === 0) {
+        wrap.innerHTML = '<div class="photo-card-empty">写真がありません。<br>「写真を追加」から撮影または選択してください。</div>';
+        return;
+    }
+    const locList = getPhotoLocations();
+    wrap.innerHTML = photoItems.map((p, i) => {
+        const no = 'P-' + String(i+1).padStart(3,'0'); // ① 自動採番(並び順で振り直し)
+        const typeOpts = PHOTO_TYPES.map(t => `<option value="${t}" ${p.type===t?'selected':''}>${t}</option>`).join('');
+        // 「その他」選択時は自由入力欄を表示
+        const typeOtherInput = p.type === 'その他'
+            ? `<input type="text" value="${escapeHtml(p.typeOther||'')}" oninput="updatePhotoItem(${p.id},'typeOther',this.value)" placeholder="種別を入力" style="margin-top:6px;">`
+            : '';
+        // 撮影箇所(主工事ベースで優先並び替え)
+        const locOpts = locList.map(l => `<option value="${l}" ${p.location===l?'selected':''}>${l}</option>`).join('');
+        const locOtherInput = p.location === 'その他'
+            ? `<input type="text" value="${escapeHtml(p.locationOther||'')}" oninput="updatePhotoItem(${p.id},'locationOther',this.value)" placeholder="箇所を入力" style="margin-top:6px;">`
+            : '';
+        return `<div class="photo-card">
+<div class="photo-card-top">
+<img class="photo-card-img" src="${p.src}" onclick="viewPhotoFull(${p.id})">
+<div class="photo-card-body">
+<div><span class="photo-card-no">${no}</span><span class="photo-card-date">${p.date}</span></div>
+<div class="photo-card-fields-row">
+<div class="photo-card-field"><label>撮影種別</label><select onchange="updatePhotoItem(${p.id},'type',this.value)">${typeOpts}</select>${typeOtherInput}</div>
+<div class="photo-card-field"><label>撮影箇所</label><select onchange="updatePhotoItem(${p.id},'location',this.value)">${locOpts}</select>${locOtherInput}</div>
+</div>
+<div class="photo-card-fields-row">
+<div class="photo-card-field"><label>階数</label><input type="text" value="${escapeHtml(p.floor||'')}" oninput="updatePhotoItem(${p.id},'floor',this.value)" placeholder="例:3階"></div>
+<div class="photo-card-field"><label>写真内容</label><input type="text" value="${escapeHtml(p.comment||'')}" oninput="updatePhotoItem(${p.id},'comment',this.value)" placeholder="内容・説明"></div>
+</div>
+</div>
+</div>
+<div class="photo-card-actions">
+<button class="photo-card-btn kokuban ${p.hasKokuban?'done':''}" onclick="applyKokuban(${p.id})">${p.hasKokuban?'黒板済':'黒板を付ける'}</button>
+<button class="photo-card-btn up" onclick="movePhoto(${p.id},-1)" ${i===0?'disabled':''}>▲</button>
+<button class="photo-card-btn down" onclick="movePhoto(${p.id},1)" ${i===photoItems.length-1?'disabled':''}>▼</button>
+<button class="photo-card-btn del" onclick="deletePhotoItem(${p.id})">削除</button>
+</div>
+</div>`;
+    }).join('');
 }
 
+function updatePhotoItem(id, field, value) {
+    const item = photoItems.find(p => p.id === id);
+    if (!item) return;
+    const prev = item[field];
+    item[field] = value;
+    let needRerender = false;
+    // 種別変更時、コメントが空または雛形のままなら雛形を更新
+    if (field === 'type') {
+        const oldTpls = Object.values(PHOTO_COMMENT_TPL);
+        if (!item.comment || oldTpls.includes(item.comment)) {
+            item.comment = PHOTO_COMMENT_TPL[value] || '';
+        }
+        needRerender = true; // その他入力欄の出し入れのため
+    }
+    // 撮影箇所で「その他」⇔通常を切り替えたら再描画(入力欄の出し入れ)
+    if (field === 'location' && (value === 'その他' || prev === 'その他')) {
+        needRerender = true;
+    }
+    if (needRerender) renderPhotoCards();
+    savePhotoItemsNoRegen(); // 入力中の再生成を避ける
+}
+
+// 写真データ保存(本文の自動再生成はしない=入力フォーカスを保つ)
+function savePhotoItemsNoRegen() {
+    if (currentProject && projects[currentProject]) {
+        projects[currentProject].photoItems = photoItems;
+        saveStorage();
+    }
+}
+
+function movePhoto(id, dir) {
+    const i = photoItems.findIndex(p => p.id === id);
+    if (i < 0) return;
+    const j = i + dir;
+    if (j < 0 || j >= photoItems.length) return;
+    [photoItems[i], photoItems[j]] = [photoItems[j], photoItems[i]];
+    renderPhotoCards();
+    savePhotoItems();
+}
+
+function deletePhotoItem(id) {
+    photoItems = photoItems.filter(p => p.id !== id);
+    renderPhotoCards();
+    savePhotoItems();
+}
+
+function viewPhotoFull(id) {
+    const item = photoItems.find(p => p.id === id);
+    if (!item) return;
+    const w = window.open('');
+    if (w) w.document.write(`<img src="${item.src}" style="max-width:100%;">`);
+}
+
+function savePhotoItems() {
+    if (currentProject && projects[currentProject]) {
+        projects[currentProject].photoItems = photoItems;
+        saveStorage();
+        // 既に台帳を生成済みなら、写真変更を本文に自動反映
+        if (projects[currentProject].outPhoto && photoItems.length > 0) {
+            generatePhotoFromUI();
+        }
+    }
+}
+
+function loadPhotoItems() {
+    photoItems = (currentProject && projects[currentProject] && projects[currentProject].photoItems) || [];
+    photoSeq = photoItems.reduce((m,p) => Math.max(m, p.id||0), 0);
+    // 撮影者を復元(なければ保存値→現場代理人の順で補完)
+    const takerEl = document.getElementById('photoTaker');
+    if (takerEl && !takerEl.value) {
+        let t = '';
+        try { t = localStorage.getItem('genba_photo_taker') || ''; } catch(e) {}
+        if (!t && currentProject && projects[currentProject]) {
+            t = projects[currentProject].manager || '';
+        }
+        takerEl.value = t;
+    }
+    renderPhotoCards();
+}
+
+// 旧互換(残存呼び出し用)
+let photoThumbs = [];
+function renderPhotoThumbs() {}
+function removePhoto(i) {}
+
 // 初期化
+// 実ビューポート高さを測定して--app-vhに設定(100dvh不具合の確実な対策)
+function setAppHeight() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--app-vh', vh + 'px');
+}
+setAppHeight();
+window.addEventListener('resize', setAppHeight);
+window.addEventListener('orientationchange', () => setTimeout(setAppHeight, 200));
 loadStorage();
 setupChips();
 if (typeof setupKyNewUI === 'function') setupKyNewUI();
@@ -6245,6 +8546,13 @@ updateHome();
 updateHeader();
 updateSaveIndicator();
 updateGlobalActionBar('home');
+// クラウド設定読込+自動同期(設定済みなら起動時にクラウドから取得)
+if (typeof loadCloudConfig === 'function') {
+    loadCloudConfig();
+    if (typeof cloudReady === 'function' && cloudReady()) {
+        setTimeout(() => { if (typeof cloudPullNow === 'function') cloudPullNow(); }, 800);
+    }
+}
 // 業種モード復元
 try {
     const savedMode = localStorage.getItem('genba_v8_vmode') || 'renovation';
