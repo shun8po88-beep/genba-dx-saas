@@ -1080,8 +1080,8 @@ html, body {
 </div>
 </div>
 
-<!-- ⑥ 旧工種(折りたたみ・互換用) -->
-<details class="compat-fold">
+<!-- ⑥ 旧工種(非表示・内部互換用。workTypeChipsは自動判定が参照するため要素は保持) -->
+<details class="compat-fold" style="display:none;">
 <summary>▼ 旧形式の工種入力（互換用）</summary>
 <div class="input-group" style="margin-top:10px;">
 <label>工種<span id="lockIndicator"></span></label>
