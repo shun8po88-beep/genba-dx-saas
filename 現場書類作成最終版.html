@@ -48,6 +48,15 @@ html, body {
 /* ========== 外部連携設定ページ ========== */
 .integration-card { background: #FFFFFF; border: 1px solid #D0D7DE; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
 .integration-card.disabled { opacity: 0.6; }
+.cloud-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+.cloud-badge.off { background: #F2F4F7; color: #667085; }
+.cloud-badge.on { background: #E7F8EF; color: #067647; }
+.cloud-badge.syncing { background: #FEF0C7; color: #B54708; }
+.cloud-badge.error { background: #FEE4E2; color: #D92D20; }
+.cloud-field { margin-bottom: 8px; }
+.cloud-field label { display: block; font-size: 12px; font-weight: 700; color: #344054; margin-bottom: 3px; }
+.cloud-field input { width: 100%; padding: 9px 11px; border: 1.5px solid #D0D5DD; border-radius: 8px; font-size: 14px; font-family: inherit; box-sizing: border-box; min-height: 40px; }
+.cloud-field input:focus { outline: none; border-color: #1570B8; }
 .integration-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
 .integration-icon { width: 24px; height: 24px; color: #0B2D4D; flex-shrink: 0; }
 .integration-info { flex: 1; }
@@ -1756,6 +1765,37 @@ html, body {
 <div class="page" id="page-integrations">
 <div class="page-title">外部サービス連携</div>
 
+<!-- クラウド保存(Supabase) -->
+<div class="integration-card" id="cloudCard" style="border:2px solid #1570B8;">
+<div class="integration-header">
+<svg class="integration-icon" style="color:#1570B8;"><use href="#i-share"/></svg>
+<div class="integration-info">
+<div class="integration-name">クラウド保存・同期 <span id="cloudStatusBadge" class="cloud-badge off">未接続</span></div>
+<div class="integration-desc">データをクラウドに保存し、複数の端末で同期します</div>
+</div>
+</div>
+<div id="cloudSetupArea">
+<div class="cloud-field">
+<label>Supabase URL</label>
+<input type="text" id="supaUrl" placeholder="https://xxxxx.supabase.co" oninput="saveCloudConfig()">
+</div>
+<div class="cloud-field">
+<label>Supabase anon key</label>
+<input type="password" id="supaKey" placeholder="eyJ... (anon public key)" oninput="saveCloudConfig()">
+</div>
+<div class="cloud-field">
+<label>同期コード(全端末で同じ値にする)</label>
+<input type="text" id="supaSync" placeholder="例:abe-kenchiku-2026" oninput="saveCloudConfig()">
+</div>
+<div class="integration-actions" style="margin-top:10px;">
+<button class="integration-btn accent" onclick="cloudConnect()">接続して同期</button>
+<button class="integration-btn" onclick="cloudPushNow()">今すぐ保存</button>
+<button class="integration-btn" onclick="cloudPullNow()">クラウドから取得</button>
+</div>
+<div class="hint" id="cloudHint" style="margin-top:8px;">Supabaseの URL と anon key を入力し、同期コードを決めて「接続して同期」を押してください。別の端末でも同じ3つを入力すればデータが同期されます。</div>
+</div>
+</div>
+
 <!-- CSV/Excelエクスポート -->
 <div class="integration-card">
 <div class="integration-header">
@@ -2010,6 +2050,140 @@ function saveStorage() {
         updateSaveIndicator();
     }
     catch(e) { console.error('[v8] saveStorage失敗:', e); }
+    // クラウドへ非同期同期(設定済みなら)
+    if (typeof cloudPushDebounced === 'function') cloudPushDebounced();
+}
+
+// ========== クラウド保存(Supabase REST API) ==========
+let cloudConfig = { url:'', key:'', sync:'' };
+let cloudConnected = false;
+let cloudPushTimer = null;
+
+function loadCloudConfig() {
+    try {
+        cloudConfig.url = localStorage.getItem('genba_supa_url') || '';
+        cloudConfig.key = localStorage.getItem('genba_supa_key') || '';
+        cloudConfig.sync = localStorage.getItem('genba_supa_sync') || '';
+    } catch(e) {}
+    const u = document.getElementById('supaUrl'); if (u) u.value = cloudConfig.url;
+    const k = document.getElementById('supaKey'); if (k) k.value = cloudConfig.key;
+    const s = document.getElementById('supaSync'); if (s) s.value = cloudConfig.sync;
+    // 設定済みなら自動接続
+    if (cloudConfig.url && cloudConfig.key && cloudConfig.sync) {
+        cloudConnected = true;
+        setCloudBadge('on', '接続済み');
+    }
+}
+
+function saveCloudConfig() {
+    cloudConfig.url = (document.getElementById('supaUrl')?.value || '').trim().replace(/\/$/, '');
+    cloudConfig.key = (document.getElementById('supaKey')?.value || '').trim();
+    cloudConfig.sync = (document.getElementById('supaSync')?.value || '').trim();
+    try {
+        localStorage.setItem('genba_supa_url', cloudConfig.url);
+        localStorage.setItem('genba_supa_key', cloudConfig.key);
+        localStorage.setItem('genba_supa_sync', cloudConfig.sync);
+    } catch(e) {}
+}
+
+function setCloudBadge(cls, text) {
+    const b = document.getElementById('cloudStatusBadge');
+    if (b) { b.className = 'cloud-badge ' + cls; b.textContent = text; }
+}
+
+function cloudReady() {
+    return cloudConfig.url && cloudConfig.key && cloudConfig.sync;
+}
+
+// Supabaseテーブル genba_data (columns: sync_code text primary key, data jsonb, updated_at timestamptz)
+async function cloudPushNow() {
+    if (!cloudReady()) { showToast('先にクラウド設定を入力してください', true); return; }
+    setCloudBadge('syncing', '保存中...');
+    try {
+        const body = { sync_code: cloudConfig.sync, data: { projects: projects }, updated_at: new Date().toISOString() };
+        const res = await fetch(`${cloudConfig.url}/rest/v1/genba_data?on_conflict=sync_code`, {
+            method: 'POST',
+            headers: {
+                'apikey': cloudConfig.key,
+                'Authorization': 'Bearer ' + cloudConfig.key,
+                'Content-Type': 'application/json',
+                'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(body)
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        cloudConnected = true;
+        setCloudBadge('on', '保存済み');
+        showToast('クラウドに保存しました');
+    } catch(e) {
+        setCloudBadge('error', 'エラー');
+        showToast('クラウド保存に失敗:' + e.message, true);
+    }
+}
+
+async function cloudPullNow() {
+    if (!cloudReady()) { showToast('先にクラウド設定を入力してください', true); return; }
+    setCloudBadge('syncing', '取得中...');
+    try {
+        const res = await fetch(`${cloudConfig.url}/rest/v1/genba_data?sync_code=eq.${encodeURIComponent(cloudConfig.sync)}&select=data`, {
+            headers: { 'apikey': cloudConfig.key, 'Authorization': 'Bearer ' + cloudConfig.key }
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const rows = await res.json();
+        if (!rows.length) { setCloudBadge('on', '接続済み'); showToast('クラウドにデータがありません(初回は「今すぐ保存」)'); return; }
+        const cloudProjects = rows[0].data && rows[0].data.projects ? rows[0].data.projects : {};
+        // マージ(lastUsedが新しい方を採用)
+        Object.keys(cloudProjects).forEach(name => {
+            const local = projects[name];
+            const remote = cloudProjects[name];
+            if (!local) { projects[name] = remote; return; }
+            const lt = new Date(local.lastUsed || 0).getTime();
+            const rt = new Date(remote.lastUsed || 0).getTime();
+            if (rt >= lt) projects[name] = remote;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+        cloudConnected = true;
+        setCloudBadge('on', '同期済み');
+        if (typeof renderProjectMenu === 'function') renderProjectMenu();
+        if (typeof updateHome === 'function') updateHome();
+        showToast('クラウドから取得しました(' + Object.keys(cloudProjects).length + '件)');
+    } catch(e) {
+        setCloudBadge('error', 'エラー');
+        showToast('取得に失敗:' + e.message, true);
+    }
+}
+
+async function cloudConnect() {
+    saveCloudConfig();
+    if (!cloudReady()) { showToast('URL・キー・同期コードをすべて入力してください', true); return; }
+    // まずクラウドから取得→無ければ保存
+    await cloudPullNow();
+    await cloudPushNow();
+}
+
+// 保存のたびに呼ばれる(2秒デバウンスでクラウドへ)
+function cloudPushDebounced() {
+    if (!cloudReady() || !cloudConnected) return;
+    if (cloudPushTimer) clearTimeout(cloudPushTimer);
+    cloudPushTimer = setTimeout(() => { cloudPushSilent(); }, 2000);
+}
+
+async function cloudPushSilent() {
+    if (!cloudReady()) return;
+    try {
+        const body = { sync_code: cloudConfig.sync, data: { projects: projects }, updated_at: new Date().toISOString() };
+        await fetch(`${cloudConfig.url}/rest/v1/genba_data?on_conflict=sync_code`, {
+            method: 'POST',
+            headers: {
+                'apikey': cloudConfig.key,
+                'Authorization': 'Bearer ' + cloudConfig.key,
+                'Content-Type': 'application/json',
+                'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(body)
+        });
+        setCloudBadge('on', '保存済み');
+    } catch(e) { setCloudBadge('error', '同期エラー'); }
 }
 function updateSaveIndicator() {
     const ind = document.getElementById('saveIndicator');
@@ -8372,6 +8546,13 @@ updateHome();
 updateHeader();
 updateSaveIndicator();
 updateGlobalActionBar('home');
+// クラウド設定読込+自動同期(設定済みなら起動時にクラウドから取得)
+if (typeof loadCloudConfig === 'function') {
+    loadCloudConfig();
+    if (typeof cloudReady === 'function' && cloudReady()) {
+        setTimeout(() => { if (typeof cloudPullNow === 'function') cloudPullNow(); }, 800);
+    }
+}
 // 業種モード復元
 try {
     const savedMode = localStorage.getItem('genba_v8_vmode') || 'renovation';
