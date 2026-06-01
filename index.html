@@ -1356,8 +1356,13 @@ html, body {
 </div>
 </div>
 <div class="pc-card-body" id="pc-body-safety" style="display:none;">
-<div class="pc-hint">工種・現場条件・重機から自動生成されます。</div>
+<div class="pc-hint">工種・現場条件・重機から自動生成されます。独自の対策も追加できます。</div>
 <div class="pc-display" id="pc-display-safety"></div>
+<div id="pc-safety-custom-list" class="qc-card-list" style="margin-top:8px;"></div>
+<div class="ky2-other-row" style="margin-top:10px;">
+<input type="text" id="pcSafetyOther" class="ky2-other-input" placeholder="独自の安全対策を追加">
+<button class="ky2-other-btn" onclick="addPcSafetyCustom()">追加</button>
+</div>
 </div>
 </div>
 
@@ -1392,8 +1397,13 @@ html, body {
 </div>
 </div>
 <div class="pc-card-body" id="pc-body-neighbor" style="display:none;">
-<div class="pc-hint">居ながら施工・住宅密集地・通学路等の条件から自動生成されます。</div>
+<div class="pc-hint">居ながら施工・住宅密集地・通学路等の条件から自動生成されます。独自の対策も追加できます。</div>
 <div class="pc-display" id="pc-display-neighbor"></div>
+<div id="pc-neighbor-custom-list" class="qc-card-list" style="margin-top:8px;"></div>
+<div class="ky2-other-row" style="margin-top:10px;">
+<input type="text" id="pcNeighborOther" class="ky2-other-input" placeholder="独自の近隣対策を追加">
+<button class="ky2-other-btn" onclick="addPcNeighborCustom()">追加</button>
+</div>
 </div>
 </div>
 
@@ -3421,6 +3431,19 @@ function gatherInputs() {
         statusPlan: (projects[currentProject] && projects[currentProject].statusPlan) || 'none',
         statusKy: (projects[currentProject] && projects[currentProject].statusKy) || 'none',
         statusPhoto: (projects[currentProject] && projects[currentProject].statusPhoto) || 'none',
+        // ▼他ページで編集するデータは既存値を保持(autoSaveで消さない)
+        qtyRows: (projects[currentProject] && projects[currentProject].qtyRows) || [],
+        ky2: (projects[currentProject] && projects[currentProject].ky2) || null,
+        ky2Approval: (projects[currentProject] && projects[currentProject].ky2Approval) || null,
+        ky2Prev: (projects[currentProject] && projects[currentProject].ky2Prev) || null,
+        photoItems: (projects[currentProject] && projects[currentProject].photoItems) || [],
+        qcCustom: (projects[currentProject] && projects[currentProject].qcCustom) || [],
+        planSections: (projects[currentProject] && projects[currentProject].planSections) || null,
+        planSectionsCustom: (projects[currentProject] && projects[currentProject].planSectionsCustom) || [],
+        planExtra: (projects[currentProject] && projects[currentProject].planExtra) || null,
+        photoTaker: (projects[currentProject] && projects[currentProject].photoTaker) || '',
+        safetyCustom: (projects[currentProject] && projects[currentProject].safetyCustom) || [],
+        neighborCustom: (projects[currentProject] && projects[currentProject].neighborCustom) || [],
         lastUsed: new Date().toISOString()
     };
 }
@@ -5148,7 +5171,12 @@ function generatePlanFromUI() {
     out += '・粉塵発生作業:湿式工法または集塵機を使用する\n';
     out += '・工事着手1週間前までに、隣接住戸+周辺50m以内全戸への挨拶と工事概要(工期・連絡先)を配布する\n';
     out += '・現場入口に苦情窓口(連絡先電話番号)を掲示する。受付後24時間以内に対応する\n';
-    out += '・通行人への配慮:作業員は工事現場周辺で大声・私語を控える\n\n';
+    out += '・通行人への配慮:作業員は工事現場周辺で大声・私語を控える\n';
+    // 独自追加の近隣対策
+    if (cur.neighborCustom && cur.neighborCustom.length) {
+        cur.neighborCustom.forEach(c => out += '・' + c + '\n');
+    }
+    out += '\n';
     out += '〔緊急連絡体制〕\n';
     out += '・救急:119(けが・急病時、現場代理人が同行)\n';
     out += '・警察:110(事故・盗難時)\n';
@@ -5156,7 +5184,12 @@ function generatePlanFromUI() {
     out += '・元請担当:' + (cur.prime || '未入力') + ' 緊急連絡先:未入力\n';
     out += '・発注者:' + (cur.client || '未入力') + ' 連絡先:未入力\n';
     out += '・最寄り病院:未入力\n\n';
-    out += '〔その他〕\n朝礼時にKY活動を実施し、当日の危険要因と対策を全員で確認する。新規入場者には入場時教育(30分以上)を実施し、教育記録を保管する。\n\n';
+    out += '〔その他〕\n朝礼時にKY活動を実施し、当日の危険要因と対策を全員で確認する。新規入場者には入場時教育(30分以上)を実施し、教育記録を保管する。\n';
+    // 独自追加の安全対策
+    if (cur.safetyCustom && cur.safetyCustom.length) {
+        cur.safetyCustom.forEach(c => out += '・' + c + '\n');
+    }
+    out += '\n';
     }
     
     // 現場組織表(立場別に内容変更)
@@ -5294,21 +5327,15 @@ function generatePlanFromUI() {
     out += '・再生資材:可能な範囲で再生材を使用する\n\n';
     }
 
-    // ========== 施工数量 ==========
+    // ========== 施工数量(入力済みのみ出力) ==========
     if (planSec(cur, 'quantity')) {
-    out += '【施工数量】\n';
     const qty = cur.qtyRows || [];
-    if (qty.length && qty.some(r => r.value && r.value.trim())) {
-        qty.forEach(r => { if (r.value && r.value.trim()) out += `・${r.name}:${r.value}${r.customUnit||r.unit||''}\n`; });
+    const filledQty = qty.filter(r => r.value && r.value.trim());
+    if (filledQty.length > 0) {
+        out += '【施工数量】\n';
+        filledQty.forEach(r => { out += `・${r.name}:${r.value}${r.customUnit||r.unit||''}\n`; });
+        out += '\n';
     }
-    // 標準数量項目(未入力でも欄を用意)
-    out += '〔主要数量〕\n';
-    out += `・施工面積:${getQtyVal(qty,'施工面積')||'＿＿＿'} ㎡\n`;
-    out += `・施工延長:${getQtyVal(qty,'施工延長')||'＿＿＿'} m\n`;
-    out += `・掘削量:${getQtyVal(qty,'掘削')||'＿＿＿'} ㎥\n`;
-    out += `・埋戻量:${getQtyVal(qty,'埋戻')||'＿＿＿'} ㎥\n`;
-    out += `・残土量:${getQtyVal(qty,'残土')||'＿＿＿'} ㎥\n`;
-    out += `・使用材料数量:${getQtyVal(qty,'材料')||'別紙のとおり'}\n\n`;
     }
 
     // ========== 添付図書 ==========
@@ -5848,7 +5875,7 @@ const KY_RECOMMEND = {
 };
 
 // ========== 施工数量テーブル(Googleフォーム風) ==========
-const QTY_UNITS = ['㎡','m','m²','m³','箇所','枚','本','台','基','式','その他'];
+const QTY_UNITS = ['㎡','m','m³','kg','t','箇所','枚','本','台','基','式','その他'];
 // 工種ごとの自動生成項目
 const QTY_AUTO_ITEMS = {
     scaffold: [{name:'足場面積',unit:'㎡'},{name:'メッシュシート',unit:'㎡'},{name:'足場高さ',unit:'m'}],
@@ -6045,6 +6072,34 @@ function refreshPcSafety(p) {
     if (p.conditions && (p.conditions.includes('occupied') || p.conditions.includes('residential'))) items.push('第三者立入禁止措置', '近隣住民への事前通知');
     if (items.length === 0) items.push('高所作業安全対策', 'KY活動実施', 'ヘルメット着用徹底');
     el.innerHTML = items.map(it => `<div style="padding:4px 0;font-size:14px;">・${escapeHtml(it)}</div>`).join('');
+    // カスタム項目描画
+    const cwrap = document.getElementById('pc-safety-custom-list');
+    if (cwrap) {
+        const custom = p.safetyCustom || [];
+        cwrap.innerHTML = custom.map((c, idx) =>
+            `<div class="qc-card-item"><span class="qc-card-check">＋</span><span style="flex:1;">${escapeHtml(c)}</span><button class="qc-del-btn" onclick="deletePcSafetyCustom(${idx})">削除</button></div>`
+        ).join('');
+    }
+}
+
+function addPcSafetyCustom() {
+    const input = document.getElementById('pcSafetyOther');
+    if (!input) return;
+    const val = input.value.trim();
+    if (!val) { showToast('対策を入力してください', true); return; }
+    if (!currentProject || !projects[currentProject]) { showToast('先に現場を選んでください', true); return; }
+    if (!projects[currentProject].safetyCustom) projects[currentProject].safetyCustom = [];
+    projects[currentProject].safetyCustom.push(val);
+    saveStorage();
+    input.value = '';
+    refreshPcSafety(projects[currentProject]);
+    showToast('安全対策を追加しました');
+}
+function deletePcSafetyCustom(idx) {
+    if (!currentProject || !projects[currentProject] || !projects[currentProject].safetyCustom) return;
+    projects[currentProject].safetyCustom.splice(idx, 1);
+    saveStorage();
+    refreshPcSafety(projects[currentProject]);
 }
 
 function refreshPcHeavy(p) {
@@ -6067,6 +6122,34 @@ function refreshPcNeighbor(p) {
     if (p.conditions && p.conditions.includes('union_report')) items.push('月1回理事会報告書提出');
     if (items.length === 0) items.push('近隣への挨拶回り実施(工事1週間前)', '苦情窓口を掲示');
     el.innerHTML = items.map(it => `<div style="padding:4px 0;font-size:14px;">・${escapeHtml(it)}</div>`).join('');
+    // カスタム項目描画
+    const cwrap = document.getElementById('pc-neighbor-custom-list');
+    if (cwrap) {
+        const custom = p.neighborCustom || [];
+        cwrap.innerHTML = custom.map((c, idx) =>
+            `<div class="qc-card-item"><span class="qc-card-check">＋</span><span style="flex:1;">${escapeHtml(c)}</span><button class="qc-del-btn" onclick="deletePcNeighborCustom(${idx})">削除</button></div>`
+        ).join('');
+    }
+}
+
+function addPcNeighborCustom() {
+    const input = document.getElementById('pcNeighborOther');
+    if (!input) return;
+    const val = input.value.trim();
+    if (!val) { showToast('対策を入力してください', true); return; }
+    if (!currentProject || !projects[currentProject]) { showToast('先に現場を選んでください', true); return; }
+    if (!projects[currentProject].neighborCustom) projects[currentProject].neighborCustom = [];
+    projects[currentProject].neighborCustom.push(val);
+    saveStorage();
+    input.value = '';
+    refreshPcNeighbor(projects[currentProject]);
+    showToast('近隣対策を追加しました');
+}
+function deletePcNeighborCustom(idx) {
+    if (!currentProject || !projects[currentProject] || !projects[currentProject].neighborCustom) return;
+    projects[currentProject].neighborCustom.splice(idx, 1);
+    saveStorage();
+    refreshPcNeighbor(projects[currentProject]);
 }
 
 function refreshPcOrg(p) {
@@ -6675,18 +6758,19 @@ function autoGenerateQtyFromProject() {
 function syncQtyToPlanText() {
     const ta = document.getElementById('out-plan');
     if (!ta || !ta.value) return;
-    // 【施工数量】セクションを構築
-    let section = '【施工数量】\n';
-    qtyRows.forEach(r => {
-        const u = r.unit === 'その他' ? (r.customUnit || '') : r.unit;
-        if (r.value && r.value.trim()) {
-            section += `・${r.name}:${r.value}${u}\n`;
-        } else {
-            section += `・${r.name}:未入力\n`;
-        }
-    });
+    const filled = qtyRows.filter(r => r.value && r.value.trim());
     const text = ta.value;
     const re = /【施工数量】\n[\s\S]*?(?=\n【|$)/;
+    if (filled.length === 0) {
+        // 入力済みがなければ【施工数量】セクションごと削除
+        if (re.test(text)) ta.value = text.replace(re, '').replace(/\n{3,}/g, '\n\n').trim();
+        return;
+    }
+    let section = '【施工数量】\n';
+    filled.forEach(r => {
+        const u = r.unit === 'その他' ? (r.customUnit || '') : r.unit;
+        section += `・${r.name}:${r.value}${u}\n`;
+    });
     if (re.test(text)) {
         ta.value = text.replace(re, section.trim());
     }
