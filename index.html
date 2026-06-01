@@ -863,7 +863,7 @@ html, body {
 
 <div class="page active" id="page-home">
 
-<!-- 上部バー:日付+業種モード(折りたたみ) -->
+<!-- 上部バー:日付+天気 -->
 <div class="home-topbar">
 <div class="home-date-row">
 <div class="home-date-strong" id="todayDateStrong"></div>
@@ -871,20 +871,6 @@ html, body {
 <svg class="hwm-icon" id="hwmIcon"><use href="#i-sun"/></svg>
 <span class="hwm-temp" id="hwmTemp">--°</span>
 <span class="hwm-heat" id="hwmHeat" style="display:none;"></span>
-</div>
-</div>
-<div class="vmode-dropdown">
-<button class="vmode-current-btn" onclick="toggleVmodeMenu()" id="vmodeCurrentBtn">
-<span id="vmodeCurrentLabel">改修工事</span>
-<svg class="vmode-arrow"><use href="#i-arrow-right"/></svg>
-</button>
-<div class="vmode-menu" id="vmodeMenu" style="display:none;">
-<button class="vmode-menu-item active" data-mode="renovation" onclick="selectVerticalMode('renovation')">改修工事</button>
-<button class="vmode-menu-item disabled" data-mode="painting" onclick="selectVerticalMode('painting')">塗装<span class="vmode-soon">準備中</span></button>
-<button class="vmode-menu-item disabled" data-mode="waterproof" onclick="selectVerticalMode('waterproof')">防水<span class="vmode-soon">準備中</span></button>
-<button class="vmode-menu-item disabled" data-mode="demolition" onclick="selectVerticalMode('demolition')">解体<span class="vmode-soon">準備中</span></button>
-<button class="vmode-menu-item disabled" data-mode="interior" onclick="selectVerticalMode('interior')">内装<span class="vmode-soon">準備中</span></button>
-<button class="vmode-menu-item disabled" data-mode="electric" onclick="selectVerticalMode('electric')">電気<span class="vmode-soon">準備中</span></button>
 </div>
 </div>
 </div>
