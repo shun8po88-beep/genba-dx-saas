@@ -37,7 +37,7 @@ html, body {
 .save-indicator svg { flex-shrink: 0; }
 
 /* ========== コンテンツ ========== */
-.content { padding: 80px 14px 200px 14px; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
+.content { padding: 64px 14px 200px 14px; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
 /* ========== グローバルアクションバー(.appのflex内 = iOS完全対応) ========== */
 .global-action-bar { padding: 8px 14px; background: #FFFFFF; border-top: 2px solid #0B2D4D; position: fixed; bottom: 60px; left: 0; right: 0; max-width: 1100px; margin: 0 auto; z-index: 150; box-sizing: border-box; }
 .global-action-btn { width: 100%; max-width: 720px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; border-radius: 8px; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; min-height: 52px; border: none; letter-spacing: 0.5px; }
@@ -55,6 +55,10 @@ html, body {
 .cloud-badge.error { background: #FEE4E2; color: #D92D20; }
 .cloud-field { margin-bottom: 8px; }
 .cloud-field label { display: block; font-size: 12px; font-weight: 700; color: #344054; margin-bottom: 3px; }
+.emg-field { margin-bottom: 8px; }
+.emg-field label { display: block; font-size: 12px; font-weight: 700; color: #344054; margin-bottom: 3px; }
+.emg-field input { width: 100%; padding: 9px 11px; border: 1.5px solid #D0D5DD; border-radius: 8px; font-size: 14px; font-family: inherit; box-sizing: border-box; min-height: 40px; }
+.emg-field input:focus { outline: none; border-color: #1570B8; }
 .cloud-field input { width: 100%; padding: 9px 11px; border: 1.5px solid #D0D5DD; border-radius: 8px; font-size: 14px; font-family: inherit; box-sizing: border-box; min-height: 40px; }
 .cloud-field input:focus { outline: none; border-color: #1570B8; }
 .integration-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
@@ -768,7 +772,7 @@ html, body {
 .page.active { display: block; }
 /* ========== PC・タブレット大画面対応 ========== */
 @media (min-width: 768px) {
-    .content { padding: 80px 32px 200px 32px; }
+    .content { padding: 64px 32px 200px 32px; }
     /* ページ内容を読みやすい幅で中央寄せ */
     #page-home, #page-plan, #page-ky, #page-photo, #page-input, #page-integrations { max-width: 900px; margin: 0 auto; }
     /* ヘッダー・バーの中身も中央寄せ */
@@ -784,7 +788,7 @@ html, body {
 @media (min-width: 1024px) {
     /* タブレット横・PC: 現場情報を2カラムに */
     #page-input { max-width: 1000px; }
-    .content { padding: 80px 40px 200px 40px; }
+    .content { padding: 64px 40px 200px 40px; }
 }
 
 .smart-tag { display: inline-flex; align-items: center; gap: 4px; background: #2D6B41; color: #fff; font-size: 12px; padding: 3px 9px; border-radius: 6px; font-weight: 600; }
@@ -1491,6 +1495,18 @@ html, body {
 <button class="ky2-other-btn" onclick="addPcSectionCustom()">追加</button>
 </div>
 <div id="pc-section-custom-list" class="qc-card-list" style="margin-top:8px;"></div>
+
+<!-- 緊急連絡先の入力欄(emergencyを選択時のみ表示) -->
+<div id="pc-emergency-inputs" style="display:none;margin-top:14px;padding-top:12px;border-top:1px solid #E4E7EC;">
+<div style="font-size:14px;font-weight:700;color:#1D2939;margin-bottom:8px;">緊急連絡先の入力</div>
+<div class="pc-hint">入力した連絡先が施工計画書に反映されます。空欄は記入欄として出力されます。</div>
+<div class="emg-field"><label>所轄消防署 TEL</label><input type="text" id="emgFire" placeholder="例:043-xxx-xxxx" oninput="saveEmergencyInfo()"></div>
+<div class="emg-field"><label>最寄り病院 名称</label><input type="text" id="emgHospitalName" placeholder="例:○○総合病院" oninput="saveEmergencyInfo()"></div>
+<div class="emg-field"><label>最寄り病院 TEL</label><input type="text" id="emgHospitalTel" placeholder="例:043-xxx-xxxx" oninput="saveEmergencyInfo()"></div>
+<div class="emg-field"><label>元請担当 緊急連絡先</label><input type="text" id="emgPrimeTel" placeholder="例:090-xxxx-xxxx" oninput="saveEmergencyInfo()"></div>
+<div class="emg-field"><label>発注者 連絡先</label><input type="text" id="emgClientTel" placeholder="例:043-xxx-xxxx" oninput="saveEmergencyInfo()"></div>
+<div class="emg-field"><label>労働基準監督署</label><input type="text" id="emgLabor" placeholder="例:○○労働基準監督署" oninput="saveEmergencyInfo()"></div>
+</div>
 </div>
 </div>
 
@@ -1838,8 +1854,9 @@ CSVを選択
 <div class="integration-actions">
 <button class="integration-btn accent" onclick="downloadWord('plan')">計画書Word</button>
 <button class="integration-btn accent" onclick="downloadWord('ky')">KY Word</button>
-<button class="integration-btn" onclick="printAsPDF()">PDF印刷</button>
+<button class="integration-btn" onclick="downloadPDF('plan')">計画書PDF</button>
 </div>
+<div class="hint" style="margin-top:8px;">各書類のページからも出力できます。</div>
 </div>
 
 <!-- Google Drive -->
@@ -3073,11 +3090,43 @@ async function updateHomeWeather() {
 
     try {
         if (!coords) {
-            const q = extractCityName(loc);
-            const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=ja&country=JP`);
-            const geo = await geoRes.json();
-            if (!geo.results || !geo.results.length) { mini.style.display = 'none'; return; }
-            coords = { lat: geo.results[0].latitude, lon: geo.results[0].longitude };
+            // 試行順:市区町村名 → 市名のみ → 都道府県を除いた地名
+            const candidates = [];
+            const full = extractCityName(loc);
+            candidates.push(full);
+            const cityOnly = full.replace(/.+?[都道府県]/, '');
+            if (cityOnly && cityOnly !== full) candidates.push(cityOnly);
+            const bare = cityOnly.replace(/[市区町村]$/, '');
+            if (bare && bare !== cityOnly) candidates.push(bare);
+            let found = null;
+            for (const q of candidates) {
+                if (!q) continue;
+                // language指定なし・country絞りなしで緩く検索(日本語地名のヒット率向上)
+                const urls = [
+                    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=5&language=ja`,
+                    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=5`
+                ];
+                for (const u of urls) {
+                    try {
+                        const geoRes = await fetch(u);
+                        const geo = await geoRes.json();
+                        if (geo.results && geo.results.length) {
+                            // 日本(JP)の結果を優先
+                            found = geo.results.find(r => r.country_code === 'JP') || geo.results[0];
+                            break;
+                        }
+                    } catch(e) {}
+                }
+                if (found) break;
+            }
+            if (!found) {
+                // 失敗を可視化(原因切り分け用)
+                mini.style.display = 'inline-flex';
+                const tempEl = document.getElementById('hwmTemp');
+                if (tempEl) tempEl.textContent = '天気?';
+                return;
+            }
+            coords = { lat: found.latitude, lon: found.longitude };
             try { localStorage.setItem('geo_' + loc, JSON.stringify(coords)); } catch(e) {}
         }
         // 軽量: 現在の気温・天気コード+当日の体感最高のみ
@@ -3096,9 +3145,20 @@ async function updateHomeWeather() {
 }
 
 function extractCityName(loc) {
+    // 都道府県+市区町村郡まで抽出(番地・建物名以降を除去)
+    // 例:「千葉県柏市中央2-5-11 柏グリーンハイツ」→「千葉県柏市」
     let m = loc.match(/(.+?[都道府県])?(.+?[市区町村])/);
-    if (m) return (m[1]||'') + m[2];
-    return loc.replace(/[0-9０-９\-－].*$/, '');
+    if (m) {
+        // 政令市の区(例:千葉市中央区)に対応
+        let result = (m[1]||'') + m[2];
+        // 「市」の後にさらに「区」がある場合は区まで含める
+        const afterCity = loc.slice(loc.indexOf(m[2]) + m[2].length);
+        const wardMatch = afterCity.match(/^(.+?区)/);
+        if (m[2].endsWith('市') && wardMatch) result += wardMatch[1];
+        return result;
+    }
+    // 市区町村が見つからなければ、数字・スペース以降を除去
+    return loc.replace(/[\s　0-9０-９\-－].*$/, '').trim();
 }
 
 function weatherCodeInfo(code) {
@@ -3122,11 +3182,13 @@ function renderWeatherMini(d) {
     if (iconEl) iconEl.querySelector('use').setAttribute('href', info.icon);
     const tempEl = document.getElementById('hwmTemp');
     if (tempEl) tempEl.textContent = d.temp + '°';
-    // 熱中症バッジ(危険時のみ)
+    // 熱中症バッジ(その日の予想最高が高く、かつ現在もある程度暑い時のみ)
     const heatEl = document.getElementById('hwmHeat');
     if (heatEl) {
-        if (d.feelMax >= 31) { heatEl.style.display='inline'; heatEl.textContent='熱中症危険'; heatEl.className='hwm-heat danger'; }
-        else if (d.feelMax >= 28) { heatEl.style.display='inline'; heatEl.textContent='熱中症警戒'; heatEl.className='hwm-heat warn'; }
+        // 現在気温が25℃未満なら(朝晩など涼しい時)警告は出さない=矛盾回避
+        if (d.temp >= 25 && d.feelMax >= 33) { heatEl.style.display='inline'; heatEl.textContent='熱中症危険'; heatEl.className='hwm-heat danger'; }
+        else if (d.temp >= 25 && d.feelMax >= 28) { heatEl.style.display='inline'; heatEl.textContent='熱中症警戒'; heatEl.className='hwm-heat warn'; }
+        else if (d.feelMax >= 33) { heatEl.style.display='inline'; heatEl.textContent='日中は熱中症注意'; heatEl.className='hwm-heat warn'; }
         else { heatEl.style.display='none'; }
     }
 }
@@ -3444,6 +3506,7 @@ function gatherInputs() {
         photoTaker: (projects[currentProject] && projects[currentProject].photoTaker) || '',
         safetyCustom: (projects[currentProject] && projects[currentProject].safetyCustom) || [],
         neighborCustom: (projects[currentProject] && projects[currentProject].neighborCustom) || [],
+        emergencyInfo: (projects[currentProject] && projects[currentProject].emergencyInfo) || null,
         lastUsed: new Date().toISOString()
     };
 }
@@ -4882,6 +4945,37 @@ function refreshPcSections(p) {
             `<div class="qc-card-item"><span class="qc-card-check">＋</span><span style="flex:1;">${escapeHtml(c.title)}</span><button class="qc-del-btn" onclick="deletePcSectionCustom(${idx})">削除</button></div>`
         ).join('');
     }
+    // 緊急連絡先入力欄の表示切替+値復元
+    const emgBox = document.getElementById('pc-emergency-inputs');
+    if (emgBox) {
+        const on = getPlanSections(p).includes('emergency');
+        emgBox.style.display = on ? 'block' : 'none';
+        if (on) loadEmergencyInfo(p);
+    }
+}
+
+// 緊急連絡先の保存・復元
+function saveEmergencyInfo() {
+    if (!currentProject || !projects[currentProject]) return;
+    projects[currentProject].emergencyInfo = {
+        fire: (document.getElementById('emgFire')?.value||'').trim(),
+        hospitalName: (document.getElementById('emgHospitalName')?.value||'').trim(),
+        hospitalTel: (document.getElementById('emgHospitalTel')?.value||'').trim(),
+        primeTel: (document.getElementById('emgPrimeTel')?.value||'').trim(),
+        clientTel: (document.getElementById('emgClientTel')?.value||'').trim(),
+        labor: (document.getElementById('emgLabor')?.value||'').trim()
+    };
+    saveStorage();
+}
+function loadEmergencyInfo(p) {
+    const e = (p && p.emergencyInfo) || {};
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+    set('emgFire', e.fire);
+    set('emgHospitalName', e.hospitalName);
+    set('emgHospitalTel', e.hospitalTel);
+    set('emgPrimeTel', e.primeTel);
+    set('emgClientTel', e.clientTel);
+    set('emgLabor', e.labor);
 }
 
 // 含める項目に独自項目を追加
@@ -4913,6 +5007,11 @@ function togglePlanSection(key, on) {
     else { sec = sec.filter(k => k !== key); }
     projects[currentProject].planSections = sec;
     saveStorage();
+    // 緊急連絡先入力欄の表示切替
+    if (key === 'emergency') {
+        const emgBox = document.getElementById('pc-emergency-inputs');
+        if (emgBox) { emgBox.style.display = on ? 'block' : 'none'; if (on) loadEmergencyInfo(projects[currentProject]); }
+    }
 }
 
 function applySectionPreset(preset) {
@@ -4974,6 +5073,8 @@ function deletePcQualityCustom(idx) {
 function generatePlanFromUI() {
     const cur = getCurrent();
     if (!cur) { showToast('先に現場を選んでください', true); openProjectMenu(); return; }
+    // 数量の最新値を確実に保存値へ反映してから生成
+    if (qtyRows && qtyRows.length && typeof saveQtyState === 'function') saveQtyState();
     const wt = cur.workType || 'earthwork';
     const tpl = planTemplates[wt] || planTemplates.earthwork;
     const koushu = workTypeToKoushu(wt);
@@ -4991,17 +5092,15 @@ function generatePlanFromUI() {
     out += `作成日:${new Date().toLocaleDateString('ja-JP')}\n\n`;
     out += '【工事概要】\n';
     out += `工事名:${cur.projectName || currentProject}\n`;
-    out += `工事場所:${cur.location || '（未記載）'}\n`;
-    out += `発注者:${cur.client || '（未記載）'}\n`;
+    if (cur.location) out += `工事場所:${cur.location}\n`;
+    if (cur.client) out += `発注者:${cur.client}\n`;
     out += `元請会社:${cur.prime || '自社元請'}\n`;
-    out += `現場代理人:${cur.manager || '（未記載）'}\n`;
-    // 工期
+    if (cur.manager) out += `現場代理人:${cur.manager}\n`;
+    // 工期(両方入力時のみ)
     if (cur.startDate || cur.endDate) {
-        out += `工期:${cur.startDate || '未入力'} 〜 ${cur.endDate || '未入力'}\n`;
-    } else {
-        out += `工期:未入力\n`;
+        out += `工期:${cur.startDate || '未定'} 〜 ${cur.endDate || '未定'}\n`;
     }
-    out += `工事内容:${cur.workContent || '（未記載）'}\n`;
+    if (cur.workContent) out += `工事内容:${cur.workContent}\n`;
     if (hasComposite) {
         out += `主工事:${compositeTitle}\n`;
         const relatedNames = cur.relatedWorks.map(rw => relatedWorkToName(rw)).join('・');
@@ -5180,10 +5279,10 @@ function generatePlanFromUI() {
     out += '〔緊急連絡体制〕\n';
     out += '・救急:119(けが・急病時、現場代理人が同行)\n';
     out += '・警察:110(事故・盗難時)\n';
-    out += '・所轄消防署:未入力\n';
-    out += '・元請担当:' + (cur.prime || '未入力') + ' 緊急連絡先:未入力\n';
-    out += '・発注者:' + (cur.client || '未入力') + ' 連絡先:未入力\n';
-    out += '・最寄り病院:未入力\n\n';
+    out += '・所轄消防署:＿＿＿\n';
+    out += '・元請担当:' + (cur.prime || '＿＿＿') + ' 緊急連絡先:＿＿＿\n';
+    if (cur.client) out += '・発注者:' + cur.client + ' 連絡先:＿＿＿\n';
+    out += '・最寄り病院:＿＿＿\n\n';
     out += '〔その他〕\n朝礼時にKY活動を実施し、当日の危険要因と対策を全員で確認する。新規入場者には入場時教育(30分以上)を実施し、教育記録を保管する。\n';
     // 独自追加の安全対策
     if (cur.safetyCustom && cur.safetyCustom.length) {
@@ -5192,42 +5291,37 @@ function generatePlanFromUI() {
     out += '\n';
     }
     
-    // 現場組織表(立場別に内容変更)
+    // 現場組織表(立場別・入力済みのみ出力)
     if (planSec(cur, 'org')) {
-    out += '【現場組織表】\n';
+    const orgLines = [];
     if (cur.role === 'sub') {
-        // 専門工事業者:職長中心の簡素な構成
-        out += '・職長:' + (cur.orgForeman || '未入力') + '\n';
-        out += '・安全衛生責任者:' + (cur.orgSafety || '未入力') + '\n';
-        out += '・現場代理人:' + (cur.manager || '未入力') + '\n';
+        if (cur.orgForeman) orgLines.push('・職長:' + cur.orgForeman);
+        if (cur.orgSafety) orgLines.push('・安全衛生責任者:' + cur.orgSafety);
+        if (cur.manager) orgLines.push('・現場代理人:' + cur.manager);
     } else {
-        // 元請:統括含む全構成
-        out += '・統括安全衛生責任者:' + (cur.orgChief || '未入力') + '\n';
-        out += '・安全衛生責任者:' + (cur.orgSafety || '未入力') + '\n';
-        out += '・現場代理人:' + (cur.manager || '未入力') + '\n';
-        out += '・主任技術者:' + (cur.orgChiefEng || '未入力') + '\n';
-        out += '・職長:' + (cur.orgForeman || '未入力') + '\n';
+        if (cur.orgChief) orgLines.push('・統括安全衛生責任者:' + cur.orgChief);
+        if (cur.orgSafety) orgLines.push('・安全衛生責任者:' + cur.orgSafety);
+        if (cur.manager) orgLines.push('・現場代理人:' + cur.manager);
+        if (cur.orgChiefEng) orgLines.push('・主任技術者:' + cur.orgChiefEng);
+        if (cur.orgForeman) orgLines.push('・職長:' + cur.orgForeman);
     }
-    // 玉掛・合図者(クレーン使用時のみ)
-    const heavyText = (cur.heavyMachineList || '').toLowerCase();
-    if (cur.useHeavy && (heavyText.includes('クレーン') || heavyText.includes('ラフター') || cur.orgLifter || cur.orgSignal)) {
-        out += '・玉掛責任者:' + (cur.orgLifter || '未入力') + '\n';
-        out += '・合図者:' + (cur.orgSignal || '未入力') + '\n';
+    if (cur.orgLifter) orgLines.push('・玉掛責任者:' + cur.orgLifter);
+    if (cur.orgSignal) orgLines.push('・合図者:' + cur.orgSignal);
+    if (cur.orgGuide) orgLines.push('・誘導員:' + cur.orgGuide);
+    if (cur.orgOperator) orgLines.push('・重機オペレーター:' + cur.orgOperator);
+    // 入力済みが1件以上あるときだけ見出しと内容を出力
+    if (orgLines.length > 0) {
+        out += '【現場組織表】\n';
+        out += orgLines.join('\n') + '\n\n';
     }
-    // 誘導員・重機オペレーター(重機使用時または手動入力時)
-    if (cur.useHeavy || cur.orgGuide || cur.orgOperator) {
-        out += '・誘導員:' + (cur.orgGuide || '未入力') + '\n';
-        out += '・重機オペレーター:' + (cur.orgOperator || '未入力') + '\n';
-    }
-    out += '\n';
     
     // 専門工事業者の場合は下請編成表(組織表に含める)
-    if (cur.role === 'sub') {
+    if (cur.role === 'sub' && orgLines.length > 0) {
         out += '【下請負業者編成表】\n';
         out += '・自社作業員数:' + (cur.workers || '＿') + '名\n';
-        out += '・職長(兼安全衛生責任者):' + (cur.orgForeman || '未入力') + '\n';
-        out += '・元請担当:' + (cur.prime || '未入力') + '殿への報告は職長が一元化する\n\n';
-        out += '【専門工事固有の安全管理】\n';
+        if (cur.orgForeman) out += '・職長(兼安全衛生責任者):' + cur.orgForeman + '\n';
+        if (cur.prime) out += '・元請担当:' + cur.prime + '殿への報告は職長が一元化する\n';
+        out += '\n【専門工事固有の安全管理】\n';
         out += '・職長は自社作業員の朝礼を毎日実施し、TBM・KYを記録する\n';
         out += '・元請の安全パトロールに同行し、指摘事項は即日是正する\n';
         out += '・自社使用機械・工具の始業前点検を職長が確認する\n\n';
@@ -5329,11 +5423,15 @@ function generatePlanFromUI() {
 
     // ========== 施工数量(入力済みのみ出力) ==========
     if (planSec(cur, 'quantity')) {
-    const qty = cur.qtyRows || [];
-    const filledQty = qty.filter(r => r.value && r.value.trim());
+    // グローバルqtyRowsと保存値の両方を見て、確実に最新を取る
+    let qty = (qtyRows && qtyRows.length) ? qtyRows : (cur.qtyRows || []);
+    const filledQty = qty.filter(r => r.value && String(r.value).trim());
     if (filledQty.length > 0) {
         out += '【施工数量】\n';
-        filledQty.forEach(r => { out += `・${r.name}:${r.value}${r.customUnit||r.unit||''}\n`; });
+        filledQty.forEach(r => {
+            const u = (r.unit === 'その他') ? (r.customUnit || '') : (r.unit || '');
+            out += `・${r.name}:${String(r.value).trim()}${u}\n`;
+        });
         out += '\n';
     }
     }
@@ -5347,13 +5445,17 @@ function generatePlanFromUI() {
 
     // ========== 緊急連絡先 ==========
     if (planSec(cur, 'emergency')) {
+    const e = cur.emergencyInfo || {};
     out += '【緊急連絡先】\n';
-    out += `・元請担当:${cur.prime||'＿＿＿'} / TEL＿＿＿\n`;
-    out += `・発注者:${cur.client||'＿＿＿'} / TEL＿＿＿\n`;
-    out += '・最寄り病院:＿＿＿ / TEL＿＿＿\n';
     out += '・消防署:119(救急・火災)\n';
     out += '・警察署:110(事故・事件)\n';
-    out += '・労働基準監督署:＿＿＿\n\n';
+    out += `・所轄消防署:${e.fire || '＿＿＿'}\n`;
+    out += `・最寄り病院:${e.hospitalName || '＿＿＿'}${e.hospitalTel ? ' / TEL ' + e.hospitalTel : ' / TEL＿＿＿'}\n`;
+    out += `・元請担当:${cur.prime||'＿＿＿'}${e.primeTel ? ' / TEL ' + e.primeTel : ' / TEL＿＿＿'}\n`;
+    if (cur.client || e.clientTel) {
+        out += `・発注者:${cur.client||'＿＿＿'}${e.clientTel ? ' / TEL ' + e.clientTel : ' / TEL＿＿＿'}\n`;
+    }
+    out += `・労働基準監督署:${e.labor || '＿＿＿'}\n\n`;
     }
 
     // 安全管理体制表
@@ -5386,7 +5488,7 @@ function generatePlanFromUI() {
     out += '承認者:＿＿＿\n';
     out += `承認日:${new Date().toLocaleDateString('ja-JP')}\n`;
     
-    document.getElementById('out-plan').value = injectBlankFields(out, cur);
+    document.getElementById('out-plan').value = out;
     document.getElementById('planOutput').style.display = 'block';
     // 生成内容を保存(ページ再訪時に出力ボタンを表示するため)
     if (currentProject && projects[currentProject]) {
@@ -5406,38 +5508,8 @@ function generatePlanFromUI() {
 
 // 空欄項目を埋め込む(現場代理人が確認・記入する箇所)
 function injectBlankFields(text, cur) {
-    // 数量テーブル(qtyRows)がある場合はそのデータを使う
-    let quantityBlock = '【施工数量】\n';
-    if (qtyRows && qtyRows.length > 0) {
-        qtyRows.forEach(r => {
-            const u = r.unit === 'その他' ? (r.customUnit || '') : r.unit;
-            if (r.value && r.value.trim()) {
-                quantityBlock += `・${r.name}:${r.value}${u}\n`;
-            } else {
-                quantityBlock += `・${r.name}:未入力\n`;
-            }
-        });
-    } else {
-        // 従来のフォールバック(工種別テンプレート)
-        const wt = cur.workType || 'earthwork';
-        if (wt === 'painting') {
-            quantityBlock += '・塗装面積:未入力\n・足場面積:未入力\n・ケレン面積:未入力\n';
-        } else if (wt === 'earthwork') {
-            quantityBlock += '・掘る土の量:未入力\n・のこった土を出す量:未入力\n・穴をうめる土の量:未入力\n';
-        } else if (wt === 'demolition') {
-            quantityBlock += '・解体する床の面積:未入力\n・ゴミの量:未入力\n';
-        } else {
-            quantityBlock += '・施工数量:未入力\n・施工範囲:未入力\n';
-        }
-    }
-    quantityBlock += '\n※現場代理人が実測値を記入してください\n\n';
-    // 概要の直後に挿入
-    const idx = text.indexOf('【概要】');
-    if (idx === -1) return quantityBlock + text;
-    // 【概要】ブロックの終わり(次の【...】の手前)を探す
-    const nextChap = text.indexOf('【', idx + 4);
-    if (nextChap === -1) return text + '\n' + quantityBlock;
-    return text.substring(0, nextChap) + quantityBlock + text.substring(nextChap);
+    // 廃止:数量・記入欄の二重挿入を停止(生成本文側で入力済みのみ出力)
+    return text;
 }
 
 // 表示切替(章別 / 全文)
@@ -6758,17 +6830,22 @@ function autoGenerateQtyFromProject() {
 function syncQtyToPlanText() {
     const ta = document.getElementById('out-plan');
     if (!ta || !ta.value) return;
-    const filled = qtyRows.filter(r => r.value && r.value.trim());
+    // グローバルqtyRowsが空でも、保存済みのprojects値を参照(ページ遷移後対策)
+    let src = qtyRows;
+    if ((!src || src.length === 0) && currentProject && projects[currentProject] && projects[currentProject].qtyRows) {
+        src = projects[currentProject].qtyRows;
+    }
+    const filled = (src || []).filter(r => r.value && String(r.value).trim());
     const text = ta.value;
     const re = /【施工数量】\n[\s\S]*?(?=\n【|$)/;
     if (filled.length === 0) {
-        // 入力済みがなければ【施工数量】セクションごと削除
+        // 本当に入力が無いときだけセクション削除
         if (re.test(text)) ta.value = text.replace(re, '').replace(/\n{3,}/g, '\n\n').trim();
         return;
     }
     let section = '【施工数量】\n';
     filled.forEach(r => {
-        const u = r.unit === 'その他' ? (r.customUnit || '') : r.unit;
+        const u = r.unit === 'その他' ? (r.customUnit || '') : (r.unit || '');
         section += `・${r.name}:${r.value}${u}\n`;
     });
     if (re.test(text)) {
@@ -7445,9 +7522,10 @@ function generateKYFromUI() {
     out += '━━━━━━━━━━━━━━━━━━━━\n';
     out += `実施日:${today}\n`;
     out += `工事名:${cur.projectName || currentProject}\n`;
-    out += `工事場所:${cur.location || '未入力'}\n`;
+    if (cur.location) out += `工事場所:${cur.location}\n`;
     out += `元請会社:${cur.prime || '施主直請け'}\n`;
-    out += `現場代理人:${cur.manager || '未入力'}\n\n`;
+    if (cur.manager) out += `現場代理人:${cur.manager}\n`;
+    out += '\n';
 
     out += '【本日の作業】\n';
     if (work.length) work.forEach(w => out += '・' + w + '\n'); else out += '・未選択\n';
@@ -7478,8 +7556,8 @@ function generateKYFromUI() {
         out += '確認日時:' + ap.datetime + '\n';
         out += '\u2611 KY確認済\n';
     } else {
-        out += '職長:' + (foreman || '未入力') + '\n';
-        out += '確認日時:未承認\n';
+        out += '職長:' + (foreman || '＿＿＿') + '\n';
+        out += '確認日時:＿＿＿\n';
         out += '\u2610 KY確認済\n';
     }
 
@@ -7584,7 +7662,7 @@ function generatePhotoFromUI() {
     out += '写真台帳\n━━━━━━━━━━━━━━━━━━━━\n';
     // 現場・施工計画書からの連携情報
     out += `工事名:${cur.projectName || currentProject}\n`;
-    out += `工事場所:${cur.location || '（未記載）'}\n`;
+    if (cur.location) out += `工事場所:${cur.location}\n`;
     out += `工種:${koushu}\n`;
     if (cur.mainConstruction) out += `主工事:${cur.mainConstruction}\n`;
     if (cur.relatedWorks && cur.relatedWorks.length) out += `関連工事:${cur.relatedWorks.join('、')}\n`;
@@ -7601,14 +7679,14 @@ function generatePhotoFromUI() {
         const locLabel = (p.location === 'その他' ? (p.locationOther || 'その他') : p.location) + (p.floor ? ' ' + p.floor : '');
         out += `【${no}】${typeLabel}\n`;
         out += '┌─────────────────┐\n│                       │\n│      （写真貼付）      │\n│                       │\n└─────────────────┘\n';
-        out += `撮影箇所:${locLabel || '（未記載）'}\n`;
+        if (locLabel.trim()) out += `撮影箇所:${locLabel}\n`;
         out += `撮影年月日:${p.date}\n`;
-        out += `撮影者:${p.taker || '（未記載）'}\n`;
+        if (p.taker) out += `撮影者:${p.taker}\n`;
         out += `写真内容:${p.comment || typeLabel}\n`;
         out += `黒板記載:${cur.projectName || currentProject} / ${koushu} / ${locLabel} / ${p.date}\n\n`;
     });
 
-    out += '────────────────────\n【確認欄】\n確認者:未入力 印\n';
+    out += '────────────────────\n【確認欄】\n確認者:＿＿＿ 印\n';
 
     document.getElementById('out-photo').value = out;
     document.getElementById('photoOutput').style.display = 'block';
@@ -7744,6 +7822,32 @@ function fallbackCopy(text) {
 }
 
 // ========== PDF出力(ブラウザ印刷機能を利用) ==========
+// PDF/Word出力用:未入力・未選択・未記載の行を除去(大手の書類は空欄を出さない)
+function stripBlankLines(text) {
+    const lines = text.split('\n');
+    const out = [];
+    lines.forEach((line, i) => {
+        const t = line.trim();
+        // 冒頭の重複要素を除去(表紙に既にあるため):施工計画書タイトル・作成日・区切り線
+        if (/^施工計画書[（(].*[）)]\s*$/.test(t)) return;          // 「施工計画書(○○工事)」
+        if (/^[━─―-]{5,}\s*$/.test(t)) return;                     // 区切り線
+        if (/^作成日[:：]/.test(t)) return;                         // 「作成日:2026/6/1」
+        // 「項目:未入力」単独(コロンが1つだけで値が未入力系)→除去
+        const colonCount = (t.match(/[:：]/g) || []).length;
+        if (colonCount === 1 && /^[^:：]+[:：]\s*(未入力|未記載|未選択|未定)\s*$/.test(t)) return;
+        if (/^[・･]\s*(未選択|未入力|未記載|未サイン)\s*$/.test(t)) return;   // 「・未選択」
+        if (/^[^:：]+[:：]\s*(未入力|未記載)\s*印\s*$/.test(t)) return;       // 「確認:未入力 印」
+        if (/^作業員\d+[:：]未サイン\s*$/.test(t)) return;                   // 「作業員1:未サイン」
+        // 値が記入欄(＿＿＿)・空括弧・空っぽ・スペースのみだけの行 → 項目名ごと非表示
+        if (/^[・･]?\s*[^:：]+[:：]\s*[（(]?[\s　＿_]*[）)]?\s*$/.test(t) && colonCount === 1) return;  // 「工事場所:」「工事場所:(＿＿＿)」「工事場所:（　　）」
+        // 複合行や残りの未入力は記入欄(＿＿＿)に置換
+        let cleaned = line.replace(/(未入力|未記載)/g, '＿＿＿');
+        out.push(cleaned);
+    });
+    // 連続する空行を1つに圧縮
+    return out.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
 function downloadPDF(type) {
     const cur = getCurrent();
     const titleMap = { plan:'施工計画書', ky:'KY活動表', photo:'写真台帳' };
@@ -7760,17 +7864,18 @@ function downloadPDF(type) {
             ? ((cur && cur.manager) || '')
             : ((document.getElementById('photoTaker')?.value) || (cur && cur.manager) || '');
         // ===== 表紙 =====
+        const cvRow = (label, val) => val ? `<tr><th>${label}</th><td>${esc(val)}</td></tr>` : '';
         bodyHtml += `<div class="cover">`;
         bodyHtml += `<div class="cover-title">${esc(docTitle)}</div>`;
         bodyHtml += `<table class="cover-info">`;
-        bodyHtml += `<tr><th>工事名</th><td>${esc((cur&&cur.projectName)||currentProject||'')}</td></tr>`;
-        bodyHtml += `<tr><th>工事場所</th><td>${esc((cur&&cur.location)||'')}</td></tr>`;
-        bodyHtml += `<tr><th>工種</th><td>${esc(koushuC)}</td></tr>`;
+        bodyHtml += cvRow('工事名', (cur&&cur.projectName)||currentProject||'');
+        bodyHtml += cvRow('工事場所', (cur&&cur.location)||'');
+        bodyHtml += cvRow('工種', koushuC);
         bodyHtml += `</table>`;
         bodyHtml += `<table class="cover-info cover-info2">`;
-        bodyHtml += `<tr><th>作成日</th><td>${esc(new Date().toLocaleDateString('ja-JP'))}</td></tr>`;
-        bodyHtml += `<tr><th>作成者</th><td>${esc((cur&&cur.manager)||'')}</td></tr>`;
-        bodyHtml += `<tr><th>会社名</th><td>${esc((cur&&cur.prime)||'')}</td></tr>`;
+        bodyHtml += cvRow('作成日', new Date().toLocaleDateString('ja-JP'));
+        bodyHtml += cvRow('作成者', (cur&&cur.manager)||'');
+        bodyHtml += cvRow('会社名', (cur&&cur.prime)||'');
         bodyHtml += `</table>`;
         bodyHtml += `</div>`;
 
@@ -7806,7 +7911,7 @@ function downloadPDF(type) {
         bodyHtml += `<h1>写真台帳</h1>`;
         bodyHtml += `<table class="info">`;
         bodyHtml += `<tr><th>工事名</th><td>${esc((cur&&cur.projectName)||currentProject||'')}</td></tr>`;
-        bodyHtml += `<tr><th>工事場所</th><td>${esc((cur&&cur.location)||'')}</td></tr>`;
+        if (cur && cur.location) bodyHtml += `<tr><th>工事場所</th><td>${esc(cur.location)}</td></tr>`;
         bodyHtml += `<tr><th>工種</th><td>${esc(koushu)}</td></tr>`;
         if (cur && cur.mainConstruction) bodyHtml += `<tr><th>主工事</th><td>${esc(cur.mainConstruction)}</td></tr>`;
         bodyHtml += `<tr><th>元請会社</th><td>${esc((cur&&cur.prime)||'施主直請け')}</td></tr>`;
@@ -7831,7 +7936,7 @@ function downloadPDF(type) {
         if (type === 'plan' && typeof syncChaptersToText === 'function') syncChaptersToText();
         const text = document.getElementById(map[type])?.value;
         if (!text || !text.trim()) { showToast('先に生成してください', true); return; }
-        const lines = text.split('\n');
+        const lines = stripBlankLines(text).split('\n');
         let i = 0;
         const cur2 = cur || {};
         while (i < lines.length) {
@@ -7862,7 +7967,8 @@ function downloadPDF(type) {
                     bodyHtml += `<div class="gantt-row">
 <div class="gantt-no">${idx+1}</div>
 <div class="gantt-label">${esc(p.name)}</div>
-<div class="gantt-track"><div class="gantt-fill" style="margin-left:${leftPct.toFixed(1)}%;width:${widthPct.toFixed(1)}%;">${p.days}日</div></div>
+<div class="gantt-track"><div class="gantt-fill" style="margin-left:${leftPct.toFixed(1)}%;width:${widthPct.toFixed(1)}%;"></div></div>
+<div class="gantt-days">${p.days}日</div>
 </div>`;
                     cum += p.days;
                 });
@@ -7940,10 +8046,25 @@ function downloadPDF(type) {
                     }
                     i++;
                 }
+                // 役職を階層レベルに分類(大手の施工体制図に準拠)
+                const levelOf = (role) => {
+                    if (/統括/.test(role)) return 0;
+                    if (/現場代理人|安全衛生責任者/.test(role)) return 1;
+                    if (/主任技術者|監理技術者/.test(role)) return 2;
+                    if (/職長/.test(role)) return 3;
+                    return 4; // 玉掛・合図・誘導員・オペレーター等
+                };
+                const levels = [[],[],[],[],[]];
+                org.forEach(o => levels[levelOf(o.role)].push(o));
                 bodyHtml += '<div class="orgchart">';
-                org.forEach((o, idx) => {
-                    bodyHtml += `<div class="org-node"><div class="org-role">${esc(o.role)}</div><div class="org-name">${esc(o.name)}</div></div>`;
-                    if (idx < org.length-1) bodyHtml += '<div class="org-line"></div>';
+                const nonEmpty = levels.filter(l => l.length > 0);
+                nonEmpty.forEach((lv, li) => {
+                    bodyHtml += '<div class="org-level">';
+                    lv.forEach(o => {
+                        bodyHtml += `<div class="org-node"><div class="org-role">${esc(o.role)}</div><div class="org-name">${esc(o.name)}</div></div>`;
+                    });
+                    bodyHtml += '</div>';
+                    if (li < nonEmpty.length-1) bodyHtml += '<div class="org-connector"></div>';
                 });
                 bodyHtml += '</div>';
                 continue;
@@ -7967,7 +8088,7 @@ function downloadPDF(type) {
         @page { size: A4; margin: 15mm; }
         body { font-family: "Yu Gothic","Meiryo",sans-serif; color:#000; line-height:1.6; font-size:10.5pt; }
         h1 { font-size:18pt; text-align:center; border-bottom:3px double #000; padding-bottom:8px; margin-bottom:14px; }
-        h2 { font-size:12.5pt; font-weight:bold; background:#0B2D4D; color:#fff; padding:4px 10px; margin:12px 0 6px; }
+        h2 { font-size:12.5pt; font-weight:bold; background:#0B2D4D; color:#fff; padding:4px 10px; margin:12px 0 6px; page-break-after:avoid; }
         .pagebreak { page-break-after: always; }
         .cover { text-align:center; padding-top:40mm; }
         .cover-title { font-size:26pt; font-weight:bold; letter-spacing:4pt; border:3px double #000; display:inline-block; padding:14pt 40pt; margin-bottom:30mm; }
@@ -7990,16 +8111,19 @@ function downloadPDF(type) {
         table.grid th { border:1px solid #555; padding:4px 6px; background:#0B2D4D; color:#fff; }
         table.grid td { border:1px solid #555; padding:4px 6px; vertical-align:top; }
         .gantt { margin:6px 0 10px; }
+        .gantt { page-break-inside:avoid; }
         .gantt-row { display:flex; align-items:center; margin-bottom:5px; }
         .gantt-no { width:20px; height:20px; background:#1570B8; color:#fff; border-radius:4px; text-align:center; line-height:20px; font-weight:bold; font-size:8.5pt; flex-shrink:0; }
-        .gantt-label { width:120px; font-size:9.5pt; padding:0 8px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .gantt-label { width:130px; font-size:9.5pt; padding:0 8px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .gantt-track { flex:1; background:#F0F2F5; border-radius:4px; height:20px; position:relative; }
-        .gantt-fill { background:#1570B8; height:20px; border-radius:4px; color:#fff; font-size:8pt; line-height:20px; text-align:center; min-width:24px; box-sizing:border-box; overflow:hidden; }
-        .orgchart { margin:8px 0; }
-        .org-node { border:2px solid #0B2D4D; border-radius:6px; padding:5px 12px; text-align:center; width:200px; margin:0 auto; background:#F0F7FC; }
+        .gantt-fill { background:#1570B8; height:20px; border-radius:4px; min-width:8px; box-sizing:border-box; }
+        .gantt-days { width:42px; font-size:8.5pt; text-align:right; flex-shrink:0; padding-left:6px; color:#333; }
+        .orgchart { margin:10px 0; page-break-inside:avoid; text-align:center; }
+        .org-level { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+        .org-node { border:2px solid #0B2D4D; border-radius:6px; padding:5px 14px; text-align:center; min-width:170px; background:#F0F7FC; display:inline-block; }
         .org-role { font-size:8.5pt; color:#1570B8; font-weight:bold; }
         .org-name { font-size:11pt; font-weight:bold; }
-        .org-line { width:2px; height:14px; background:#0B2D4D; margin:0 auto; }
+        .org-connector { width:2px; height:16px; background:#0B2D4D; margin:0 auto; }
         .qc-list { margin:6px 0 10px; }
         .qc-item { padding:5px 10px; border:1px solid #ccc; border-radius:4px; margin-bottom:4px; font-size:10.5pt; background:#F9FAFB; }
         .qc-box { color:#067647; font-weight:bold; margin-right:8px; }
@@ -8036,7 +8160,7 @@ function downloadPhotoWord() {
     // ヘッダー情報
     html += `<table style="border-collapse:collapse;width:100%;margin:10pt 0 16pt;">`;
     html += `<tr><td style="${HS}">工事名</td><td style="${CS}">${esc(cur.projectName||currentProject)}</td></tr>`;
-    html += `<tr><td style="${HS}">工事場所</td><td style="${CS}">${esc(cur.location||'')}</td></tr>`;
+    if (cur.location) html += `<tr><td style="${HS}">工事場所</td><td style="${CS}">${esc(cur.location)}</td></tr>`;
     html += `<tr><td style="${HS}">工種</td><td style="${CS}">${esc(koushu)}</td></tr>`;
     if (cur.mainConstruction) html += `<tr><td style="${HS}">主工事</td><td style="${CS}">${esc(cur.mainConstruction)}</td></tr>`;
     if (cur.relatedWorks && cur.relatedWorks.length) html += `<tr><td style="${HS}">関連工事</td><td style="${CS}">${esc(cur.relatedWorks.join('、'))}</td></tr>`;
@@ -8086,8 +8210,9 @@ function downloadWord(type) {
     if (type === 'plan' && typeof syncChaptersToText === 'function') syncChaptersToText();
     const map = { plan:'out-plan', ky:'out-ky', photo:'out-photo' };
     const titleMap = { plan:'施工計画書', ky:'KY活動表', photo:'写真台帳' };
-    const text = document.getElementById(map[type])?.value;
-    if (!text || !text.trim()) { showToast('先に生成してください', true); return; }
+    const rawText = document.getElementById(map[type])?.value;
+    if (!rawText || !rawText.trim()) { showToast('先に生成してください', true); return; }
+    const text = stripBlankLines(rawText);
 
     try {
         const fname = titleMap[type] + '_' + (currentProject || '工事') + '.doc';
@@ -8222,18 +8347,21 @@ function downloadWord(type) {
         let coverPage = '';
         if (type === 'plan') {
             const koushuW = workTypeToKoushu(projectInfo.workType || 'earthwork');
+            const tdH = 'border:1px solid #555;padding:10pt;font-weight:bold;width:32%;background:#f0f0f0;text-align:left;';
+            const tdV = 'border:1px solid #555;padding:10pt;text-align:left;';
+            const cwRow = (label, val) => val ? `<tr><td style="${tdH}">${label}</td><td style="${tdV}">${escHtml(val)}</td></tr>` : '';
             coverPage = `
 <div style="page-break-after:always;text-align:center;padding-top:70pt;">
 <div style="font-size:24pt;font-weight:bold;letter-spacing:6pt;border:3pt double #000;display:inline-block;padding:14pt 40pt;margin-bottom:50pt;">施工計画書（${escHtml(koushuW)}）</div>
 <table style="border-collapse:collapse;width:72%;margin:30pt auto;">
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;width:32%;background:#f0f0f0;text-align:left;">工事名</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(projectName)}</td></tr>
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;background:#f0f0f0;text-align:left;">工事場所</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(projectInfo.location || '')}</td></tr>
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;background:#f0f0f0;text-align:left;">工種</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(koushuW)}</td></tr>
+${cwRow('工事名', projectName)}
+${cwRow('工事場所', projectInfo.location || '')}
+${cwRow('工種', koushuW)}
 </table>
 <table style="border-collapse:collapse;width:72%;margin:40pt auto 0;">
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;width:32%;background:#f0f0f0;text-align:left;">作成日</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(todayStr)}</td></tr>
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;background:#f0f0f0;text-align:left;">作成者</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(projectInfo.manager || '')}</td></tr>
-<tr><td style="border:1px solid #555;padding:10pt;font-weight:bold;background:#f0f0f0;text-align:left;">会社名</td><td style="border:1px solid #555;padding:10pt;text-align:left;">${escHtml(projectInfo.prime || '')}</td></tr>
+${cwRow('作成日', todayStr)}
+${cwRow('作成者', projectInfo.manager || '')}
+${cwRow('会社名', projectInfo.prime || '')}
 </table>
 </div>`;
 
